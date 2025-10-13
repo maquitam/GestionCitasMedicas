@@ -1,0 +1,14 @@
+# Ignorar carpetas temporales de NetBeans
+/build/
+/dist/
+/nbproject/private/
+
+# Ignorar archivos de compilación
+*.class
+*.jar
+*.war
+*.ear
+
+# Ignorar archivos de sistema
+.DS_Store
+Thumbs.db
