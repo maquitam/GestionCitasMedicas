@@ -2,13 +2,13 @@ package objetos;
 
 public abstract class Usuario {
     private String nombres, apellidos, tipoDocumento, correo, direccion, perfil;
-    private int numeroDocumento;
+    private double numeroDocumento;
     private double telefono;
     private boolean estado;
     
     // Constructor para usuarios tipo Paciente
     public Usuario(String nombres, String apellidos, String tipoDocumento,
-            int numeroDocumento, double telefono, String correo, String direccion) {
+            double numeroDocumento, double telefono, String correo, String direccion) {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.tipoDocumento = tipoDocumento;
@@ -82,7 +82,7 @@ public abstract class Usuario {
         numeroDocumento = nuevoNumeroDoc;
     }
     
-    public int getNumeroDoc() {
+    public double getNumeroDoc() {
         return numeroDocumento;
     }
     

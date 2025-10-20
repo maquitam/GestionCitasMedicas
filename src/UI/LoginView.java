@@ -4,7 +4,7 @@ import javax.swing.*;
 
 import java.awt.*;
 
-public class Login extends JFrame {
+public class LoginView extends JFrame {
     private JPanel panelIzquierdo;
     private JPanel panelDerecho;
     private CardLayout cardLayout = new CardLayout();
@@ -15,7 +15,7 @@ public class Login extends JFrame {
     public static final String INICIAR_SESION = "iniciarSesion";
 
     
-    public Login() {
+    public LoginView() {
         setTitle("Gestor de Citas Médicas");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);

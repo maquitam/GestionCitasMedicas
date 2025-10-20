@@ -2,11 +2,18 @@ package UI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+
+import repositorio.LoginRepositorio;
+import objetos.Login;
+import servicios.ServicioLogin;
+
 
 public class LoginPanel extends JPanel {
-    private Login loginFrame;
+    private LoginView loginFrame;
+    ServicioLogin servicioLogin;
 
-    public LoginPanel(Login loginFrame) {
+    public LoginPanel(LoginView loginFrame) {
         this.loginFrame = loginFrame;
         
         setBackground(Color.WHITE);
@@ -108,7 +115,21 @@ public class LoginPanel extends JPanel {
 
         
         loginBoton.addActionListener(e -> {
-        
+            
+            servicioLogin = new ServicioLogin();
+
+            var usuario = textUsuario.getText();
+            var contraseña = new String(campoContraseña.getPassword());
+            var login = new Login(usuario,contraseña);
+
+            var valid = servicioLogin.validarUsuarioyContraseña(usuario, contraseña);
+
+            if (valid) {
+                JOptionPane.showMessageDialog(loginBoton, "Inició sesión correctamente");
+            } else {
+                JOptionPane.showMessageDialog(loginBoton, "Usuario o Contraseña Incorrectos");
+            }
+
         });
 
     }
