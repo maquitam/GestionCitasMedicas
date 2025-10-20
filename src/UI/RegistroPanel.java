@@ -157,5 +157,9 @@ public class RegistroPanel extends JPanel {
         gbc.weighty = 1.0;
         gbc.gridwidth = 2;
         add(enviarBoton, gbc);
+
+        enviarBoton.addActionListener(e->{
+            
+        });
     }
 }

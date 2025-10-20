@@ -105,5 +105,11 @@ public class LoginPanel extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         add(loginBoton, gbc);
+
+        
+        loginBoton.addActionListener(e -> {
+        
+        });
+
     }
 }
