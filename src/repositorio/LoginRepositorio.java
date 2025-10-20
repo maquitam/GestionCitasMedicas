@@ -13,6 +13,19 @@ public class LoginRepositorio {
     
     public LoginRepositorio() throws IOException {
         file = new File(PATH);
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+
+            try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
+            var admin = "admin" + "|" + "admin";
+            bufferedWriter.write(admin);
+            bufferedWriter.newLine();
+        } catch (Exception exe) {
+            exe.getMessage();
+        }
+        
+        }
     }
 
     public List<Login> getLogins() {
