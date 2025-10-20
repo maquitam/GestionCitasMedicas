@@ -4,9 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class IniciarSesion extends JPanel {   
-    private Login loginFrame;
+    private LoginView loginFrame;
 
-    public IniciarSesion(Login loginFrame) {
+    public IniciarSesion(LoginView loginFrame) {
         this.loginFrame = loginFrame;
         setBackground(new Color(35,94,40));
         setLayout(new GridBagLayout());

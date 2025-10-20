@@ -4,9 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class RegistroPanel extends JPanel {
-    private Login loginFrame;
+    private LoginView loginFrame;
 
-    public RegistroPanel(Login loginFrame) {
+    public RegistroPanel(LoginView loginFrame) {
         this.loginFrame = loginFrame;
         setBackground(Color.WHITE);
         setLayout(new GridBagLayout());

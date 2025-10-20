@@ -1,0 +1,51 @@
+package repositorio;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import objetos.Login;
+
+public class LoginRepositorio {
+    private File file;
+    public static final String PATH = "datos\\Login.txt";
+    
+    public LoginRepositorio() throws IOException {
+        file = new File(PATH);
+    }
+
+    public List<Login> getLogins() {
+        Scanner s = null;
+        List<Login> logins = new ArrayList<>();
+        try {
+            System.out.println("Leyendo el archivo Login...");
+            s = new Scanner(file);
+
+            while (s.hasNextLine()) {
+                String loginLine = s.nextLine();
+                var login = new Login(loginLine.split("\\|")[0], loginLine.split("\\|")[1]);
+                logins.add(login);
+                System.out.println("Login obteined: " + login.getUsuario());
+            }
+    
+            return logins;
+            
+    } catch (Exception exe) {
+        return null;
+    }        
+}
+
+    public boolean registrarUsuario(Login login) throws Exception {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
+            var content = login.getUsuario() + "|" + login.getContraseña();
+            bufferedWriter.write(content);
+            bufferedWriter.newLine();
+        } catch (Exception exe) {
+            throw new Exception(exe.getMessage());
+        }
+
+        return true;
+    }
+
+}

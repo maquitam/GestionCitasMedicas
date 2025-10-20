@@ -4,9 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CrearCuenta extends JPanel {   
-    private Login loginFrame;
+    private LoginView loginFrame;
 
-    public CrearCuenta(Login loginFrame) {
+    public CrearCuenta(LoginView loginFrame) {
         this.loginFrame = loginFrame;
         setPreferredSize(new Dimension(400,getHeight()));
         setBackground(new Color(35,94,40));
