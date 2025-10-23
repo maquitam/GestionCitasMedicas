@@ -1,14 +1,15 @@
 package objetos;
 
 public abstract class Usuario {
-    private String nombres, apellidos, tipoDocumento, correo, direccion, perfil;
+    private String nombres, apellidos, tipoDocumento, correo, direccion;
+    private final String perfil;
     private double numeroDocumento;
     private double telefono;
-    private boolean estado;
+    //private boolean estado;
     
     // Constructor para usuarios tipo Paciente
     public Usuario(String nombres, String apellidos, String tipoDocumento,
-            double numeroDocumento, double telefono, String correo, String direccion) {
+            double numeroDocumento, double telefono, String correo, String direccion, String perfil) {
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.tipoDocumento = tipoDocumento;
@@ -16,10 +17,10 @@ public abstract class Usuario {
         this.telefono = telefono;
         this.correo = correo;
         this.direccion = direccion;
-        this.perfil = "Paciente";
+        this.perfil = perfil;
     }
     
-    // Constructor para usuarios tipo Médico
+    /*  Constructor para usuarios tipo Médico
     public Usuario(String nombres, String apellidos, 
             int numeroDocumento, String tipoDocumento, String correo, double telefono, String direccion,
             boolean estado) {
@@ -32,7 +33,7 @@ public abstract class Usuario {
         this.direccion = direccion;
         this.perfil = "Personal Médico";
         this.estado = estado;
-    }
+    }*/
     
     public void setNombres(String nuevosNombres) {
         nombres = nuevosNombres;
@@ -70,9 +71,9 @@ public abstract class Usuario {
         return direccion;
     }
     
-    public void setPerfil(String nuevoPerfil) {
+    /*public void setPerfil(String nuevoPerfil) {
         perfil = nuevoPerfil;
-    }
+    }*/
     
     public String getPerfil() {
         return perfil;
@@ -94,11 +95,11 @@ public abstract class Usuario {
         return telefono;
     }
     
-    public void setEstado(boolean nuevoEstado) {
+   /*public void setEstado(boolean nuevoEstado) {
         estado = nuevoEstado;
     }
     
     public boolean getEstado(){
         return estado;
-    }
+    }*/
 }
