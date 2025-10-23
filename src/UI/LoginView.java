@@ -42,8 +42,8 @@ public class LoginView extends JFrame {
         panelDerecho = new JPanel(cardLayout);
 
         // Crear los dos paneles
-        LoginPanel loginPanel = new LoginPanel(this);
-        RegistroPanel registroPanel = new RegistroPanel(this);
+        PanelLogin loginPanel = new PanelLogin(this);
+        PanelRegistro registroPanel = new PanelRegistro(this);
 
         // Agregar los paneles al CardLayout con identificadores
         panelDerecho.add(loginPanel, LOGIN_PANEL);
@@ -57,8 +57,8 @@ public class LoginView extends JFrame {
         panelIzquierdo = new JPanel(cardLayout);
 
         // Crear Panel Crear Cuenta
-        CrearCuenta crearCuenta = new CrearCuenta(this);
-        IniciarSesion iniciarSesion = new IniciarSesion(this);
+        PanelCrearCuenta crearCuenta = new PanelCrearCuenta(this);
+        PanelIniciarSesion iniciarSesion = new PanelIniciarSesion(this);
 
         panelIzquierdo.add(crearCuenta, CREAR_CUENTA);
         panelIzquierdo.add(iniciarSesion, INICIAR_SESION);

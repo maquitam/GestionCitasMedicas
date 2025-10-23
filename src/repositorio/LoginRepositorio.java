@@ -61,4 +61,39 @@ public class LoginRepositorio {
         return true;
     }
 
+    public boolean eliminarUsuario(String documento) throws Exception {
+        Scanner s = null; 
+        List<String> logins = new ArrayList<>();
+         try{
+            s = new Scanner(file);
+
+            while (s.hasNextLine()) {
+                String loginLine = s.nextLine();
+                if (!loginLine.contains(documento)) {
+                    logins.add(loginLine);
+                };
+            }
+            
+            if (file.exists()) {
+                file.delete();
+            }
+
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+
+            try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, false))) {
+                for (var login : logins) {
+                    bufferedWriter.write(login);
+                    bufferedWriter.newLine();
+                }
+            }
+
+            return true;
+
+         } catch (Exception e)  {
+            return false;
+         }
+}
 }

@@ -3,10 +3,10 @@ package UI;
 import javax.swing.*;
 import java.awt.*;
 
-public class CrearCuenta extends JPanel {   
+public class PanelCrearCuenta extends JPanel {   
     private LoginView loginFrame;
 
-    public CrearCuenta(LoginView loginFrame) {
+    public PanelCrearCuenta(LoginView loginFrame) {
         this.loginFrame = loginFrame;
         setPreferredSize(new Dimension(400,getHeight()));
         setBackground(new Color(35,94,40));

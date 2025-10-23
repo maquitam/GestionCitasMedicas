@@ -12,7 +12,6 @@ public class ServicioLogin {
         try {
             loginRepositorio = new LoginRepositorio();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
