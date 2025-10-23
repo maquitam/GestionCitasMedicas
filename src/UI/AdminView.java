@@ -13,7 +13,10 @@ public class AdminView extends JFrame {
     public static final String MEDICO_PANEL = "medicoPanel";    
     public static final String BIENVENIDA_PANEL = "bienvenidaPanel";
 
-    public AdminView() {
+    public String USUARIO_AUTENTICADO;
+
+    public AdminView(String usuario) {
+        this.USUARIO_AUTENTICADO = usuario;
         setTitle("Vista Administrador");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -116,10 +119,5 @@ public class AdminView extends JFrame {
         bienvenidaPanel.add(welcomeTitle, gbc);
 
         return bienvenidaPanel;
-    }
-    
-
-    public static void main(String[] args) {
-        AdminView adminView = new AdminView();
     }
 }

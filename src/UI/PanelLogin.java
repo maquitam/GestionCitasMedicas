@@ -7,11 +7,11 @@ import servicios.ServicioLogin;
 
 
 public class PanelLogin extends JPanel {
-    private LoginView loginFrame;
-    ServicioLogin servicioLogin;
+    private LoginView loginView;
+    private String usuario, contrasenna;
 
-    public PanelLogin(LoginView loginFrame) {
-        this.loginFrame = loginFrame;
+    public PanelLogin(LoginView loginView) {
+        this.loginView = loginView;
         
         setBackground(Color.WHITE);
         setLayout(new GridBagLayout());
@@ -112,21 +112,11 @@ public class PanelLogin extends JPanel {
 
         
         loginBoton.addActionListener(e -> {
-            
-            servicioLogin = new ServicioLogin();
 
-            var usuario = textUsuario.getText();
-            var contraseña = new String(campoContraseña.getPassword());
-            var login = new Login(usuario,contraseña);
+            usuario = textUsuario.getText();
+            contrasenna = new String(campoContraseña.getPassword());
 
-            var valid = servicioLogin.validarUsuarioyContraseña(usuario, contraseña);
-
-            if (valid) {
-                JOptionPane.showMessageDialog(loginBoton, "Inició sesión correctamente");
-            } else {
-                JOptionPane.showMessageDialog(loginBoton, "Usuario o Contraseña Incorrectos");
-            }
-
+            loginView.manejarInicioSesion(usuario, contrasenna);
         });
 
     }

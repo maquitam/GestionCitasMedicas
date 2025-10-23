@@ -375,8 +375,6 @@ public class PanelMedicos extends JPanel {
         // - - - - - - - - - - - - - -
 
         add(tablaMedicosPanel,BorderLayout.CENTER);
-
-        setCampos();
         
     }
 
@@ -456,26 +454,6 @@ public class PanelMedicos extends JPanel {
         btnActualizar.setVisible(true);
 
     };
-
-    public void setCampos() {
-        primerNombreField.setText("Elkin");
-        segundoNombreField.setText("Alejandro");
-        primerApellidoField.setText("Lopez");
-        segundoApellidoField.setText("Clavijo");
-
-        documentoField.setText("1090377346");
-        tiposDocumentos.setSelectedItem("CC");
-
-        tipoEspecialidades.setSelectedItem("Pediatría");
-        
-        correoField.setText("al467199");
-
-        telefonoField.setText("3022480598");
-
-        direccionField.setText("Bello");
-
-        campoContraseña.setText("123");
-    }
 
     public void modoCrear() {
         btnActualizar.setVisible(false);
