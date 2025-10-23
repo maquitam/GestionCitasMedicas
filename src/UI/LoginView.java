@@ -2,6 +2,8 @@ package UI;
 
 import javax.swing.*;
 
+import servicios.ServicioLogin;
+
 import java.awt.*;
 
 public class LoginView extends JFrame {
@@ -14,6 +16,7 @@ public class LoginView extends JFrame {
     public static final String CREAR_CUENTA = "crearCuenta";
     public static final String INICIAR_SESION = "iniciarSesion";
 
+    private ServicioLogin servicioLogin;
     
     public LoginView() {
         setTitle("Gestor de Citas Médicas");
@@ -82,5 +85,29 @@ public class LoginView extends JFrame {
 
     public void mostrarIniciarSesion() {
         cardLayout.show(panelIzquierdo, INICIAR_SESION);
+    }
+
+    public void manejarInicioSesion(String usuario, String contrasenna) {
+        
+        servicioLogin = new ServicioLogin();
+
+        var perfil = servicioLogin.iniciarSesion(usuario, contrasenna);
+
+        switch (perfil) {
+            case "admin":
+                AdminView adminView = new AdminView(usuario);
+                this.dispose();
+            case "Médico":
+                // MedicoView = new MedicoView(usuario);
+                break;
+            case "Paciente":
+                // PacienteView = new PacienteView(usuario);
+            default:
+                JOptionPane.showMessageDialog(
+                    null, "Hubo un error al iniciar sesión.", "Error", JOptionPane.INFORMATION_MESSAGE);;
+        }
+
+
+
     }
 }

@@ -2,11 +2,13 @@ package servicios;
 
 import java.io.IOException;
 import repositorio.LoginRepositorio;
-import objetos.Login;
+import objetos.*;
 
 public class ServicioLogin {
 
     private LoginRepositorio loginRepositorio;
+    private Medico Medico;
+    private Paciente Paciente;
 
     public ServicioLogin() {
         try {
@@ -27,29 +29,42 @@ public class ServicioLogin {
         return false;
     }
 
-    public boolean registrarUsuario(Login login) throws IOException, Exception {
+    public boolean registrarUsuario(Usuario usuario) throws IOException, Exception {
         var logins = loginRepositorio.getLogins();
 
         for (var temporal : logins) {
-            if(temporal.getUsuario().equals(login.getUsuario())) {
+            if(temporal.getUsuario().equals(usuario.getNumeroDoc())) {
                 return false;
             }
 
         }
 
-        return loginRepositorio.registrarUsuario(login);
+        return loginRepositorio.registrarUsuario(usuario);
 
     }
 
-    public boolean verificarUsuarioenBasedeDatos(String usuario) {
+    public boolean verificarUsuarioenBasedeDatos(String documento) {
         var logins = loginRepositorio.getLogins();
 
         for (var temporal : logins) {
-            if (temporal.getUsuario().equals(usuario)) {
+            if (temporal.getUsuario().equals(documento)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public String obtenerPerfil(String documento) {
+        return loginRepositorio.obtenerPerfilUsuario(documento);
+    }
+
+    public String iniciarSesion(String usuario, String contrasenna) {
+        var valid = validarUsuarioyContraseña(usuario, contrasenna);
+        if (valid) {
+            return obtenerPerfil(usuario);
+        }
+
+        return "";
     }
 }

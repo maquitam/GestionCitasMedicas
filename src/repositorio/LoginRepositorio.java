@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import objetos.Login;
+import objetos.Usuario;
 
 public class LoginRepositorio {
     private File file;
@@ -49,9 +50,9 @@ public class LoginRepositorio {
     }        
 }
 
-    public boolean registrarUsuario(Login login) throws Exception {
+    public boolean registrarUsuario(Usuario usuario) throws Exception {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
-            var content = login.getUsuario() + "|" + login.getContraseña();
+            var content = usuario.getNumeroDoc() + "|" + usuario.getContrassena() + "|" + usuario.getPerfil();
             bufferedWriter.write(content);
             bufferedWriter.newLine();
         } catch (Exception exe) {
@@ -95,5 +96,28 @@ public class LoginRepositorio {
          } catch (Exception e)  {
             return false;
          }
-}
+        }
+
+    public String obtenerPerfilUsuario(String documento) {
+        Scanner s = null;
+        try {
+            System.out.println("Leyendo el archivo Login...");
+            s = new Scanner(file);
+
+            while (s.hasNextLine()) {
+                String loginLine = s.nextLine();
+                String[] partes = loginLine.split("\\|");
+                if (documento.equals("admin")) {
+                    return "admin";
+                } else if (partes[0].equals(documento)) {
+                    return partes[2];
+                }
+            }
+    
+            return "";
+            
+    } catch (Exception exe) {
+        return null;
+    }
+    }
 }

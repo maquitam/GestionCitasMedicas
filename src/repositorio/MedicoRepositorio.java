@@ -26,7 +26,6 @@ public class MedicoRepositorio {
         Scanner s = null;
         List<Medico> medicos = new ArrayList<>();
         try {
-            System.out.println("Leyendo el archivo Medicos...");
             s = new Scanner(file);
 
             while (s.hasNextLine()) {
@@ -50,10 +49,8 @@ public class MedicoRepositorio {
         } catch (Exception exe) {
             throw new Exception(exe.getMessage());
         }
-
         loginRepositorio = new LoginRepositorio();
-        var Login = new Login(medico.getNumeroDoc(), medico.getContrassena());
-        loginRepositorio.registrarUsuario(Login);
+        loginRepositorio.registrarUsuario(medico);
 
         return true;
     };
