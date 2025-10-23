@@ -2,18 +2,15 @@ package UI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-
-import repositorio.LoginRepositorio;
 import objetos.Login;
 import servicios.ServicioLogin;
 
 
-public class LoginPanel extends JPanel {
+public class PanelLogin extends JPanel {
     private LoginView loginFrame;
     ServicioLogin servicioLogin;
 
-    public LoginPanel(LoginView loginFrame) {
+    public PanelLogin(LoginView loginFrame) {
         this.loginFrame = loginFrame;
         
         setBackground(Color.WHITE);

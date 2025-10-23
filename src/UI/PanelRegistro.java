@@ -3,10 +3,10 @@ package UI;
 import javax.swing.*;
 import java.awt.*;
 
-public class RegistroPanel extends JPanel {
+public class PanelRegistro extends JPanel {
     private LoginView loginFrame;
 
-    public RegistroPanel(LoginView loginFrame) {
+    public PanelRegistro(LoginView loginFrame) {
         this.loginFrame = loginFrame;
         setBackground(Color.WHITE);
         setLayout(new GridBagLayout());

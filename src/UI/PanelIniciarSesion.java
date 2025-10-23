@@ -3,10 +3,10 @@ package UI;
 import javax.swing.*;
 import java.awt.*;
 
-public class IniciarSesion extends JPanel {   
+public class PanelIniciarSesion extends JPanel {   
     private LoginView loginFrame;
 
-    public IniciarSesion(LoginView loginFrame) {
+    public PanelIniciarSesion(LoginView loginFrame) {
         this.loginFrame = loginFrame;
         setBackground(new Color(35,94,40));
         setLayout(new GridBagLayout());

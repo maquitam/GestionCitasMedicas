@@ -18,6 +18,10 @@ public class Boton extends JButton {
         setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
+    public void setRedondeado(int radio) {
+        this.radio = radio;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();

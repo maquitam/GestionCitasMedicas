@@ -1,14 +1,12 @@
 package objetos;
 
 public abstract class Usuario {
-    private String nombres, apellidos, tipoDocumento, correo, direccion, perfil;
-    private double numeroDocumento;
-    private double telefono;
-    private boolean estado;
+    private int id;
+    private String nombres, apellidos, numeroDocumento, tipoDocumento, telefono, correo, direccion, perfil, contrasenna;
     
-    // Constructor para usuarios tipo Paciente
-    public Usuario(String nombres, String apellidos, String tipoDocumento,
-            double numeroDocumento, double telefono, String correo, String direccion) {
+    public Usuario(int id, String nombres, String apellidos, String tipoDocumento,
+            String numeroDocumento, String telefono, String correo, String direccion, String perfil, String contrasenna) {
+        this.id = id;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.tipoDocumento = tipoDocumento;
@@ -16,89 +14,53 @@ public abstract class Usuario {
         this.telefono = telefono;
         this.correo = correo;
         this.direccion = direccion;
-        this.perfil = "Paciente";
+        this.contrasenna = contrasenna;
+        this.perfil = perfil;
     }
     
-    // Constructor para usuarios tipo Médico
-    public Usuario(String nombres, String apellidos, 
-            int numeroDocumento, String tipoDocumento, String correo, double telefono, String direccion,
-            boolean estado) {
-        this.nombres = nombres;
-        this.apellidos = apellidos;
-        this.tipoDocumento = tipoDocumento;
-        this.numeroDocumento = numeroDocumento;
-        this.correo = correo;
-        this.telefono = telefono;
-        this.direccion = direccion;
-        this.perfil = "Personal Médico";
-        this.estado = estado;
+    public void setId(int id) {this.id = id;}
+    public void setNombres(String nuevosNombres) {nombres = nuevosNombres;}
+    public void setApellidos(String nuevosApellidos) {apellidos = nuevosApellidos;}
+    public void setTipoDocumento(String nuevoTipoDoc) {tipoDocumento = nuevoTipoDoc;}
+    public void setCorreo(String nuevoCorreo) {correo = nuevoCorreo;}
+    public void setDireccion(String nuevaDireccion) {direccion = nuevaDireccion;}
+    public void setPerfil(String nuevoPerfil) {perfil = nuevoPerfil;}
+    public void setNumeroDoc(String nuevoNumeroDoc) {numeroDocumento = nuevoNumeroDoc;}
+    public void setTelefono(String nuevoTelefono) {telefono = nuevoTelefono;}
+    public void setContrasenna(String contrasenna) {this.contrasenna = contrasenna;}
+
+    public int getId() {return id;}
+    public String getNombres() {return nombres;}
+    public String getApellidos() {return apellidos;}
+    public String getNombreCompleto() {return nombres + " " + apellidos;}
+    public String getTipoDocumento() {return tipoDocumento;}
+    public String getCorreo() {return correo;}
+    public String getDireccion() {return direccion;}
+    public String getPerfil() {return perfil;}
+    public String getNumeroDoc() {return numeroDocumento;}
+    public String getTelefono() {return telefono;}
+    public String getContrassena() {return contrasenna;}
+
+    public String getPrimerNombre() {
+        var nombres = getNombres().split(" ");
+        return nombres[0];
     }
-    
-    public void setNombres(String nuevosNombres) {
-        nombres = nuevosNombres;
+
+    public String getSegundoNombre() {
+        var nombres = getNombres().split(" ");
+        if (nombres.length == 2) {
+            return nombres[1];
+        }
+        return null;
     }
-    
-    public void setApellidos(String nuevosApellidos) {
-        apellidos = nuevosApellidos;
+
+    public String getPrimerApellido() {
+        var apellidos = getApellidos().split(" ");
+        return apellidos[0];
     }
-    
-    public String getNombreCompleto() {
-        return nombres + " " + apellidos;
-    }
-    
-    public void setTipoDocumento(String nuevoTipoDoc) {
-        tipoDocumento = nuevoTipoDoc;
-    }
-    
-    public String getTipoDocumento() {
-        return tipoDocumento;
-    }
-    
-    public void setCorreo(String nuevoCorreo) {
-        correo = nuevoCorreo;
-    }
-    
-    public String getCorreo() {
-        return correo;
-    }
-    
-    public void setDireccion(String nuevaDireccion) {
-        direccion = nuevaDireccion;
-    }
-    
-    public String getDireccion() {
-        return direccion;
-    }
-    
-    public void setPerfil(String nuevoPerfil) {
-        perfil = nuevoPerfil;
-    }
-    
-    public String getPerfil() {
-        return perfil;
-    }
-    
-    public void setNumeroDoc(int nuevoNumeroDoc) {
-        numeroDocumento = nuevoNumeroDoc;
-    }
-    
-    public double getNumeroDoc() {
-        return numeroDocumento;
-    }
-    
-    public void setTelefono(int nuevoTelefono) {
-        telefono = nuevoTelefono;
-    }
-    
-    public double getTelefono() {
-        return telefono;
-    }
-    
-    public void setEstado(boolean nuevoEstado) {
-        estado = nuevoEstado;
-    }
-    
-    public boolean getEstado(){
-        return estado;
+
+    public String getSegundoApellido() {
+        var apellidos = getApellidos().split(" ");
+        return apellidos[1];
     }
 }
