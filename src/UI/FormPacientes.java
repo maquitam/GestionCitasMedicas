@@ -9,37 +9,35 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PanelRegistro extends JPanel {
-    private LoginView loginFrame;
-    private FormPacientes formPacientes;
-    private ServicioPaciente servicioPaciente;
-    private CampoTexto primerNombre, segundoNombre, primerApellido, segundoApellido, documento, telefono, direccion, fechaNacimiento, correo;
-    private ComboBox<String> tiposDocumentos, sexo, grupo, rh;
-    private JPasswordField contrasenna;
+public class FormPacientes extends JPanel {
+    protected CampoTexto primerNombre, segundoNombre, primerApellido, segundoApellido, documento, telefono, direccion, fechaNacimiento, correo;
+    protected ComboBox<String> tiposDocumentos, sexo, grupo, rh;
+    protected JPasswordField contrasenna;
+    protected JCheckBox mostrarContrasenna;
+    protected JLabel contrasennaLabel;
+    
+    public FormPacientes(String titulo) {
+        setLayout(new GridBagLayout());
 
-    public PanelRegistro(LoginView loginFrame) {
-        this.loginFrame = loginFrame;
-        setBackground(Color.WHITE);
-        setLayout(new BorderLayout());
-        
-        /* GridBagConstraints gbc = new GridBagConstraints();
+        crearFormularioBase(titulo);
+        setCampos();
+    }
+
+    protected void crearFormularioBase(String titulo) {
+        GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10,20,10,20);
-        gbc.fill = GridBagConstraints.HORIZONTAL; */
-        
-        formPacientes = new FormPacientes("Registro de Usuario");
-        add(formPacientes, BorderLayout.CENTER);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        /* // Título - Registro Usuario
-        JLabel registerTitle = new JLabel("Registro de Usuario");
-        registerTitle.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        registerTitle.setForeground(new Color(35,94,40));
+        JLabel tituloLabel = new JLabel(titulo);
+        tituloLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        tituloLabel.setForeground(new Color(35,94,40));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 1.0;
         gbc.gridwidth = 2;
-        add(registerTitle, gbc);
+        add(tituloLabel, gbc);
 
         gbc.gridy = 1;
         gbc.gridwidth = 1;
@@ -227,7 +225,7 @@ public class PanelRegistro extends JPanel {
         gbc.insets = new Insets(10,20,1,20);
 
         // Campo de Contraseña
-        JLabel contrasennaLabel = new JLabel("Contraseña");
+        contrasennaLabel = new JLabel("Contraseña");
         gbc.gridy = 12;
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.WEST;
@@ -236,101 +234,72 @@ public class PanelRegistro extends JPanel {
         gbc.insets = new Insets(10,20,10,20);
 
         contrasenna = new CampoContraseña(20);
+        contrasenna.setPreferredSize(primerNombre.getPreferredSize());
         gbc.gridy = 13;
 
         add(contrasenna, gbc);
 
         gbc.insets = new Insets(0,20,10,20);
 
-        JCheckBox mostrarContraseña = new JCheckBox("Mostrar Contraseña");
-        mostrarContraseña.setBackground(getBackground());
+        mostrarContrasenna = new JCheckBox("Mostrar Contraseña");
+        mostrarContrasenna.setBackground(getBackground());
 
         gbc.gridy = 14;
-        add(mostrarContraseña, gbc);
+        add(mostrarContrasenna, gbc);
 
-        mostrarContraseña.addActionListener(_->{
+        mostrarContrasenna.addActionListener(_->{
             boolean showing = contrasenna.getEchoChar() != 0;
             if (showing) {
                 contrasenna.setEchoChar((char) 0); // Mostrar texto
-                mostrarContraseña.setText("Ocultar Constraseña");
+                mostrarContrasenna.setText("Ocultar Constraseña");
             } else {
                 contrasenna.setEchoChar('•'); // Ocultar texto
-                mostrarContraseña.setText("Mostrar Constraseña");
-            }
-        }); */
-        
-        // Boton Enviar
-        var boton = crearBtnEnviar();
-        
-/*         gbc.gridx = 0;
-        gbc.gridy = 15;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.gridwidth = 2; */
-        add(boton, BorderLayout.SOUTH);
-
-        
-
-    }
-
-    private JPanel crearBtnEnviar() {
-        JPanel btnPanel = new JPanel(new GridBagLayout());
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.weightx = 0.5;
-        Boton enviarBoton = new Boton("Crear Cuenta");
-
-        btnPanel.add(enviarBoton, gbc);
-
-        // ---- EVENTO ----
-        enviarBoton.addActionListener(e->{
-            ServicioPaciente  servicioPaciente = new ServicioPaciente();
-            var datos = formPacientes.cargarDatos();
-            boolean valid;
-            try {
-                valid = servicioPaciente.crearPaciente(datos);
-                if (valid) {
-                    JOptionPane.showMessageDialog(null, "Usuario Creado Exitosamente", "", JOptionPane.INFORMATION_MESSAGE);
-                    UtilidadesForm.limpiarCampos(this);
-                    loginFrame.mostrarLoginPanel();
-                } else {
-                    JOptionPane.showMessageDialog(null, "¡Ups! Parece que este documento ya tiene una cuenta asociada", "", JOptionPane.INFORMATION_MESSAGE);
-                    UtilidadesForm.limpiarCampos(this);
-                }
-            } catch (Exception e1) {
-                e1.printStackTrace();
+                mostrarContrasenna.setText("Mostrar Constraseña");
             }
         });
 
-
-        return btnPanel;
     }
 
-    public Map<String, String> obtenerDatosCampos() {
-            Map<String, String> datos = new HashMap<>();
+    protected void cargarPaciente(Map<String, String> datos) {
+        primerNombre.setText(datos.get("primerNombre"));
+        segundoNombre.setText(datos.get("segundoNombre"));
+        primerApellido.setText(datos.get("primerApellido"));
+        segundoApellido.setText(datos.get("segundoApellido"));
+        tiposDocumentos.setSelectedItem(datos.get("tipoDocumento"));
+        documento.setText(datos.get("documento"));
+        sexo.setSelectedItem(datos.get("sexo"));
+        grupo.setSelectedItem(datos.get("grupo"));
+        rh.setSelectedItem(datos.get("rh"));
+        telefono.setText(datos.get("telefono"));
+        direccion.setText(datos.get("direccion"));
+        correo.setText(datos.get("correo"));
+        contrasenna.setText(datos.get("contrasenna"));
+        fechaNacimiento.setText(datos.get("fechaNacimiento"));
+    }
 
-            datos.put("primerNombre", primerNombre.getText());
-            datos.put("segundoNombre", segundoNombre.getText());
-            datos.put("primerApellido", primerApellido.getText());
-            datos.put("segundoApellido", segundoApellido.getText());
-            datos.put("documento", documento.getText());
-            datos.put("tipoDocumento", (String) tiposDocumentos.getSelectedItem());
-            datos.put("sexo", (String) sexo.getSelectedItem());
-            datos.put("grupo", (String) grupo.getSelectedItem());
-            datos.put("rh", (String) rh.getSelectedItem());
-            datos.put("telefono", telefono.getText());
-            datos.put("direccion", direccion.getText());
-            datos.put("correo", correo.getText());
-            datos.put("contrasenna", new String(contrasenna.getPassword()));
-            datos.put("fechaNacimiento", fechaNacimiento.getText());
-            datos.put("perfil", "Paciente");
+    protected Map<String, String> cargarDatos() {
+        Map<String, String> datos = new HashMap<>();
 
-            return datos;
-        }
+        datos.put("primerNombre", primerNombre.getText());
+        datos.put("segundoNombre", segundoNombre.getText());
+        datos.put("primerApellido", primerApellido.getText());
+        datos.put("segundoApellido", segundoApellido.getText());
+        datos.put("documento", documento.getText());
+        datos.put("tipoDocumento", (String) tiposDocumentos.getSelectedItem());
+        datos.put("sexo", (String) sexo.getSelectedItem());
+        datos.put("grupo", (String) grupo.getSelectedItem());
+        datos.put("rh", (String) rh.getSelectedItem());
+        datos.put("telefono", telefono.getText());
+        datos.put("direccion", direccion.getText());
+        datos.put("correo", correo.getText());
+        datos.put("contrasenna", new String(contrasenna.getPassword()));
+        datos.put("fechaNacimiento", fechaNacimiento.getText());
+        datos.put("perfil", "Paciente");
 
-    public void setCampos() {
+        return datos;
+    };
+
+    protected void setCampos() {
         primerNombre.setText("María");
         segundoNombre.setText("Camila");
         primerApellido.setText("Parra");
@@ -346,4 +315,23 @@ public class PanelRegistro extends JPanel {
         contrasenna.setText("123");
         fechaNacimiento.setText("16-11-2004");
     }
-    }
+
+    protected boolean guardarPaciente() {
+        ServicioPaciente  servicioPaciente = new ServicioPaciente();
+            var datos = cargarDatos();
+            boolean valid;
+            try {
+                valid = servicioPaciente.crearPaciente(datos);
+                if (valid) {
+                    JOptionPane.showMessageDialog(null, "Usuario Creado Exitosamente", "", JOptionPane.INFORMATION_MESSAGE);
+                    UtilidadesForm.limpiarCampos(this);
+                    return true;
+                }
+            JOptionPane.showMessageDialog(null, "¡Ups! Parece que este documento ya tiene una cuenta asociada", "", JOptionPane.INFORMATION_MESSAGE);
+            UtilidadesForm.limpiarCampos(this);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        return false;
+    };
+}
