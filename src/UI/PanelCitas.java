@@ -9,7 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class PanelCitas extends JPanel {
-    public PanelCitas () {
+    private AdminView adminView;
+    public PanelCitas (AdminView adminView) {
+        this.adminView = adminView;
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
         JLabel titulo = new JLabel("Aquí va la vista de citas: ", SwingConstants.CENTER);

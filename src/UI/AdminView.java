@@ -12,6 +12,7 @@ public class AdminView extends JFrame {
 
     public static final String MEDICO_PANEL = "medicoPanel";    
     public static final String BIENVENIDA_PANEL = "bienvenidaPanel";
+    public static final String CITA_PANEL = "citaPanel";
 
     public String USUARIO_AUTENTICADO;
 
@@ -90,15 +91,22 @@ public class AdminView extends JFrame {
         //Crear paneles    
         PanelMedicos medicoPanel = new PanelMedicos(this);
         JPanel bienvenidaPanel = mostrarBienvenidaPanel();
-            
+        PanelCitas citaPanel = new PanelCitas(this);
+
+
         panelDerecho.add(bienvenidaPanel, BIENVENIDA_PANEL);
         panelDerecho.add(medicoPanel, MEDICO_PANEL);
+        panelDerecho.add(citaPanel, CITA_PANEL);
 
         cardLayout.show(panelDerecho, BIENVENIDA_PANEL);
     }
 
     public void mostrarPanelMedicos() {
         cardLayout.show(panelDerecho, MEDICO_PANEL);
+    }
+
+    public void mostrarPanelCitas() {
+        cardLayout.show(panelDerecho, CITA_PANEL);
     }
 
     private JPanel mostrarBienvenidaPanel() {
@@ -123,14 +131,5 @@ public class AdminView extends JFrame {
         bienvenidaPanel.add(welcomeTitle, gbc);
 
         return bienvenidaPanel;
-    }
-
-    private void mostrarPanelCitas() {
-        panelDerecho.removeAll();
-        PanelCitas panelCitas = new PanelCitas();
-        panelDerecho.add(panelCitas);
-        panelDerecho.revalidate();
-        panelDerecho.repaint();
-
     }
 }
