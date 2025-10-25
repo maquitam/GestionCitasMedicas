@@ -78,6 +78,10 @@ public class AdminView extends JFrame {
         medicos.addActionListener(e->{
             mostrarPanelMedicos();
         });
+
+        citas.addActionListener(e->{
+            mostrarPanelCitas();
+        });
     }
 
     private void crearPanelDerecho() {
@@ -119,5 +123,14 @@ public class AdminView extends JFrame {
         bienvenidaPanel.add(welcomeTitle, gbc);
 
         return bienvenidaPanel;
+    }
+
+    private void mostrarPanelCitas() {
+        panelDerecho.removeAll();
+        PanelCitas panelCitas = new PanelCitas();
+        panelDerecho.add(panelCitas);
+        panelDerecho.revalidate();
+        panelDerecho.repaint();
+
     }
 }
