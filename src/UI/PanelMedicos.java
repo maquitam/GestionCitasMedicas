@@ -205,7 +205,7 @@ public class PanelMedicos extends JPanel {
 
         JCheckBox mostrarContraseña = new JCheckBox("Mostrar Contraseña");
 
-        mostrarContraseña.addActionListener(_->{
+        mostrarContraseña.addActionListener(e->{
             boolean showing = campoContraseña.getEchoChar() != 0;
             if (showing) {
                 campoContraseña.setEchoChar((char) 0); // Mostrar texto
@@ -294,7 +294,7 @@ public class PanelMedicos extends JPanel {
 
         // - - - - EVENTOS - - - - -
 
-        btnCrearMedico.addActionListener(_->{
+        btnCrearMedico.addActionListener(e->{
             var datos = toTxtFormat();
             try {
                 boolean valid = servicioMedico.crearMedico(datos);
@@ -320,7 +320,7 @@ public class PanelMedicos extends JPanel {
             }
         });
 
-        btnActualizar.addActionListener(_->{
+        btnActualizar.addActionListener(e->{
             var lista = obtenerCampos();
             try {
                 servicioMedico.actualizarMedico(lista);
@@ -333,7 +333,7 @@ public class PanelMedicos extends JPanel {
             
         });
 
-        btnCancelar.addActionListener(_->{
+        btnCancelar.addActionListener(e->{
             UtilidadesForm.limpiarCampos(medicoForm);
             btnActualizar.setVisible(false);
             btnCancelar.setVisible(false);
@@ -354,7 +354,7 @@ public class PanelMedicos extends JPanel {
             btnCancelar.setVisible(true);
         });
 
-        itemEliminar.addActionListener(_->{
+        itemEliminar.addActionListener(e->{
             var documento = modeloTabla.getValueAt(filaSeleccionada, 2).toString();
             try {
                 servicioMedico.eliminarMedico(documento);
@@ -364,7 +364,7 @@ public class PanelMedicos extends JPanel {
             actualizarTabla();
         });
 
-        itemCambiarEstado.addActionListener(_->{
+        itemCambiarEstado.addActionListener(e->{
             var documento = modeloTabla.getValueAt(filaSeleccionada, 2).toString();
             try {
                 servicioMedico.cambiasEstado(documento);
