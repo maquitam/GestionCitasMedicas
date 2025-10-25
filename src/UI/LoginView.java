@@ -15,18 +15,22 @@ public class LoginView extends JFrame {
     public static final String REGISTRO_PANEL = "registroPanel";
     public static final String CREAR_CUENTA = "crearCuenta";
     public static final String INICIAR_SESION = "iniciarSesion";
+    public static final Dimension DEFECTO = new Dimension(800, 500);
 
     private ServicioLogin servicioLogin;
     
     public LoginView() {
         setTitle("Gestor de Citas Médicas");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(900, 500);
-        setLocationRelativeTo(null);
+        
         setResizable(false);
         setLayout(new BorderLayout());
         
         initComponents();
+
+        setSize(DEFECTO);
+
+        setLocationRelativeTo(null);
         setVisible(true);
     }
     
@@ -60,8 +64,8 @@ public class LoginView extends JFrame {
         panelIzquierdo = new JPanel(cardLayout);
 
         // Crear Panel Crear Cuenta
-        PanelCrearCuenta crearCuenta = new PanelCrearCuenta(this);
-        PanelIniciarSesion iniciarSesion = new PanelIniciarSesion(this);
+        SwithToCreateAccount crearCuenta = new SwithToCreateAccount(this);
+        SwitchToLogin iniciarSesion = new SwitchToLogin(this);
 
         panelIzquierdo.add(crearCuenta, CREAR_CUENTA);
         panelIzquierdo.add(iniciarSesion, INICIAR_SESION);
@@ -69,22 +73,25 @@ public class LoginView extends JFrame {
         cardLayout.show(panelIzquierdo, CREAR_CUENTA);
     };
 
-
-
     public void mostrarRegistroPanel() {
         cardLayout.show(panelDerecho, REGISTRO_PANEL);
     }
 
     public void mostrarLoginPanel() {
         cardLayout.show(panelDerecho, LOGIN_PANEL);
+        mostrarCrearCuenta();
     }
 
     public void mostrarCrearCuenta() {
         cardLayout.show(panelIzquierdo, CREAR_CUENTA);
+        setSize(DEFECTO);
+        setLocationRelativeTo(null);
     }
 
     public void mostrarIniciarSesion() {
         cardLayout.show(panelIzquierdo, INICIAR_SESION);
+        setSize(900, 650);
+        setLocationRelativeTo(null);
     }
 
     public void manejarInicioSesion(String usuario, String contrasenna) {
@@ -95,19 +102,15 @@ public class LoginView extends JFrame {
 
         switch (perfil) {
             case "admin":
-                AdminView adminView = new AdminView(usuario);
+                new AdminView(usuario);
                 this.dispose();
-            case "Médico":
-                // MedicoView = new MedicoView(usuario);
                 break;
             case "Paciente":
-                // PacienteView = new PacienteView(usuario);
+                new PacienteView(usuario);
+                this.dispose();
+                break;
             default:
-                JOptionPane.showMessageDialog(
-                    null, "Hubo un error al iniciar sesión.", "Error", JOptionPane.INFORMATION_MESSAGE);;
+                JOptionPane.showMessageDialog(null, "Hubo un error al iniciar sesión.", "Error", JOptionPane.INFORMATION_MESSAGE);;
         }
-
-
-
     }
 }

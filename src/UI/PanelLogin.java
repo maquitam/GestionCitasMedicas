@@ -2,8 +2,6 @@ package UI;
 
 import javax.swing.*;
 import java.awt.*;
-import objetos.Login;
-import servicios.ServicioLogin;
 
 
 public class PanelLogin extends JPanel {

@@ -3,11 +3,12 @@ package UI;
 import javax.swing.*;
 import java.awt.*;
 
-public class PanelIniciarSesion extends JPanel {   
+public class SwithToCreateAccount extends JPanel {   
     private LoginView loginFrame;
 
-    public PanelIniciarSesion(LoginView loginFrame) {
+    public SwithToCreateAccount(LoginView loginFrame) {
         this.loginFrame = loginFrame;
+        setPreferredSize(new Dimension(300,getHeight()));
         setBackground(new Color(35,94,40));
         setLayout(new GridBagLayout());
 
@@ -17,7 +18,7 @@ public class PanelIniciarSesion extends JPanel {
 
 
         // Titulo
-        JLabel registerTitle = new JLabel("¿Ya tienes una cuenta?");
+        JLabel registerTitle = new JLabel("¿No tienes una cuenta?");
         registerTitle.setFont(new Font("Segoe UI", Font.BOLD, 20));
         registerTitle.setForeground(Color.WHITE);
         gbc.gridx = 0;
@@ -26,16 +27,22 @@ public class PanelIniciarSesion extends JPanel {
         add(registerTitle, gbc);
 
         // Boton Registrarse
-        Boton registerButton = new Boton("Iniciar Sesión");
-        registerButton.setBackground(new Color(44,119,50));
-
-        registerButton.addActionListener(e -> {
-            loginFrame.mostrarLoginPanel();
-            loginFrame.mostrarCrearCuenta();
-        });
+        var boton = BotonCrearCuenta();
 
         gbc.gridy = 6;
-        add(registerButton, gbc);
+        add(boton, gbc);
     
     }
+
+    public Boton BotonCrearCuenta() {
+        Boton registerButton = new Boton("Crear Cuenta");
+        registerButton.setBackground(new Color(44,119,50));
+
+        registerButton.addActionListener(_->{
+            loginFrame.mostrarRegistroPanel();
+            loginFrame.mostrarIniciarSesion();
+        });
+
+        return registerButton;
+    } 
 }

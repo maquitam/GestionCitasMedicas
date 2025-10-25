@@ -290,11 +290,7 @@ public class PanelMedicos extends JPanel {
 
         tablaMedicos.setComponentPopupMenu(menu);
 
-        tablaMedicos.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                filaSeleccionada = tablaMedicos.rowAtPoint(e.getPoint());
-            }
-        });
+        add(tablaMedicosPanel, BorderLayout.CENTER);
 
         // - - - - EVENTOS - - - - -
 
@@ -344,6 +340,12 @@ public class PanelMedicos extends JPanel {
             btnCrearMedico.setVisible(true);
         });
 
+        tablaMedicos.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                filaSeleccionada = tablaMedicos.rowAtPoint(e.getPoint());
+            }
+        });
+
         itemEditar.addActionListener(_->{
             UtilidadesForm.limpiarCampos(medicoForm);
             cargarMedico();
@@ -373,8 +375,6 @@ public class PanelMedicos extends JPanel {
         });
 
         // - - - - - - - - - - - - - -
-
-        add(tablaMedicosPanel,BorderLayout.CENTER);
         
     }
 

@@ -7,8 +7,6 @@ import objetos.*;
 public class ServicioLogin {
 
     private LoginRepositorio loginRepositorio;
-    private Medico Medico;
-    private Paciente Paciente;
 
     public ServicioLogin() {
         try {
