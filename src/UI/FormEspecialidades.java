@@ -17,7 +17,7 @@ public class FormEspecialidades extends JPanel {
         setLayout(new GridBagLayout());
 
         crearFormularioBase(titulo);
-        //setCampos();
+
     }
 
     protected void crearFormularioBase(String titulo) {
@@ -58,7 +58,7 @@ public class FormEspecialidades extends JPanel {
 
         gbc.insets = new Insets(10,20,1,20);
 
-        // Identificador
+        // Descripción
         JLabel descripcionLabel = new JLabel("Descripción");
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -74,64 +74,6 @@ public class FormEspecialidades extends JPanel {
         add(descripcion, gbc);
         gbc.insets = new Insets(10,20,1,20);
 
-
-/*  Estado
-        JLabel estadoLabel = new JLabel("Estado");
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        add(estadoLabel, gbc);
-
-        gbc.weightx = 0.5;
-        gbc.insets = new Insets(10,20,10,20);
-        
-        estado = new CampoTexto(20);
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        add(estado, gbc);
-        gbc.insets = new Insets(10,20,1,20);
-
-          Descripción
-        JLabel descripcionLabel = new JLabel("Descripción");
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        add(descripcionLabel, gbc);
-        
-        gbc.insets = new Insets(10,20,10,20);
-
-        descripcion = new CampoTexto(20);
-        gbc.gridx = 0;
-        gbc.gridy = 8;
-
-        add(estado, gbc);
-        gbc.insets = new Insets(10,20,1,20);*/
-
-        
-        
-        
-        
-        
-       /*  JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(getBackground());
-        GridBagConstraints inner = new GridBagConstraints();
-        inner.insets = new Insets(0, 0, 0, 5);
-        inner.fill = GridBagConstraints.HORIZONTAL;
-        inner.gridx = 0;
-        inner.weightx = 0.9;
-        descripcion = new CampoTexto(10);
-        panel.add(descripcion, inner);
-
-        inner.weightx = 0.1;
-        inner.gridx = 1;
-        String[] items = {"CC", "TI", "RC", "CE", "PA"};
-        tiposDocumentos = new ComboBox<>(items);
-        panel.add(tiposDocumentos, inner);
-
-        gbc.gridx = 0;
-        gbc.gridy = 10;
-        add(panel, gbc);
-        
-        gbc.insets = new Insets(10,20,1,20);*/
-      
     }
 
     protected void cargarEspecialidad(Map<String, String> datos) {
@@ -153,31 +95,10 @@ public class FormEspecialidades extends JPanel {
         return datos;
     };
 
-    /*protected void setCampos() {
-        nombre.setText("María");
-        segundoNombre.setText("Camila");
-        primerApellido.setText("Parra");
-        segundoApellido.setText("Morales");
-        documento.setText("1090377346");
-        tiposDocumentos.setSelectedItem("CC");
-        sexo.setSelectedItem("FEMENINO");
-        grupo.setSelectedItem("A");
-        rh.setSelectedItem("+");
-        telefono.setText("3022480598");
-        direccion.setText("Sabaneta");
-        correo.setText("mcparram1611@gmail.com");
-        contrasenna.setText("123");
-        fechaNacimiento.setText("16-11-2004");
-    }*/
 
     protected boolean guardarEspecialidad() {
-        ServicioEspecialidad  servicioEspecialidad = new ServicioEspecialidad();
-            var datosMap = cargarDatos();
-            String datos = String.format("%s|%s|%s|%s", 
-                datosMap.get("nombre"),
-                datosMap.get("identificador"),
-                datosMap.get("descripcion"),
-                "activo");
+        ServicioEspecialidad servicioEspecialidad = new ServicioEspecialidad();
+            var datos = cargarDatos();
             boolean valid;
             try {
                 valid = servicioEspecialidad.crearEspecialidad(datos);
@@ -186,7 +107,7 @@ public class FormEspecialidades extends JPanel {
                     UtilidadesForm.limpiarCampos(this);
                     return true;
                 }
-            JOptionPane.showMessageDialog(null, "¡Ups! Parece que este documento ya tiene una cuenta asociada", "", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "¡Ups! Parece que esta especialidad ya existe", "", JOptionPane.INFORMATION_MESSAGE);
             UtilidadesForm.limpiarCampos(this);
             } catch (Exception e1) {
                 e1.printStackTrace();

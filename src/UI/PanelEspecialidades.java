@@ -11,11 +11,11 @@ import servicios.ServicioEspecialidad;
 import servicios.UtilidadesForm;
 
 public class PanelEspecialidades extends JPanel {
+    
     private AdminView adminView;
     private JTable tablaEspecialidades;
     private DefaultTableModel modeloTabla;
     private ServicioEspecialidad servicioEspecialidad;
-
     private FormEspecialidades formEspecialidades;
     private Boton botonCrear, botonActualizar, botonCancelar;
 
@@ -32,7 +32,7 @@ public class PanelEspecialidades extends JPanel {
 
         var formulario = crearFormulario();
         var botones = crearBotones();
-        //var tabla = crearTabla();
+        var tabla = crearTabla();
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -43,10 +43,10 @@ public class PanelEspecialidades extends JPanel {
 
         add(formPanel, BorderLayout.WEST);
 
-        //add(tabla, BorderLayout.CENTER);
+        add(tabla, BorderLayout.CENTER);
 
-        //actualizarTabla();
-       // modoCrear();
+        actualizarTabla();
+        modoCrear();
     }
 
     public JPanel crearFormulario() {
@@ -78,11 +78,11 @@ public class PanelEspecialidades extends JPanel {
 
         // --- EVENTOS BOTONES ---
         botonCrear.addActionListener(e->{
-           // formEspecialidades.guardarPaciente();
-           // actualizarTabla();
+            formEspecialidades.guardarEspecialidad();
+            actualizarTabla();
         });
 
-        /*botonActualizar.addActionListener(e->{
+        botonActualizar.addActionListener(e->{
             var datos = formEspecialidades.cargarDatos();
             try {
                 servicioEspecialidad.actualizarEspecialidad(datos);
@@ -90,17 +90,18 @@ public class PanelEspecialidades extends JPanel {
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-            UtilidadesForm.limpiarCampos(formPacientes);
-        });*/
+            UtilidadesForm.limpiarCampos(formEspecialidades);
+        });
 
         botonCancelar.addActionListener(e->{
             UtilidadesForm.limpiarCampos(formEspecialidades);
-           // modoCrear();
+            modoCrear();
         });
             
         return botonesPanel;
+    }
 
-    /*public JPanel crearTabla() {
+    public JPanel crearTabla() {
         JPanel tablaPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbcTabla = new GridBagConstraints();
         gbcTabla.gridx = 0;
@@ -112,53 +113,43 @@ public class PanelEspecialidades extends JPanel {
         gbcTabla.fill = GridBagConstraints.BOTH;
 
         tablaPanel.setBackground(Color.GRAY);
-        modeloTabla = new DefaultTableModel(new Object[]{"Especialidades","ID", "Estado", "Descripción"}, 0);
+        modeloTabla = new DefaultTableModel(new Object[]{"Especialidades", "ID", "Estado", "Descripción"}, 0);
         
         tablaEspecialidades = new JTable(modeloTabla) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-        };*/
-       // JScrollPane scrollTabla = new JScrollPane(tablaEspecialidades);
+        };
+        JScrollPane scrollTabla = new JScrollPane(tablaEspecialidades);
 
-       /* JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = new JPopupMenu();
         JMenuItem itemEliminar = new JMenuItem("Eliminar");
         menu.add(itemEliminar);
 
         tablaEspecialidades.setComponentPopupMenu(menu);
         
-        //tablaPanel.add(scrollTabla, gbcTabla);*/
+        tablaPanel.add(scrollTabla, gbcTabla);
 
         // --- EVENTOS TABLA ---
-       /*  tablaEspecialidades.addMouseListener(new MouseAdapter() {
+        tablaEspecialidades.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int fila = tablaEspecialidades.getSelectedRow();
                     if (fila != -1) {
                         var documento = tablaEspecialidades.getValueAt(fila, 2).toString();
-                      //  var datos = servicioEspecialidad.cargarEspecialidad(documento);
-                       // formEspecialidades.cargarEspecialidad(datos);
-                      //  modoEdicion();
+                        var datos = servicioEspecialidad.cargarEspecialidad(documento);
+                        formEspecialidades.cargarEspecialidad(datos);
+                        modoEdicion();
                     }
                 }
             }
-        });*/
-
-      /*  itemEliminar.addActionListener(_->{
-            var documento = modeloTabla.getValueAt(tablaEspecialidades.getSelectedRow(), 2).toString();
-            try {
-                servicioEspecialidad.eliminarEspe(documento);
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-            actualizarTabla();
         });
-
         return tablaPanel;
-    };*/
 
-    /*public void actualizarTabla() {
+    };
+
+    public void actualizarTabla() {
         var especialidades = servicioEspecialidad.getEspecialidades();
         
         if (especialidades == null) {
@@ -169,7 +160,7 @@ public class PanelEspecialidades extends JPanel {
         modeloTabla = (DefaultTableModel) tablaEspecialidades.getModel();
 
         for (var especialidad : especialidades) {
-            modeloTabla.addRow(new Object[]{especialidad.getNombreEspecialidad(), especialidad.getId(), especialidad.getEstado(), especialidad.getDescripcion()});;
+            modeloTabla.addRow(new Object[]{especialidad.getNombreEspecialidad(), especialidad.getIdentificadorFormated(), especialidad.getEstadoFormated(), especialidad.getDescripcion()});
         }
     };
 
@@ -183,7 +174,6 @@ public class PanelEspecialidades extends JPanel {
         botonActualizar.setVisible(true);
         botonCancelar.setVisible(true);
         botonCrear.setVisible(false);
-    }*/
+    }
 
-}
 }

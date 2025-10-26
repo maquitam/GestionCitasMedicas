@@ -3,6 +3,7 @@ package servicios;
 import java.io.IOException;
 import java.util.Map;
 import objetos.Especialidad;
+import objetos.Paciente;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,124 +31,81 @@ public class ServicioEspecialidad {
     }
 
     public int generarId() {
-        var especialiades = getEspecialidades();
+        var especialidades = getEspecialidades();
         
-        if (pacientes == null) {
+        if (especialidades == null) {
             return 0;
         }
         
-        return especialiades.size();
-    
+        return especialidades.size();
+    }
 
     public boolean crearEspecialidad(Map<String, String> datos) throws Exception {
         try {
-            if (buscarPornombre(datos.getNombreEspecialidad()) != -1) {
+            if (buscarPorNombre(datos.get("nombreEspecialidad")) != -1) {
                 return false;
             }
-            
-            var nombres = datos.get("primerNombre");
-            var segundoNombre = datos.get("segundoNombre");
 
-            if (segundoNombre != null) {
-                nombres += " " + segundoNombre;
-            }
-
-            var paciente = new Paciente(datos.getNombre(),generarId(), nombres, datos.get("primerApellido") + " " + datos.get("segundoApellido"), 
-                            datos.get("tipoDocumento"), datos.get("documento"), 
-                            datos.get("fechaNacimiento"), datos.get("sexo"), datos.get("grupo") + datos.get("rh"),
-                            datos.get("correo"), datos.get("telefono"), datos.get("direccion"), datos.get("perfil"), 
-                            datos.get("contrasenna"));
+            var especialidad = new Especialidad(datos.get("nombreEspecialidad"), generarId(),true, datos.get("descripcion"));
         
-        return pacienteRepositorio.registrarPaciente(paciente);
+        return especialidadRepositorio.registrarEspecialidad(especialidad);
 
         } catch (Exception e) {
             return false;
         }
         
-        
     }
 
-    public Map<String, String> cargarPaciente(String id) {
-        Paciente paciente = obtenerPaciente(id);
+    public Map<String, String> cargarEspecialidad(String nombre) {
+        Especialidad especialidad = obtenerEspecialidad(nombre);
 
         Map<String, String> datos = new HashMap<>();
 
-        datos.put("primerNombre", paciente.getPrimerNombre());
-        datos.put("segundoNombre", paciente.getSegundoNombre());
-        datos.put("primerApellido", paciente.getPrimerApellido());
-        datos.put("segundoApellido", paciente.getSegundoApellido());
-        datos.put("documento", paciente.getNumeroDoc());
-        datos.put("tipoDocumento", paciente.getTipoDocumento());
-        datos.put("sexo", paciente.getSexo());
-        datos.put("grupo", paciente.getGrupo());
-        datos.put("rh", paciente.getRh());
-        datos.put("telefono", paciente.getTelefono());
-        datos.put("direccion", paciente.getDireccion());
-        datos.put("correo", paciente.getCorreo());
-        datos.put("contrasenna", paciente.getContrassena());
-        datos.put("fechaNacimiento", paciente.getFechadeNacimiento());
-        datos.put("perfil", "Paciente");
-
+        datos.put("nombreEspecialidad", especialidad.getNombreEspecialidad());
+        datos.put("identificador", especialidad.getIdentificadorFormated());
+        datos.put("estado", especialidad.getEstadoFormated());
+        datos.put("descripcion", especialidad.getDescripcion());
+       
         return datos;
     }
 
-    public Paciente obtenerPaciente(String documento) {
-        var pacientes = getPacientes();
-        var indice = buscarPorDocumento(documento);
-        return pacientes.get(indice);
+    public Especialidad obtenerEspecialidad(String nombre) {
+        var especialidades = getEspecialidades();
+        var indice = buscarPorNombre(nombre);
+        return especialidades.get(indice);
     };
 
-    public int buscarPorDocumento(String documento) {
-        var pacientes = getPacientes();
+    public int buscarPorNombre(String nombre) {
+        var especialidades = getEspecialidades();
 
-        if (pacientes == null) {return -1;}
+        if (especialidades == null) {return -1;}
 
-        for (var temporal : pacientes) {
-            if (temporal.getNumeroDoc().equals(documento)) {
-                return pacientes.indexOf(temporal);
+        for (var temporal : especialidades) {
+            if (temporal.getNombreEspecialidad().equals(nombre)) {
+                return especialidades.indexOf(temporal);
             }
         }
 
         return -1;
     }
 
-    public boolean actualizarPaciente(Map<String, String> datos) throws Exception {
-        var pacientes = getPacientes();
-        var indice = buscarPorDocumento(datos.get("documento"));
-        var paciente = pacientes.get(indice);
+    public boolean actualizarEspecialidad(Map<String, String> datos) throws Exception {
+        var especialidades = getEspecialidades();
+        var indice = buscarPorNombre(datos.get("nombreEspecialidad"));
+        var especialidad = especialidades.get(indice);
 
-        var nombres = datos.get("primerNombre");
-
-        if (datos.get("segundoNombre") != null) {nombres += " " + datos.get("segundoNombre");}
-
-        paciente.setNombres(nombres);
-        paciente.setApellidos(datos.get("primerApellido") + " " + datos.get("segundoApellido"));
-        paciente.setTipoDocumento(datos.get("tipoDocumento"));
-        paciente.setNumeroDoc(datos.get("documento"));
-        paciente.setsexo(datos.get("sexo"));
-        paciente.setGrupoSanguineo(datos.get("grupo")+datos.get("rh"));
-        paciente.setTelefono(datos.get("telefono"));
-        paciente.setDireccion(datos.get("direccion"));
-        paciente.setFechadeNacimiento(datos.get("fechaNacimiento"));
-        paciente.setCorreo(datos.get("correo"));
-        paciente.setContrasenna(datos.get("contrasenna"));
-
-        return pacienteRepositorio.actualizarBasedeDatos(pacientes);
+        if (especialidad.getEstado()) {
+            especialidad.setEstado(false);
+            } else {
+                especialidad.setEstado(true);
     }
 
-    public boolean eliminarPaciente(String documento) throws Exception {
-        var pacientes = pacienteRepositorio.getPacientes();
-        var indice = buscarPorDocumento(documento);
-        
-        pacientes.remove(indice);
-        
-        pacienteRepositorio.actualizarBasedeDatos(pacientes);
-        
-        loginRepositorio = new LoginRepositorio();
-        loginRepositorio.eliminarUsuario(documento);
+        especialidadRepositorio.actualizarBasedeDatos(especialidades);
 
         return true;
+    };
+    
 
-    }
+    
 }
-}
+
