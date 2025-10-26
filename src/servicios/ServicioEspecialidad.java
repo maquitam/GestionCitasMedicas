@@ -2,10 +2,12 @@ package servicios;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import objetos.Especialidad;
-
+import objetos.Paciente;
 import repositorio.EspecialidadRepositorio;
 import repositorio.LoginRepositorio;
 
@@ -25,7 +27,7 @@ public class ServicioEspecialidad {
 
     public boolean crearEspecialidad(String datos) throws Exception {
             String[] partes = datos.split("\\|");
-            var especialidad = new Especialidad(partes[0], generarId(), partes[2], partes[3]);
+            var especialidad = new Especialidad(partes[0], generarId(), Boolean.parseBoolean(partes[2]), partes[3]);
 
 
             return especialidadRepositorio.registrarEspecialidad(especialidad);
@@ -45,7 +47,8 @@ public class ServicioEspecialidad {
         return especialidadRepositorio.registrarEspecialidad(especialidad);
     }
 
-    public List<Especialidad> getMedicos() {
+
+    public List<Especialidad> getEspecialidades() {
         return especialidadRepositorio.getEspecialidades();
     }
  
@@ -69,32 +72,43 @@ public class ServicioEspecialidad {
 
         return -1;
     }
-/* 
-    public boolean actualizarMedico(ArrayList<String> lista) throws Exception {
-        var medicos = getMedicos();
-        var indice = buscarPorDocumento(new String(lista.get(5)));
-        var medico = medicos.get(indice);
 
-        var nombre = lista.get(0);
+    public Map<String, String> cargarEspecialidad(String nombreEspecialidad) {
+        Especialidad especialidad = obtenerEspecialidad(nombreEspecialidad);
+        Map<String, String> datos = new HashMap<>();
 
-        if (!lista.get(1).isBlank()) {
-            nombre += " " + lista.get(1);
+        datos.put("nombreEspecialidad", especialidad.getNombreEspecialidad());
+        datos.put("identificador", especialidad.getIdentificadorFormated());
+        datos.put("estado", especialidad.getEstadoFormated());
+        datos.put("descripcion", especialidad.getDescripcion());
+        
+
+        return datos;
+    }
+
+        public Especialidad obtenerEspecialidad(String nombreEspecialidad) {
+        var especialiadades = getEspecialidades();
+        var indice = buscarPornombre(nombreEspecialidad);
+        return especialiadades.get(indice);
+    };
+
+
+ 
+    public boolean actualizarEspecialidad(Map<String, String> datos) throws Exception {
+        var especialiadades = getEspecialidades();
+        var indice = buscarPornombre(datos.get("nombreEspecialidad"));
+        var especialidad = especialiadades.get(indice);
+
+        if (especialidad.getEstado()) {
+            especialidad.setEstado(false);
+        } else {
+            especialidad.setEstado(true);
         }
 
-        medico.setNombres(nombre);
-        medico.setApellidos(lista.get(2) + " " + lista.get(3));
-        medico.setTipoDocumento(lista.get(4));
-        medico.setNumeroDoc(lista.get(5));
-        medico.setEspecialidad(lista.get(6));
-        medico.setCorreo(lista.get(7));
-        medico.setTelefono(lista.get(8));
-        medico.setDireccion(lista.get(9));
-        medico.setContrasenna(lista.get(10));
+        especialidadRepositorio.actualizarBasedeDatos(especialiadades);
 
-        medicos.set(indice, medico);
-
-        return medicoRepositorio.actualizarBasedeDatos(medicos);
-    }*/
+        return true;
+    }
 
     /*public boolean eliminarMedico(String documento) throws Exception {
         var medicos = medicoRepositorio.getMedicos();
@@ -112,8 +126,8 @@ public class ServicioEspecialidad {
 
     }*/
 
-   /*public boolean cambiasEstado(String nombre) throws Exception {
-        var especialiadades = especialidadRepositorio.getEspecialidades();
+    public boolean cambiasEstado(String nombre) throws Exception {
+        var especialiadades = getEspecialidades();
         var indice = buscarPornombre(nombre);
         var especialidad = especialiadades.get(indice);
 
@@ -126,5 +140,5 @@ public class ServicioEspecialidad {
         especialidadRepositorio.actualizarBasedeDatos(especialiadades);
 
         return true;
-    };*/
+    }
 }
