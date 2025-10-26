@@ -51,7 +51,7 @@ public class ControlCita {
         System.out.println("El paciente con el documento: "+ documentoPaciente +" no tene citas registradas.");       
         }
     }
-
+ 
     public int generarIdCita() {
         return listaCitas.size() + 1;
     }
