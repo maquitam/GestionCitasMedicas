@@ -131,8 +131,6 @@ public class FormEspecialidades extends JPanel {
         add(panel, gbc);
         
         gbc.insets = new Insets(10,20,1,20);*/
-
-        // FECHA DE NACIMIENTO lo borre
       
     }
 
@@ -149,8 +147,8 @@ public class FormEspecialidades extends JPanel {
 
         datos.put("nombreEspecialidad", nombreEspecialidad.getText());
         datos.put("identificador", identificador.getText());
+        datos.put("estado", estado.getText());
         datos.put("descripción", descripcion.getText());
-
 
         return datos;
     };

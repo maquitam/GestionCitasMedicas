@@ -1,21 +1,23 @@
 package servicios;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.Map;
 import objetos.Especialidad;
 
-import repositorio.EspecialidadRepositorio;
+import java.util.HashMap;
+import java.util.List;
+
 import repositorio.LoginRepositorio;
+import repositorio.EspecialidadRepositorio;
 
 
 public class ServicioEspecialidad {
-   
+        
     EspecialidadRepositorio especialidadRepositorio;
     LoginRepositorio loginRepositorio;
 
     public ServicioEspecialidad() {
+   
         try {
             especialidadRepositorio = new EspecialidadRepositorio();
         } catch (IOException e) {
@@ -23,108 +25,129 @@ public class ServicioEspecialidad {
         }
     }
 
-    public boolean crearEspecialidad(String datos) throws Exception {
-            String[] partes = datos.split("\\|");
-            var especialidad = new Especialidad(partes[0], generarId(), partes[2], partes[3]);
-
-
-            return especialidadRepositorio.registrarEspecialidad(especialidad);
-    }
-
-    public boolean registrarEspecialidad(Especialidad especialidad) throws IOException, Exception {
-        var especialidades = especialidadRepositorio.getEspecialidades();
-
-        if (especialidades != null) {
-            for (var temporal : especialidades) {
-                if (temporal.getNombreEspecialidad().equals(especialidad.getNombreEspecialidad())) {
-                    return false;
-            }
-        }
-        }
-
-        return especialidadRepositorio.registrarEspecialidad(especialidad);
-    }
-
-    public List<Especialidad> getMedicos() {
+    public List<Especialidad> getEspecialidades() {
         return especialidadRepositorio.getEspecialidades();
     }
- 
+
     public int generarId() {
-        var especialidades = especialidadRepositorio.getEspecialidades();
+        var especialiades = getEspecialidades();
         
-        if (especialidades == null) {
+        if (pacientes == null) {
             return 0;
         }
         
-        return especialidades.size();
+        return especialiades.size();
+    
+
+    public boolean crearEspecialidad(Map<String, String> datos) throws Exception {
+        try {
+            if (buscarPornombre(datos.getNombreEspecialidad()) != -1) {
+                return false;
+            }
+            
+            var nombres = datos.get("primerNombre");
+            var segundoNombre = datos.get("segundoNombre");
+
+            if (segundoNombre != null) {
+                nombres += " " + segundoNombre;
+            }
+
+            var paciente = new Paciente(datos.getNombre(),generarId(), nombres, datos.get("primerApellido") + " " + datos.get("segundoApellido"), 
+                            datos.get("tipoDocumento"), datos.get("documento"), 
+                            datos.get("fechaNacimiento"), datos.get("sexo"), datos.get("grupo") + datos.get("rh"),
+                            datos.get("correo"), datos.get("telefono"), datos.get("direccion"), datos.get("perfil"), 
+                            datos.get("contrasenna"));
+        
+        return pacienteRepositorio.registrarPaciente(paciente);
+
+        } catch (Exception e) {
+            return false;
+        }
+        
+        
     }
 
-    public int buscarPornombre(String nombre) {
-        var especialidad = especialidadRepositorio.getEspecialidades();
-        for (var temporal : especialidad) {
-            if (temporal.getNombreEspecialidad().equals(nombre)) {
-                return especialidad.indexOf(temporal);
+    public Map<String, String> cargarPaciente(String id) {
+        Paciente paciente = obtenerPaciente(id);
+
+        Map<String, String> datos = new HashMap<>();
+
+        datos.put("primerNombre", paciente.getPrimerNombre());
+        datos.put("segundoNombre", paciente.getSegundoNombre());
+        datos.put("primerApellido", paciente.getPrimerApellido());
+        datos.put("segundoApellido", paciente.getSegundoApellido());
+        datos.put("documento", paciente.getNumeroDoc());
+        datos.put("tipoDocumento", paciente.getTipoDocumento());
+        datos.put("sexo", paciente.getSexo());
+        datos.put("grupo", paciente.getGrupo());
+        datos.put("rh", paciente.getRh());
+        datos.put("telefono", paciente.getTelefono());
+        datos.put("direccion", paciente.getDireccion());
+        datos.put("correo", paciente.getCorreo());
+        datos.put("contrasenna", paciente.getContrassena());
+        datos.put("fechaNacimiento", paciente.getFechadeNacimiento());
+        datos.put("perfil", "Paciente");
+
+        return datos;
+    }
+
+    public Paciente obtenerPaciente(String documento) {
+        var pacientes = getPacientes();
+        var indice = buscarPorDocumento(documento);
+        return pacientes.get(indice);
+    };
+
+    public int buscarPorDocumento(String documento) {
+        var pacientes = getPacientes();
+
+        if (pacientes == null) {return -1;}
+
+        for (var temporal : pacientes) {
+            if (temporal.getNumeroDoc().equals(documento)) {
+                return pacientes.indexOf(temporal);
             }
         }
 
         return -1;
     }
-/* 
-    public boolean actualizarMedico(ArrayList<String> lista) throws Exception {
-        var medicos = getMedicos();
-        var indice = buscarPorDocumento(new String(lista.get(5)));
-        var medico = medicos.get(indice);
 
-        var nombre = lista.get(0);
+    public boolean actualizarPaciente(Map<String, String> datos) throws Exception {
+        var pacientes = getPacientes();
+        var indice = buscarPorDocumento(datos.get("documento"));
+        var paciente = pacientes.get(indice);
 
-        if (!lista.get(1).isBlank()) {
-            nombre += " " + lista.get(1);
-        }
+        var nombres = datos.get("primerNombre");
 
-        medico.setNombres(nombre);
-        medico.setApellidos(lista.get(2) + " " + lista.get(3));
-        medico.setTipoDocumento(lista.get(4));
-        medico.setNumeroDoc(lista.get(5));
-        medico.setEspecialidad(lista.get(6));
-        medico.setCorreo(lista.get(7));
-        medico.setTelefono(lista.get(8));
-        medico.setDireccion(lista.get(9));
-        medico.setContrasenna(lista.get(10));
+        if (datos.get("segundoNombre") != null) {nombres += " " + datos.get("segundoNombre");}
 
-        medicos.set(indice, medico);
+        paciente.setNombres(nombres);
+        paciente.setApellidos(datos.get("primerApellido") + " " + datos.get("segundoApellido"));
+        paciente.setTipoDocumento(datos.get("tipoDocumento"));
+        paciente.setNumeroDoc(datos.get("documento"));
+        paciente.setsexo(datos.get("sexo"));
+        paciente.setGrupoSanguineo(datos.get("grupo")+datos.get("rh"));
+        paciente.setTelefono(datos.get("telefono"));
+        paciente.setDireccion(datos.get("direccion"));
+        paciente.setFechadeNacimiento(datos.get("fechaNacimiento"));
+        paciente.setCorreo(datos.get("correo"));
+        paciente.setContrasenna(datos.get("contrasenna"));
 
-        return medicoRepositorio.actualizarBasedeDatos(medicos);
-    }*/
+        return pacienteRepositorio.actualizarBasedeDatos(pacientes);
+    }
 
-    /*public boolean eliminarMedico(String documento) throws Exception {
-        var medicos = medicoRepositorio.getMedicos();
+    public boolean eliminarPaciente(String documento) throws Exception {
+        var pacientes = pacienteRepositorio.getPacientes();
         var indice = buscarPorDocumento(documento);
         
-        medicos.remove(indice);
+        pacientes.remove(indice);
         
-        medicoRepositorio.actualizarBasedeDatos(medicos);
+        pacienteRepositorio.actualizarBasedeDatos(pacientes);
         
         loginRepositorio = new LoginRepositorio();
-
         loginRepositorio.eliminarUsuario(documento);
 
         return true;
 
-    }*/
-
-   /*public boolean cambiasEstado(String nombre) throws Exception {
-        var especialiadades = especialidadRepositorio.getEspecialidades();
-        var indice = buscarPornombre(nombre);
-        var especialidad = especialiadades.get(indice);
-
-        if (especialidad.getEstado()) {
-            especialidad.setEstado(false);
-        } else {
-            especialidad.setEstado(true);
-        }
-
-        especialidadRepositorio.actualizarBasedeDatos(especialiadades);
-
-        return true;
-    };*/
+    }
+}
 }

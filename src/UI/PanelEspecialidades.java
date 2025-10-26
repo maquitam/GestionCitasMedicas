@@ -1,16 +1,14 @@
 package UI;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import servicios.ServicioEspecialidad;
-import servicios.UtilidadesForm;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.util.ArrayList;
+
+import servicios.ServicioEspecialidad;
+import servicios.UtilidadesForm;
 
 public class PanelEspecialidades extends JPanel {
     private AdminView adminView;
