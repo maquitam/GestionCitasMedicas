@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import objetos.Especialidad;
 import objetos.Login;
 import objetos.Usuario;
 
@@ -119,5 +120,17 @@ public class LoginRepositorio {
     } catch (Exception exe) {
         return null;
     }
+    }
+// prueba alejo
+         public boolean registrarEspecialidad(Especialidad especialidad) throws Exception {
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
+            var content = especialidad.getNombreEspecialidad() + "|" + especialidad.getIdentificador() + "|" + especialidad.getEstadoFormated();
+            bufferedWriter.write(content);
+            bufferedWriter.newLine();
+        } catch (Exception exe) {
+            throw new Exception(exe.getMessage());
+        }
+
+        return true;
     }
 }
