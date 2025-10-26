@@ -137,23 +137,42 @@ public class PanelCitas extends JPanel{
 
     //Busqueda de citas
     private JPanel crearPanelBusqueda() {
-            JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-            panel.setBackground(Color.WHITE);
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        panel.setBackground(Color.WHITE);
 
-            JTextField txtBuscarDocumento = new JTextField(10);
-            buscarCitaPorPacienteBoton = new Boton("Buscar Paciente");
-            listarCitaBoton = new Boton("Listar Las Citas");
-            
-            panel.add(new JLabel("Documento Del Paciente:"));
-            panel.add(txtBuscarDocumento);
-            panel.add(buscarCitaPorPacienteBoton);
-            panel.add(listarCitaBoton);
+        JTextField txtBuscarDocumento = new JTextField(10);
+        buscarCitaPorPacienteBoton = new Boton("Buscar Paciente");
+        listarCitaBoton = new Boton("Listar Las Citas");
+        
+        panel.add(new JLabel("Documento Del Paciente:"));
+        panel.add(txtBuscarDocumento);
+        panel.add(buscarCitaPorPacienteBoton);
+        panel.add(listarCitaBoton);
 
-            //Acciones de los botones
-            //buscarCitaPorPacienteBoton.addActionListener(e -> buscarPorDocumento(txtBuscarDocumento.getText()));
-            //listarCitaBoton.addActionListener(e -> listarCitas());
-            return panel;
+        //Acciones de los botones
+        //buscarCitaPorPacienteBoton.addActionListener(e -> buscarPorDocumento(txtBuscarDocumento.getText()));
+        //listarCitaBoton.addActionListener(e -> listarCitas());
+        return panel;
     }
     
-    
+    private void agendarCita() {
+        try {
+            long documento = Long.parseLong(txtDocumento.getText());
+            String nombrePaciente = txtPaciente.getText();
+            String nombreMedico = txtMedico.getText();
+            String motivo = txtMotivo.getText();
+            LocalDate fecha = LocalDate.parse(txtFecha.getText());
+            String hora = txtHora.getText();
+
+            Paciente paciente = new Paciente(documento, nombrePaciente);
+            Medico medico = new Medico(nombreMedico);
+            Cita nuevaCita = new Cita(controlCita.generarIdCita(), fecha, hora, medico, paciente, motivo);
+
+            controlCita.agendarCita(nuevaCita);
+            modeloTabla.addRow(new Object[]{documento, nombrePaciente, nombreMedico, motivo, fecha, hora});
+            JOptionPane.showMessageDialog(this, "Cita agendada con éxito.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al agendar la cita: ");
+        }
+    }
 }
