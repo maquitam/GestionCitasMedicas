@@ -1,44 +1,23 @@
 package UI;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import java.awt.*;
 
-public class AdminView extends JFrame {
-    private JPanel menuLateral;
-    private JPanel panelDerecho;
-    private CardLayout cardLayout = new CardLayout();
-
-    public static final String MEDICO_PANEL = "medicoPanel";    
+public class AdminView extends BaseView {
+    public static final String MODULO_MEDICOS = "medicoPanel";
+    public static final String MODULO_PACIENTES = "pacientePanel";
     public static final String BIENVENIDA_PANEL = "bienvenidaPanel";
     public static final String CITA_PANEL = "citaPanel";
 
     public String USUARIO_AUTENTICADO;
 
     public AdminView(String usuario) {
-        this.USUARIO_AUTENTICADO = usuario;
-        setTitle("Vista Administrador");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setLocationRelativeTo(null);
-        setResizable(true);
-        setLayout(new BorderLayout());
-        
-        initComponents();
-        setVisible(true);
-    
+        super(usuario, "Vista Administrador");
     }
 
-    private void initComponents() {
-        crearMenuLateral();
-        crearPanelDerecho();
-
-        add(menuLateral, BorderLayout.WEST);
-        add(panelDerecho, BorderLayout.CENTER);
-    }
-
-    private void crearMenuLateral() {
+    @Override
+    protected void crearMenuLateral() {
         menuLateral = new JPanel(new GridBagLayout());
         menuLateral.setBackground(new Color(35,94,40));
 
@@ -71,65 +50,63 @@ public class AdminView extends JFrame {
         especialidades.setRedondeado(0);
         cerrarSesion.setRedondeado(0);
 
-        cerrarSesion.addActionListener(e->{
-            dispose();
-            LoginView loginView = new LoginView();
-        });
 
+        // ---- EVENTOS ----
         medicos.addActionListener(e->{
             mostrarPanelMedicos();
         });
+
+        pacientes.addActionListener(e->{
+            mostrarPanelPacientes();
+        });
+
+        cerrarSesion.addActionListener(e->{
+            dispose();
+            new LoginView();
+        });
+
+
+        
 
         citas.addActionListener(e->{
             mostrarPanelCitas();
         });
     }
 
-    private void crearPanelDerecho() {
+    @Override
+    protected void crearPanelDerecho() {
         panelDerecho = new JPanel(cardLayout);
         
         //Crear paneles    
         PanelMedicos medicoPanel = new PanelMedicos(this);
-        JPanel bienvenidaPanel = mostrarBienvenidaPanel();
+        PanelPacientes panelPacientes = new PanelPacientes(this);
+        JPanel bienvenidaPanel = mostrarBienvenida("Bienvenid@ Admin");
+
         PanelCitas citaPanel = new PanelCitas(this);
 
 
         panelDerecho.add(bienvenidaPanel, BIENVENIDA_PANEL);
-        panelDerecho.add(medicoPanel, MEDICO_PANEL);
+        panelDerecho.add(panelPacientes, MODULO_PACIENTES);
+        panelDerecho.add(medicoPanel, MODULO_MEDICOS);
         panelDerecho.add(citaPanel, CITA_PANEL);
 
         cardLayout.show(panelDerecho, BIENVENIDA_PANEL);
     }
 
     public void mostrarPanelMedicos() {
-        cardLayout.show(panelDerecho, MEDICO_PANEL);
+        cardLayout.show(panelDerecho, MODULO_MEDICOS);
     }
 
     public void mostrarPanelCitas() {
         cardLayout.show(panelDerecho, CITA_PANEL);
     }
 
-    private JPanel mostrarBienvenidaPanel() {
-        JPanel bienvenidaPanel = new JPanel();
-        bienvenidaPanel.setBackground(Color.WHITE);
-        bienvenidaPanel.setLayout(new GridBagLayout());
+    public void mostrarPanelCitas() {
+        cardLayout.show(panelDerecho, CITA_PANEL);
+    }
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10,20,10,20);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        
-        // Título - Bienvenid@ Admin
-        JLabel welcomeTitle = new JLabel("Bienvenid@ Admin");
-        welcomeTitle.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        welcomeTitle.setForeground(new Color(35,94,40));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.weightx = 1.0;
-        gbc.gridwidth = 2;
-        bienvenidaPanel.add(welcomeTitle, gbc);
-
-        return bienvenidaPanel;
+    public void mostrarPanelPacientes() {
+        cardLayout.show(panelDerecho, MODULO_PACIENTES);
     }
 }
+

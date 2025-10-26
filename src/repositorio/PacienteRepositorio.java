@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import objetos.Medico;
+import objetos.Paciente;
 
-public class MedicoRepositorio {
+public class PacienteRepositorio {
     private File file;
-    public static final String PATH = "datos\\Medicos.txt";
-    
+    public static final String PATH = "datos\\Pacientes.txt";
+
     private LoginRepositorio loginRepositorio;
 
-    public MedicoRepositorio() throws IOException {
+    public PacienteRepositorio() throws IOException {
         file = new File(PATH);
         if (!file.exists()) {
             file.getParentFile().mkdirs();
@@ -21,40 +21,40 @@ public class MedicoRepositorio {
         }
     }
 
-    public List<Medico> getMedicos() {
+    public List<Paciente> getPacientes() {
         Scanner s = null;
-        List<Medico> medicos = new ArrayList<>();
+        List<Paciente> pacientes = new ArrayList<>();
         try {
             s = new Scanner(file);
 
             while (s.hasNextLine()) {
-                String medicoLine = s.nextLine();
-                var medico = Medico.fromTxtFormat(medicoLine);
-                medicos.add(medico);
+                String pacienteLine = s.nextLine();
+                var paciente = Paciente.fromTxtFormat(pacienteLine);
+                pacientes.add(paciente);
             }
-    
-            return medicos;
-            
-    } catch (Exception exe) {
-        return null;
-    }        
-}
 
-    public boolean registrarMedico(Medico medico) throws Exception {
+            return pacientes;
+        } catch (Exception exe) {
+            return null;
+        }
+    }
+
+    public boolean registrarPaciente(Paciente paciente) throws Exception {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
-            var content = medico.toTxtFormat();
+            var content = paciente.toTxtFormat();
             bufferedWriter.write(content);
             bufferedWriter.newLine();
         } catch (Exception exe) {
             throw new Exception(exe.getMessage());
         }
+
         loginRepositorio = new LoginRepositorio();
-        loginRepositorio.registrarUsuario(medico);
+        loginRepositorio.registrarUsuario(paciente);
 
         return true;
     };
 
-    public boolean actualizarBasedeDatos(List<Medico> medicos) throws Exception {
+    public boolean actualizarBasedeDatos(List<Paciente> pacientes) throws Exception {
         try {
             if (file.exists()) {
                 file.delete();
@@ -64,19 +64,17 @@ public class MedicoRepositorio {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
             }
-        
 
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, false))) {
-            for (var medicoTmp : medicos) {
-                    String medicoLine = medicoTmp.toTxtFormat();
-                    bufferedWriter.write(medicoLine);
-                    bufferedWriter.newLine();
+            for (var pacienteTmp : pacientes) {
+                String pacienteLine = pacienteTmp.toTxtFormat();
+                bufferedWriter.write(pacienteLine);
+                bufferedWriter.newLine();
             }
         }
         return true;
-        
-    } catch (Exception exe) {
+        } catch (Exception exe) {
             throw new Exception(exe.getMessage());
-    }
+        }
     }
 }
