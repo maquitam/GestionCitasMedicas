@@ -25,7 +25,7 @@ public class ServicioEspecialidad {
 
     public boolean crearEspecialidad(String datos) throws Exception {
             String[] partes = datos.split("\\|");
-            var especialidad = new Especialidad(partes[0], partes[1], Boolean.parseBoolean(partes[2]));
+            var especialidad = new Especialidad(partes[0], generarId(), partes[2], partes[3]);
 
 
             return especialidadRepositorio.registrarEspecialidad(especialidad);
@@ -48,16 +48,16 @@ public class ServicioEspecialidad {
     public List<Especialidad> getMedicos() {
         return especialidadRepositorio.getEspecialidades();
     }
-/* 
+ 
     public int generarId() {
-        var medicos = getMedicos();
+        var especialidades = especialidadRepositorio.getEspecialidades();
         
-        if (medicos == null) {
+        if (especialidades == null) {
             return 0;
         }
         
-        return medicos.size();
-    }*/
+        return especialidades.size();
+    }
 
     public int buscarPornombre(String nombre) {
         var especialidad = especialidadRepositorio.getEspecialidades();
@@ -112,7 +112,7 @@ public class ServicioEspecialidad {
 
     }*/
 
-    public boolean cambiasEstado(String nombre) throws Exception {
+   /*public boolean cambiasEstado(String nombre) throws Exception {
         var especialiadades = especialidadRepositorio.getEspecialidades();
         var indice = buscarPornombre(nombre);
         var especialidad = especialiadades.get(indice);
@@ -126,5 +126,5 @@ public class ServicioEspecialidad {
         especialidadRepositorio.actualizarBasedeDatos(especialiadades);
 
         return true;
-    };
+    };*/
 }

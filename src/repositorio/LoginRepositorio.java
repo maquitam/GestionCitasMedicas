@@ -124,7 +124,7 @@ public class LoginRepositorio {
 // prueba alejo
          public boolean registrarEspecialidad(Especialidad especialidad) throws Exception {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
-            var content = especialidad.getNombreEspecialidad() + "|" + especialidad.getIdentificador() + "|" + especialidad.getEstadoFormated();
+            var content = especialidad.getNombreEspecialidad() + "|" + especialidad.getIdentificador() + "|" + especialidad.getEstado() + "|" + especialidad.getDescripcion();
             bufferedWriter.write(content);
             bufferedWriter.newLine();
         } catch (Exception exe) {

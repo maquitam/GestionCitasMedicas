@@ -3,17 +3,19 @@ package objetos;
 public class Especialidad {
 
 String nombreEspecialidad;
-String identificador;
-boolean estado;
+int identificador;
+String estado;
+String descripcion;
 
-// Registrar Especialidad()
-public Especialidad(String nombreEspecialidad, String identificador, boolean estado){
+
+public Especialidad(String nombreEspecialidad, int identificador, String estado, String descripcion) {
     this.nombreEspecialidad = nombreEspecialidad;
     this.identificador = identificador;
     this.estado = estado;
+    this.descripcion = descripcion;
 }
 
-
+/* 
 public void actualizarEspecialidad(String nombreEspecialidad, String identificador, boolean estado){
     this.nombreEspecialidad = nombreEspecialidad;
     this.identificador = identificador;
@@ -22,20 +24,21 @@ public void actualizarEspecialidad(String nombreEspecialidad, String identificad
 
 public String consultarEspecialidad(){
     return "Nombre: " + nombreEspecialidad +"\nID: " + identificador + "\nEstado: "+ estado;
-}
-
+}*/
 
 //setters
 public void setNombreEspecialidad(String nombreEspecialidad) {this.nombreEspecialidad = nombreEspecialidad;}
-public void setIdentificador(String identificador) {this.identificador = identificador;}
-public void setEstado(boolean estado) {this.estado = estado;}
+public void setIdentificador(int identificador) {this.identificador = identificador;}
+public void setEstado(String estado) {this.estado = estado;}
+public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
 
 //getters
 public String getNombreEspecialidad() {return nombreEspecialidad;}
-public String getIdentificador() {return identificador;}
-public boolean getEstado() {return estado;}
+public int getIdentificador() {return identificador;}
+public String getEstado() {return estado;}
+public String getDescripcion() {return descripcion;}
 
-public String getEstadoFormated() {
+/*public String getEstadoFormated() {
     var estado = getEstado();
     switch (estado) {
         case true:
@@ -43,7 +46,7 @@ public String getEstadoFormated() {
         default:
             return "Inactiva";
     }
-};
+};*/
 
 public String toTxtFormat() {
     return identificador + "|" + nombreEspecialidad + "|" + estado;
@@ -52,7 +55,7 @@ public String toTxtFormat() {
  public static Especialidad fromTxtFormat(String lineaEspecialidad) {
     String[] parts = lineaEspecialidad.split("\\|");
   if (parts.length != 3) throw new IllegalArgumentException("Fórmato de linea no valido.");
-  Especialidad especialidad = new Especialidad(parts[0], (parts[1]), Boolean.parseBoolean(parts[2]));
+  Especialidad especialidad = new Especialidad(parts[0], Integer.parseInt(parts[1]), parts[2], parts[3]);
     return especialidad;
  }
 
