@@ -1,14 +1,16 @@
 package UI;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import servicios.ServicioEspecialidad;
 import servicios.UtilidadesForm;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class PanelEspecialidades extends JPanel {
     private AdminView adminView;
@@ -32,7 +34,7 @@ public class PanelEspecialidades extends JPanel {
 
         var formulario = crearFormulario();
         var botones = crearBotones();
-        var tabla = crearTabla();
+        //var tabla = crearTabla();
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -43,10 +45,10 @@ public class PanelEspecialidades extends JPanel {
 
         add(formPanel, BorderLayout.WEST);
 
-        add(tabla, BorderLayout.CENTER);
+        //add(tabla, BorderLayout.CENTER);
 
-        actualizarTabla();
-        modoCrear();
+        //actualizarTabla();
+       // modoCrear();
     }
 
     public JPanel crearFormulario() {
@@ -66,7 +68,8 @@ public class PanelEspecialidades extends JPanel {
 
     public JPanel crearBotones() {
         JPanel botonesPanel = new JPanel();
-       // botonesPanel.setBackground(Color.GRAY);
+        botonesPanel.setBackground(Color.GRAY);
+
         botonCrear = new Boton("Crear Especialidad");
         botonActualizar = new Boton("Actualizar");
         botonCancelar = new Boton("Cancelar");
@@ -77,11 +80,11 @@ public class PanelEspecialidades extends JPanel {
 
         // --- EVENTOS BOTONES ---
         botonCrear.addActionListener(e->{
-        formEspecialidades.guardarEspecialidad();
-        actualizarTabla();
+           // formEspecialidades.guardarPaciente();
+           // actualizarTabla();
         });
 
-        botonActualizar.addActionListener(e->{
+        /*botonActualizar.addActionListener(e->{
             var datos = formEspecialidades.cargarDatos();
             try {
                 servicioEspecialidad.actualizarEspecialidad(datos);
@@ -89,18 +92,17 @@ public class PanelEspecialidades extends JPanel {
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-           // UtilidadesForm.limpiarCampos(formEspecialidades);
-        });
+            UtilidadesForm.limpiarCampos(formPacientes);
+        });*/
 
         botonCancelar.addActionListener(e->{
             UtilidadesForm.limpiarCampos(formEspecialidades);
-            modoCrear();
+           // modoCrear();
         });
             
         return botonesPanel;
-    }
 
-    public JPanel crearTabla() {
+    /*public JPanel crearTabla() {
         JPanel tablaPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbcTabla = new GridBagConstraints();
         gbcTabla.gridx = 0;
@@ -119,37 +121,33 @@ public class PanelEspecialidades extends JPanel {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-        };
+        };*/
+       // JScrollPane scrollTabla = new JScrollPane(tablaEspecialidades);
 
-        JScrollPane scrollTabla = new JScrollPane(tablaEspecialidades);
-        
-    // continue configuring popup and listeners (scroll added below)
-    JPopupMenu menu = new JPopupMenu();
+       /* JPopupMenu menu = new JPopupMenu();
         JMenuItem itemEliminar = new JMenuItem("Eliminar");
         menu.add(itemEliminar);
 
         tablaEspecialidades.setComponentPopupMenu(menu);
         
-        tablaPanel.add(scrollTabla, gbcTabla);
+        //tablaPanel.add(scrollTabla, gbcTabla);*/
 
         // --- EVENTOS TABLA ---
-        tablaEspecialidades.addMouseListener(new MouseAdapter() {
+       /*  tablaEspecialidades.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     int fila = tablaEspecialidades.getSelectedRow();
                     if (fila != -1) {
-                        var nombreEspecialidad = tablaEspecialidades.getValueAt(fila, 0).toString();
-                        var datos = servicioEspecialidad.cargarEspecialidad(nombreEspecialidad);
-                        formEspecialidades.cargarEspecialidad(datos);
-                        modoEdicion();
+                        var documento = tablaEspecialidades.getValueAt(fila, 2).toString();
+                      //  var datos = servicioEspecialidad.cargarEspecialidad(documento);
+                       // formEspecialidades.cargarEspecialidad(datos);
+                      //  modoEdicion();
                     }
                 }
             }
-        });
+        });*/
 
-                return tablaPanel;
-
-            /*  itemEliminar.addActionListener(_->{
+      /*  itemEliminar.addActionListener(_->{
             var documento = modeloTabla.getValueAt(tablaEspecialidades.getSelectedRow(), 2).toString();
             try {
                 servicioEspecialidad.eliminarEspe(documento);
@@ -161,9 +159,8 @@ public class PanelEspecialidades extends JPanel {
 
         return tablaPanel;
     };*/
-    }
 
-    public void actualizarTabla() {
+    /*public void actualizarTabla() {
         var especialidades = servicioEspecialidad.getEspecialidades();
         
         if (especialidades == null) {
@@ -174,7 +171,7 @@ public class PanelEspecialidades extends JPanel {
         modeloTabla = (DefaultTableModel) tablaEspecialidades.getModel();
 
         for (var especialidad : especialidades) {
-            modeloTabla.addRow(new Object[]{especialidad.getNombreEspecialidad(), especialidad.getIdentificador(), especialidad.getEstado(), especialidad.getDescripcion()});;
+            modeloTabla.addRow(new Object[]{especialidad.getNombreEspecialidad(), especialidad.getId(), especialidad.getEstado(), especialidad.getDescripcion()});;
         }
     };
 
@@ -188,5 +185,7 @@ public class PanelEspecialidades extends JPanel {
         botonActualizar.setVisible(true);
         botonCancelar.setVisible(true);
         botonCrear.setVisible(false);
-    }
+    }*/
+
+}
 }
