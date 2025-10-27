@@ -34,6 +34,16 @@ public class PanelMedicos extends JPanel {
 
     private int filaSeleccionada = -1;
 
+    private void actualizarEspecialidades() {
+    
+        String[] especialidades = {"Pediatría", "Consulta General", "Cardiología", "Dermatología"};
+        tipoEspecialidades.setModel(new DefaultComboBoxModel<>(especialidades));
+    }
+    
+    public void refrescarEspecialidades() {
+        actualizarEspecialidades();
+    }
+
     public PanelMedicos(AdminView adminView) {
         this.adminView = adminView;
         this.servicioMedico = new ServicioMedico();
@@ -188,6 +198,7 @@ public class PanelMedicos extends JPanel {
         tipoEspecialidades = new ComboBox<>(listaEspecialidades);
         gbc.anchor = GridBagConstraints.NORTH;
         medicoForm.add(tipoEspecialidades, gbc);
+        actualizarEspecialidades();
 
         gbc.gridx = 1;
         // Campo de Contraseña
