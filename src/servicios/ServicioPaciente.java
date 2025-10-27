@@ -92,6 +92,11 @@ public class ServicioPaciente {
     public Paciente obtenerPaciente(String documento) {
         var pacientes = getPacientes();
         var indice = buscarPorDocumento(documento);
+
+        if (indice < 0 || pacientes == null || pacientes.isEmpty()) {
+            System.out.println("Paciente no encontrado o lista vacía para documento: " + documento);
+            return null;
+        }
         return pacientes.get(indice);
     };
 

@@ -361,7 +361,7 @@ public class PanelMedicos extends JPanel {
             }
         });
 
-        itemEditar.addActionListener(_->{
+        itemEditar.addActionListener(a->{
             UtilidadesForm.limpiarCampos(medicoForm);
             cargarMedico();
             btnCrearMedico.setVisible(false);
