@@ -1,3 +1,4 @@
+// ...existing code...
 package repositorio;
 
 import java.io.*;
@@ -26,19 +27,22 @@ public class MedicoRepositorio {
         List<Medico> medicos = new ArrayList<>();
         try {
             s = new Scanner(file);
-
             while (s.hasNextLine()) {
                 String medicoLine = s.nextLine();
-                var medico = Medico.fromTxtFormat(medicoLine);
-                medicos.add(medico);
+                try {
+                    var medico = Medico.fromTxtFormat(medicoLine);
+                    if (medico != null) medicos.add(medico);
+                } catch (Exception e) {
+                    // línea inválida: ignorar
+                }
             }
-    
-            return medicos;
-            
-    } catch (Exception exe) {
-        return null;
-    }        
-}
+        } catch (Exception exe) {
+            // opcional: registrar log
+        } finally {
+            if (s != null) s.close();
+        }
+        return medicos;
+    }
 
     public boolean registrarMedico(Medico medico) throws Exception {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
@@ -52,7 +56,7 @@ public class MedicoRepositorio {
         loginRepositorio.registrarUsuario(medico);
 
         return true;
-    };
+    }
 
     public boolean actualizarBasedeDatos(List<Medico> medicos) throws Exception {
         try {
@@ -65,18 +69,17 @@ public class MedicoRepositorio {
                 file.createNewFile();
             }
         
-
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, false))) {
-            for (var medicoTmp : medicos) {
+            try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, false))) {
+                for (var medicoTmp : medicos) {
                     String medicoLine = medicoTmp.toTxtFormat();
                     bufferedWriter.write(medicoLine);
                     bufferedWriter.newLine();
+                }
             }
-        }
-        return true;
+            return true;
         
-    } catch (Exception exe) {
+        } catch (Exception exe) {
             throw new Exception(exe.getMessage());
-    }
+        }
     }
 }
