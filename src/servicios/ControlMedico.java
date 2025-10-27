@@ -6,61 +6,61 @@ import objetos.Medico;
 
 public class ControlMedico {
 
-    // Lista que simula la base de datos de médicos
     private List<Medico> listaMedicos;
 
-    // Constructor
     public ControlMedico() {
         listaMedicos = new ArrayList<>();
     }
 
-    // Método para agregar un médico
     public boolean agregarMedico(Medico medico) {
-        // Evitar duplicados por código o nombre
+        if (medico == null) return false;
+
         for (Medico m : listaMedicos) {
-            if (m.getCodigo().equals(medico.getCodigo())) {
-                System.out.println("⚠️ El médico con ese código ya existe.");
+            if (m.getNumeroDoc().equalsIgnoreCase(medico.getNumeroDoc())) {
+                System.out.println(" El médico con ese documento ya existe.");
                 return false;
             }
         }
+
         listaMedicos.add(medico);
-        System.out.println("✅ Médico agregado correctamente.");
+        System.out.println(" Médico agregado correctamente.");
         return true;
     }
 
-    // Método para eliminar un médico por su código
-    public boolean eliminarMedico(String codigo) {
-        for (Medico m : listaMedicos) {
-            if (m.getCodigo().equals(codigo)) {
+    public boolean eliminarMedico(String numeroDocumento) {
+        for (Medico m : new ArrayList<>(listaMedicos)) {
+            if (m.getNumeroDoc().equalsIgnoreCase(numeroDocumento)) {
                 listaMedicos.remove(m);
-                System.out.println("🗑️ Médico eliminado correctamente.");
+                System.out.println(" Médico eliminado correctamente.");
                 return true;
             }
         }
-        System.out.println("❌ No se encontró un médico con ese código.");
+        System.out.println(" No se encontró un médico con ese documento.");
         return false;
     }
 
-    // Método para buscar médicos por especialidad
     public List<Medico> buscarMedicoPorEspecialidad(String especialidad) {
         List<Medico> resultado = new ArrayList<>();
+        if (especialidad == null) return resultado;
+
         for (Medico m : listaMedicos) {
-            if (m.getEspecialidad().equalsIgnoreCase(especialidad)) {
-                resultado.add(m);
+            try {
+                if (m.getEspeciliadad() != null && m.getEspeciliadad().equalsIgnoreCase(especialidad)) {
+                    resultado.add(m);
+                }
+            } catch (Exception e) {
             }
         }
         return resultado;
     }
 
-    // Método para listar todos los médicos
     public List<Medico> listarMedicos() {
-        return listaMedicos;
+        return new ArrayList<>(listaMedicos);
     }
 
-    // Método opcional: buscar por nombre o código
-    public Medico buscarMedico(String codigo) {
+    public Medico buscarMedicoPorDocumento(String numeroDocumento) {
         for (Medico m : listaMedicos) {
-            if (m.getCodigo().equals(codigo)) {
+            if (m.getNumeroDoc().equalsIgnoreCase(numeroDocumento)) {
                 return m;
             }
         }
