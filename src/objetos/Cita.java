@@ -80,7 +80,6 @@ public class Cita {
         this.estado = estado;
     }
 
-    // 🔹 Método toString para mostrar información legible
     @Override
     public String toString() {
         return "Cita{" +
