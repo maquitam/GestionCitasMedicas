@@ -6,6 +6,7 @@ import java.awt.*;
 
 public class AdminView extends BaseView {
     public static final String MODULO_MEDICOS = "medicoPanel";
+    public static final String MODULO_CONTROL_MEDICOS = "controlMedicoPanel";
     public static final String MODULO_PACIENTES = "pacientePanel";
     public static final String BIENVENIDA_PANEL = "bienvenidaPanel";
 
@@ -16,7 +17,7 @@ public class AdminView extends BaseView {
     @Override
     protected void crearMenuLateral() {
         menuLateral = new JPanel(new GridBagLayout());
-        menuLateral.setBackground(new Color(35,94,40));
+        menuLateral.setBackground(new Color(35, 94, 40));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 0, 0, 0);
@@ -37,48 +38,50 @@ public class AdminView extends BaseView {
         Boton especialidades = new Boton("Especialidades");
         gbc.gridy = 4;
         menuLateral.add(especialidades, gbc);
-        Boton cerrarSesion = new Boton("Cerrar Sesion");
         gbc.gridy = 5;
+        Boton controlMedicos = new Boton("Control Médicos");
+        menuLateral.add(controlMedicos, gbc);
+        Boton cerrarSesion = new Boton("Cerrar Sesion");
+        gbc.gridy = 6;
         menuLateral.add(cerrarSesion, gbc);
 
         medicos.setRedondeado(0);
         pacientes.setRedondeado(0);
         citas.setRedondeado(0);
         especialidades.setRedondeado(0);
+        controlMedicos.setRedondeado(0);
         cerrarSesion.setRedondeado(0);
 
-
         // ---- EVENTOS ----
-        medicos.addActionListener(e->{
+        medicos.addActionListener(e -> {
             mostrarPanelMedicos();
         });
 
-        pacientes.addActionListener(e->{
+        pacientes.addActionListener(e -> {
             mostrarPanelPacientes();
         });
 
-        cerrarSesion.addActionListener(e->{
+        cerrarSesion.addActionListener(e -> {
             dispose();
             new LoginView();
         });
 
-
-        
     }
 
     @Override
     protected void crearPanelDerecho() {
         panelDerecho = new JPanel(cardLayout);
-        
-        //Crear paneles    
+
+        // Crear paneles
         PanelMedicos medicoPanel = new PanelMedicos(this);
+        PanelControlMedico controlMedicoPanel = new PanelControlMedico();
         PanelPacientes panelPacientes = new PanelPacientes(this);
         JPanel bienvenidaPanel = mostrarBienvenida("Bienvenid@ Admin");
 
-            
         panelDerecho.add(bienvenidaPanel, BIENVENIDA_PANEL);
         panelDerecho.add(panelPacientes, MODULO_PACIENTES);
         panelDerecho.add(medicoPanel, MODULO_MEDICOS);
+        panelDerecho.add(controlMedicoPanel, MODULO_CONTROL_MEDICOS);
 
         cardLayout.show(panelDerecho, BIENVENIDA_PANEL);
     }
@@ -87,8 +90,11 @@ public class AdminView extends BaseView {
         cardLayout.show(panelDerecho, MODULO_MEDICOS);
     }
 
+    public void mostrarPanelControlMedicos() {
+        cardLayout.show(panelDerecho, MODULO_CONTROL_MEDICOS);
+    }
+
     public void mostrarPanelPacientes() {
         cardLayout.show(panelDerecho, MODULO_PACIENTES);
     }
 }
-
