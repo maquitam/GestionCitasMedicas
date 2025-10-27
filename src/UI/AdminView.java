@@ -8,7 +8,6 @@ public class AdminView extends BaseView {
     public static final String MODULO_MEDICOS = "medicoPanel";
     public static final String MODULO_PACIENTES = "pacientePanel";
     public static final String BIENVENIDA_PANEL = "bienvenidaPanel";
-    public static final String CITA_PANEL = "citaPanel";
 
     public String USUARIO_AUTENTICADO;
 
@@ -28,7 +27,7 @@ public class AdminView extends BaseView {
         // Botones Laterales
         gbc.gridy = 0;
         gbc.gridx = 0;
-        Boton medicos = new Boton("Médicos");
+        Boton medicos = new Boton("MÃ©dicos");
         menuLateral.add(medicos, gbc);
         gbc.gridy = 1;
         Boton pacientes = new Boton("Pacientes");
@@ -64,13 +63,6 @@ public class AdminView extends BaseView {
             dispose();
             new LoginView();
         });
-
-
-        
-
-        citas.addActionListener(e->{
-            mostrarPanelCitas();
-        });
     }
 
     @Override
@@ -82,13 +74,11 @@ public class AdminView extends BaseView {
         PanelPacientes panelPacientes = new PanelPacientes(this);
         JPanel bienvenidaPanel = mostrarBienvenida("Bienvenid@ Admin");
 
-        PanelCitas citaPanel = new PanelCitas(this);
 
 
         panelDerecho.add(bienvenidaPanel, BIENVENIDA_PANEL);
         panelDerecho.add(panelPacientes, MODULO_PACIENTES);
         panelDerecho.add(medicoPanel, MODULO_MEDICOS);
-        panelDerecho.add(citaPanel, CITA_PANEL);
 
         cardLayout.show(panelDerecho, BIENVENIDA_PANEL);
     }
@@ -97,16 +87,7 @@ public class AdminView extends BaseView {
         cardLayout.show(panelDerecho, MODULO_MEDICOS);
     }
 
-    public void mostrarPanelCitas() {
-        cardLayout.show(panelDerecho, CITA_PANEL);
-    }
-
-    public void mostrarPanelCitas() {
-        cardLayout.show(panelDerecho, CITA_PANEL);
-    }
-
     public void mostrarPanelPacientes() {
         cardLayout.show(panelDerecho, MODULO_PACIENTES);
     }
 }
-
