@@ -1,1 +1,14 @@
 admin|admin
+121|3242|Médicoas|4|true|asas
+cardio|0|true|sadsad
+dsfdf|0|true|sdfdsf
+hola|2|true|sadsad
+qwewq|3|true|qwewqe
+sd|4|true|sd
+cardio|0|true|123324
+nombre|0|true|asdasd
+hola|0|true|bien
+1090377346|123|Paciente
+cardiologia|2|true|cardiope
+General|3|true|122324
+game|4|true|play

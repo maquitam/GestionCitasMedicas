@@ -1,0 +1,5 @@
+hola|0|true|bien
+holsa|1|true|mal
+cardiologia|2|true|cardiope
+General|3|true|122324
+game|4|true|play

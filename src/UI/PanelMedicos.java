@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import servicios.ServicioEspecialidad;
 import servicios.ServicioMedico;
 import servicios.UtilidadesForm;
 import servicios.ControlMedico;
