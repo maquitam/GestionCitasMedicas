@@ -30,6 +30,7 @@ public class EspecialidadRepositorio {
             while (s.hasNextLine()) {
                 String especialidadLine = s.nextLine();
                 var especialidad = Especialidad.fromTxtFormat(especialidadLine);
+
                 especialidades.add(especialidad);
             }
     
@@ -53,7 +54,6 @@ public boolean registrarEspecialidad(Especialidad especialidad) throws Exception
 
         return true;
     };
-
 
 
     public boolean actualizarBasedeDatos(List<Especialidad> especialidades) throws Exception {

@@ -3,7 +3,6 @@ package servicios;
 import java.io.IOException;
 import java.util.Map;
 import objetos.Especialidad;
-import objetos.Paciente;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +28,7 @@ public class ServicioEspecialidad {
     public List<Especialidad> getEspecialidades() {
         return especialidadRepositorio.getEspecialidades();
     }
+
 
     public int generarId() {
         var especialidades = getEspecialidades();
@@ -81,7 +81,7 @@ public class ServicioEspecialidad {
         if (especialidades == null) {return -1;}
 
         for (var temporal : especialidades) {
-            if (temporal.getNombreEspecialidad().equals(nombre)) {
+            if(temporal.getNombreEspecialidad().equals(nombre)) {
                 return especialidades.indexOf(temporal);
             }
         }

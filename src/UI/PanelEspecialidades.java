@@ -90,7 +90,7 @@ public class PanelEspecialidades extends JPanel {
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-            UtilidadesForm.limpiarCampos(formEspecialidades);
+                UtilidadesForm.limpiarCampos(formEspecialidades);
         });
 
         botonCancelar.addActionListener(e->{
@@ -124,8 +124,6 @@ public class PanelEspecialidades extends JPanel {
         JScrollPane scrollTabla = new JScrollPane(tablaEspecialidades);
 
         JPopupMenu menu = new JPopupMenu();
-        JMenuItem itemEliminar = new JMenuItem("Eliminar");
-        menu.add(itemEliminar);
 
         tablaEspecialidades.setComponentPopupMenu(menu);
         
@@ -137,10 +135,15 @@ public class PanelEspecialidades extends JPanel {
                 if (e.getClickCount() == 2) {
                     int fila = tablaEspecialidades.getSelectedRow();
                     if (fila != -1) {
-                        var documento = tablaEspecialidades.getValueAt(fila, 2).toString();
-                        var datos = servicioEspecialidad.cargarEspecialidad(documento);
-                        formEspecialidades.cargarEspecialidad(datos);
-                        modoEdicion();
+                        try {
+                            var nombre = tablaEspecialidades.getValueAt(fila, 0).toString();
+                            var datos = servicioEspecialidad.cargarEspecialidad(nombre);
+                            formEspecialidades.cargarEspecialidad(datos);
+                            modoEdicion();
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, "No se pudo cargar la especialidad seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
+                            ex.printStackTrace();
+                        }
                     }
                 }
             }

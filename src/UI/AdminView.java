@@ -85,9 +85,7 @@ public class AdminView extends BaseView {
         panelDerecho.add(bienvenidaPanel, BIENVENIDA_PANEL);
         panelDerecho.add(panelPacientes, MODULO_PACIENTES);
         panelDerecho.add(medicoPanel, MODULO_MEDICOS);
-
         panelDerecho.add(panelEspecialidades, MODULO_ESPECIALIDADES);
-
         cardLayout.show(panelDerecho, BIENVENIDA_PANEL);
     }
 
@@ -95,14 +93,9 @@ public class AdminView extends BaseView {
         cardLayout.show(panelDerecho, MODULO_MEDICOS);
     }
 
-
-
         public void mostrarPanelEspecialidades() {
         cardLayout.show(panelDerecho, MODULO_ESPECIALIDADES);
     }
-
-
-    
 
     public void mostrarPanelPacientes() {
         cardLayout.show(panelDerecho, MODULO_PACIENTES);

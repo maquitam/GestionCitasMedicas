@@ -47,15 +47,14 @@ public String getIdentificadorFormated() {
 
 
 public String toTxtFormat() {
-    return identificador + "|" + nombreEspecialidad + "|" + estado;
+     return nombreEspecialidad + "|" + identificador + "|" + estado + "|" + descripcion;
 }
 
  public static Especialidad fromTxtFormat(String lineaEspecialidad) {
-    String[] parts = lineaEspecialidad.split("\\|");
-  if (parts.length != 3) throw new IllegalArgumentException("Fórmato de linea no valido.");
+     String[] parts = lineaEspecialidad.split("\\|");
+  if (parts.length != 4) throw new IllegalArgumentException("Fórmato de linea no valido.");
   Especialidad especialidad = new Especialidad(parts[0], Integer.parseInt(parts[1]), Boolean.parseBoolean(parts[2]), parts[3]);
-    return especialidad;
+     return especialidad;
  }
-
 
 }

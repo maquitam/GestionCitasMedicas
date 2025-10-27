@@ -87,10 +87,11 @@ public class FormEspecialidades extends JPanel {
     protected Map<String, String> cargarDatos() {
         Map<String, String> datos = new HashMap<>();
 
+       
         datos.put("nombreEspecialidad", nombreEspecialidad.getText());
-        datos.put("identificador", identificador.getText());
-        datos.put("estado", estado.getText());
-        datos.put("descripción", descripcion.getText());
+        datos.put("identificador", "0"); 
+        datos.put("estado", "true");
+        datos.put("descripcion", descripcion.getText());
 
         return datos;
     };
@@ -106,9 +107,10 @@ public class FormEspecialidades extends JPanel {
                     JOptionPane.showMessageDialog(null, "Especialidad Creada Exitosamente", "", JOptionPane.INFORMATION_MESSAGE);
                     UtilidadesForm.limpiarCampos(this);
                     return true;
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡Ups! Parece que esta especialidad ya existe", "", JOptionPane.INFORMATION_MESSAGE);
+                    UtilidadesForm.limpiarCampos(this);
                 }
-            JOptionPane.showMessageDialog(null, "¡Ups! Parece que esta especialidad ya existe", "", JOptionPane.INFORMATION_MESSAGE);
-            UtilidadesForm.limpiarCampos(this);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }

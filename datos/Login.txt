@@ -1,2 +1,7 @@
 admin|admin
-121|3242|Médico
+121|3242|Médicoas|4|true|asas
+cardio|0|true|sadsad
+dsfdf|0|true|sdfdsf
+hola|2|true|sadsad
+qwewq|3|true|qwewqe
+sd|4|true|sd
