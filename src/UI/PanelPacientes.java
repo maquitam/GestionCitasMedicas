@@ -147,7 +147,7 @@ public class PanelPacientes extends JPanel {
             }
         });
 
-        itemEliminar.addActionListener(_->{
+        itemEliminar.addActionListener(a->{
             var documento = modeloTabla.getValueAt(tablaPacientes.getSelectedRow(), 2).toString();
             try {
                 servicioPaciente.eliminarPaciente(documento);
