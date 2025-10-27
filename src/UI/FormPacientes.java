@@ -246,7 +246,7 @@ public class FormPacientes extends JPanel {
         gbc.gridy = 14;
         add(mostrarContrasenna, gbc);
 
-        mostrarContrasenna.addActionListener(_->{
+        mostrarContrasenna.addActionListener(a->{
             boolean showing = contrasenna.getEchoChar() != 0;
             if (showing) {
                 contrasenna.setEchoChar((char) 0); // Mostrar texto

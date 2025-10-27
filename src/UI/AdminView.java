@@ -10,6 +10,8 @@ public class AdminView extends BaseView {
     public static final String BIENVENIDA_PANEL = "bienvenidaPanel";
     public static final String MODULO_ESPECIALIDADES = "especialidadesPanel";
 
+    public String USUARIO_AUTENTICADO;
+
     public AdminView(String usuario) {
         super(usuario, "Vista Administrador");
     }
@@ -26,7 +28,7 @@ public class AdminView extends BaseView {
         // Botones Laterales
         gbc.gridy = 0;
         gbc.gridx = 0;
-        Boton medicos = new Boton("Médicos");
+        Boton medicos = new Boton("MÃ©dicos");
         menuLateral.add(medicos, gbc);
         gbc.gridy = 1;
         Boton pacientes = new Boton("Pacientes");
@@ -66,9 +68,6 @@ public class AdminView extends BaseView {
             dispose();
             new LoginView();
         });
-
-
-        
     }
 
     @Override
@@ -81,7 +80,8 @@ public class AdminView extends BaseView {
         JPanel bienvenidaPanel = mostrarBienvenida("Bienvenid@ Admin");
         PanelEspecialidades panelEspecialidades = new PanelEspecialidades(this);
 
-            
+
+
         panelDerecho.add(bienvenidaPanel, BIENVENIDA_PANEL);
         panelDerecho.add(panelPacientes, MODULO_PACIENTES);
         panelDerecho.add(medicoPanel, MODULO_MEDICOS);
@@ -101,4 +101,3 @@ public class AdminView extends BaseView {
         cardLayout.show(panelDerecho, MODULO_PACIENTES);
     }
 }
-
