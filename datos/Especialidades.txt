@@ -1,5 +1,5 @@
-cardio|0|true|sadsad
-dsfdf|0|true|sdfdsf
-hola|2|true|sadsad
-qwewq|3|true|qwewqe
-sd|4|true|sd
+hola|0|true|bien
+holsa|1|true|mal
+cardiologia|2|true|cardiope
+General|3|true|122324
+game|4|true|play

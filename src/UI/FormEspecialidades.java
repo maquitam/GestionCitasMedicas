@@ -87,7 +87,6 @@ public class FormEspecialidades extends JPanel {
     protected Map<String, String> cargarDatos() {
         Map<String, String> datos = new HashMap<>();
 
-       
         datos.put("nombreEspecialidad", nombreEspecialidad.getText());
         datos.put("identificador", "0"); 
         datos.put("estado", "true");

@@ -87,6 +87,7 @@ public class PanelEspecialidades extends JPanel {
             try {
                 servicioEspecialidad.actualizarEspecialidad(datos);
                 actualizarTabla();
+                modoCrear();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -135,18 +136,15 @@ public class PanelEspecialidades extends JPanel {
                 if (e.getClickCount() == 2) {
                     int fila = tablaEspecialidades.getSelectedRow();
                     if (fila != -1) {
-                        try {
-                            var nombre = tablaEspecialidades.getValueAt(fila, 0).toString();
-                            var datos = servicioEspecialidad.cargarEspecialidad(nombre);
-                            formEspecialidades.cargarEspecialidad(datos);
-                            modoEdicion();
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null, "No se pudo cargar la especialidad seleccionada.", "Error", JOptionPane.ERROR_MESSAGE);
-                            ex.printStackTrace();
+                        modoEdicion();
+                        var nombre = tablaEspecialidades.getValueAt(fila, 0).toString();
+                        var datos = servicioEspecialidad.cargarEspecialidad(nombre);
+                        formEspecialidades.cargarEspecialidad(datos);
+
                         }
                     }
                 }
-            }
+            
         });
         return tablaPanel;
 
