@@ -7,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import servicios.ServicioEspecialidad;
 import servicios.ServicioMedico;
 import servicios.UtilidadesForm;
-import java.util.List;
+import servicios.ControlMedico;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -21,7 +21,7 @@ public class PanelMedicos extends JPanel {
     private JTable tablaMedicos;
     private DefaultTableModel modeloTabla;
     private ServicioMedico servicioMedico;
-    private ServicioEspecialidad servicioEspecialidad;
+    private ControlMedico controlMedico;
 
     private CampoTexto primerNombreField, segundoNombreField, primerApellidoField,
                         segundoApellidoField, documentoField, telefonoField,
@@ -37,6 +37,7 @@ public class PanelMedicos extends JPanel {
     public PanelMedicos(AdminView adminView) {
         this.adminView = adminView;
         this.servicioMedico = new ServicioMedico();
+        this.controlMedico = new ControlMedico();
 
         setPreferredSize(new Dimension(700,400));
         setLayout(new BorderLayout());
