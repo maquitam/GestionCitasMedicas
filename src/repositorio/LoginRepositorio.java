@@ -34,14 +34,12 @@ public class LoginRepositorio {
         Scanner s = null;
         List<Login> logins = new ArrayList<>();
         try {
-            System.out.println("Leyendo el archivo Login...");
             s = new Scanner(file);
 
             while (s.hasNextLine()) {
                 String loginLine = s.nextLine();
                 var login = new Login(loginLine.split("\\|")[0], loginLine.split("\\|")[1]);
                 logins.add(login);
-                System.out.println("Login obteined: " + login.getUsuario());
             }
     
             return logins;
