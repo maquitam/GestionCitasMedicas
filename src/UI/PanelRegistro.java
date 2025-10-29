@@ -85,21 +85,4 @@ public class PanelRegistro extends JPanel {
 
             return datos;
         }
-
-    public void setCampos() {
-        primerNombre.setText("María");
-        segundoNombre.setText("Camila");
-        primerApellido.setText("Parra");
-        segundoApellido.setText("Morales");
-        documento.setText("1090377346");
-        tiposDocumentos.setSelectedItem("CC");
-        sexo.setSelectedItem("FEMENINO");
-        grupo.setSelectedItem("A");
-        rh.setSelectedItem("+");
-        telefono.setText("3022480598");
-        direccion.setText("Sabaneta");
-        correo.setText("mcparram1611@gmail.com");
-        contrasenna.setText("123");
-        fechaNacimiento.setText("16-11-2004");
-    }
-    }
+}

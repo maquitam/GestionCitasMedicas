@@ -20,7 +20,6 @@ public class FormPacientes extends JPanel {
         setLayout(new GridBagLayout());
 
         crearFormularioBase(titulo);
-        setCampos();
     }
 
     protected void crearFormularioBase(String titulo) {
