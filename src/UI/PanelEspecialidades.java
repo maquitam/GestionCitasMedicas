@@ -17,7 +17,7 @@ public class PanelEspecialidades extends JPanel {
     private DefaultTableModel modeloTabla;
     private ServicioEspecialidad servicioEspecialidad;
     private FormEspecialidades formEspecialidades;
-    private Boton botonCrear, botonActualizar, botonCancelar;
+    private Boton botonCrear, botonCancelar;
 
     public PanelEspecialidades(AdminView adminView) {
         this.adminView = adminView;
@@ -66,14 +66,12 @@ public class PanelEspecialidades extends JPanel {
 
     public JPanel crearBotones() {
         JPanel botonesPanel = new JPanel();
-        botonesPanel.setBackground(Color.GRAY);
+        //botonesPanel.setBackground(Color.GRAY);
 
         botonCrear = new Boton("Crear Especialidad");
-        botonActualizar = new Boton("Actualizar");
         botonCancelar = new Boton("Cancelar");
-        
+
         botonesPanel.add(botonCrear);
-        botonesPanel.add(botonActualizar);
         botonesPanel.add(botonCancelar);
 
         // --- EVENTOS BOTONES ---
@@ -82,23 +80,11 @@ public class PanelEspecialidades extends JPanel {
             actualizarTabla();
         });
 
-        botonActualizar.addActionListener(e->{
-            var datos = formEspecialidades.cargarDatos();
-            try {
-                servicioEspecialidad.actualizarEspecialidad(datos);
-                actualizarTabla();
-                modoCrear();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-                UtilidadesForm.limpiarCampos(formEspecialidades);
-        });
-
         botonCancelar.addActionListener(e->{
             UtilidadesForm.limpiarCampos(formEspecialidades);
             modoCrear();
-        });
-            
+        });     
+          
         return botonesPanel;
     }
 
@@ -125,6 +111,11 @@ public class PanelEspecialidades extends JPanel {
         JScrollPane scrollTabla = new JScrollPane(tablaEspecialidades);
 
         JPopupMenu menu = new JPopupMenu();
+        JMenuItem itemActualizar = new JMenuItem("Actualizar");
+        JMenuItem itemEliminar = new JMenuItem("Eliminar");
+        menu.add(itemActualizar);
+        menu.add(itemEliminar);
+
 
         tablaEspecialidades.setComponentPopupMenu(menu);
         
@@ -133,19 +124,45 @@ public class PanelEspecialidades extends JPanel {
         // --- EVENTOS TABLA ---
         tablaEspecialidades.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
+                if (e.getClickCount() == 1) {
                     int fila = tablaEspecialidades.getSelectedRow();
                     if (fila != -1) {
                         modoEdicion();
                         var nombre = tablaEspecialidades.getValueAt(fila, 0).toString();
                         var datos = servicioEspecialidad.cargarEspecialidad(nombre);
                         formEspecialidades.cargarEspecialidad(datos);
-
                         }
                     }
                 }
             
         });
+
+        itemActualizar.addActionListener(e->{
+            var datos = formEspecialidades.cargarDatos();
+            try {
+                servicioEspecialidad.actualizarEspecialidad(datos);
+                actualizarTabla();
+                modoCrear();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+                UtilidadesForm.limpiarCampos(formEspecialidades);
+        });
+        
+
+        itemEliminar.addActionListener(a->{
+            var datos = formEspecialidades.cargarDatos();
+            try {
+                servicioEspecialidad.eliminarEspecialidad(datos);
+                actualizarTabla();
+                modoCrear();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+                UtilidadesForm.limpiarCampos(formEspecialidades);
+
+        });
+
         return tablaPanel;
 
     };
@@ -166,15 +183,13 @@ public class PanelEspecialidades extends JPanel {
     };
 
     public void modoCrear() {
-        botonActualizar.setVisible(false);
-        botonCancelar.setVisible(false);
         botonCrear.setVisible(true);
+        botonCancelar.setVisible(false);
     }
     
     public void modoEdicion() {
-        botonActualizar.setVisible(true);
-        botonCancelar.setVisible(true);
         botonCrear.setVisible(false);
-    }
+        botonCancelar.setVisible(true);
+    }    
 
 }

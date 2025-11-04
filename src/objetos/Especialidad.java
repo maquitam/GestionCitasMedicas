@@ -57,4 +57,11 @@ public String toTxtFormat() {
      return especialidad;
  }
 
+public static String listaEspecialidades(String lineaEspecialidad) {
+     String[] parts = lineaEspecialidad.split("\\|");
+  if (parts.length != 4) throw new IllegalArgumentException("Fórmato de linea no valido.");
+  String especialidad = parts[0];
+     return especialidad;
+ }
+
 }

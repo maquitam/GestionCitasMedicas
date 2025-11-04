@@ -1,7 +1,10 @@
 package app;
 
+import UI.LoginView;
 import UI.PacienteView;
+import objetos.Especialidad;
 import objetos.Paciente;
+import repositorio.EspecialidadRepositorio;
 import servicios.ServicioPaciente;
 
 public class Main {
@@ -9,6 +12,22 @@ public class Main {
     public static void main(String[] args) {
 
         // Crear o buscar el paciente actual
+        LoginView login = new LoginView();
+      try{ EspecialidadRepositorio especialidadRepositorio = new EspecialidadRepositorio();
+       var lista = especialidadRepositorio.getEspecialidadesList();
+            System.out.println("------------------------------------");
+
+       System.out.println(lista[0]);
+            System.out.println("------------------------------------");
+
+        }catch(Exception e){
+            System.out.println("------------------------------------");
+            System.out.println(e.getMessage());
+            System.out.println("------------------------------------");
+
+        }
+
+
         ServicioPaciente servicioPaciente = new ServicioPaciente();
 
         // Intentar buscar paciente existente por documento
