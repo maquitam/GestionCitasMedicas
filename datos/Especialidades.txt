@@ -1,5 +1,5 @@
-hola|0|true|bien
-holsa|1|true|mal
-cardiologia|2|true|cardiope
-General|3|true|122324
-game|4|true|play
+cardiologica|0|true|2112213
+nose que poner|1|true|asdsad
+sdsds|0|true|sdsd
+sdasadsad|3|false|a
+nueva|4|false|si

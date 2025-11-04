@@ -29,6 +29,10 @@ public class ServicioEspecialidad {
         return especialidadRepositorio.getEspecialidades();
     }
 
+    public String[] getEspecialidadesList() {
+        return especialidadRepositorio.getEspecialidadesList();
+    }
+
 
     public int generarId() {
         var especialidades = getEspecialidades();
@@ -45,13 +49,14 @@ public class ServicioEspecialidad {
             if (buscarPorNombre(datos.get("nombreEspecialidad")) != -1) {
                 return false;
             }
+            
 
             var especialidad = new Especialidad(datos.get("nombreEspecialidad"), generarId(),true, datos.get("descripcion"));
         
         return especialidadRepositorio.registrarEspecialidad(especialidad);
 
         } catch (Exception e) {
-            return false;
+            throw e;
         }
         
     }
@@ -78,7 +83,7 @@ public class ServicioEspecialidad {
     public int buscarPorNombre(String nombre) {
         var especialidades = getEspecialidades();
 
-        if (especialidades == null) {return -1;}
+       if (especialidades == null) {return -1;}
 
         for (var temporal : especialidades) {
             if(temporal.getNombreEspecialidad().equals(nombre)) {
@@ -105,7 +110,28 @@ public class ServicioEspecialidad {
         return true;
     };
     
+    public boolean eliminarEspecialidad(Map<String, String> datos) throws Exception {
+        var especialidades = getEspecialidades();
+        var indice = buscarPorNombre(datos.get("nombreEspecialidad"));
+        especialidades.remove(indice);
+        int i = 0;
+        
+        for (var especialidad : especialidades){
+            if (i >= indice){
+                especialidad.setIdentificador(especialidad.getIdentificador()-1);
+                }
+            i++;
+            }
+        
+            
+        especialidadRepositorio.actualizarBasedeDatos(especialidades);
+        
+       // loginRepositorio = new LoginRepositorio();
+       // loginRepositorio.eliminarUsuario(documento);
 
+        return true;
+
+    }
     
 }
 

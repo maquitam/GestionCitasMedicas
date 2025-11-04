@@ -12,3 +12,5 @@ hola|0|true|bien
 cardiologia|2|true|cardiope
 General|3|true|122324
 game|4|true|play
+cardiologia|2|true|corazones
+cardiologica|1|true|muchas cosas

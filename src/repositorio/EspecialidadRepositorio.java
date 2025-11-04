@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import excepciones.ExcepcionesEspecialidad;
 import objetos.Especialidad;
 
 
@@ -41,17 +43,49 @@ public class EspecialidadRepositorio {
     }        
 }
 
+    public String[] getEspecialidadesList() {
+        Scanner s = null;
+        String[] especialidades = new String[getEspecialidades().size()];
+        try {
+            s = new Scanner(file);
+            int i = 0;
+            while (s.hasNextLine()) {
+                String especialidadLine = s.nextLine();
+                String especialidad = Especialidad.listaEspecialidades(especialidadLine);
+                especialidades[i] = especialidad;
+                i++;
+                /*for (int i = 0; i <= getEspecialidades().size() + 1 ; i++){
+                    especialidades[i] = especialidad;
+                }*/
+            }
+    
+            return especialidades;
+            
+    } catch (Exception exe) {
+        return null;
+    }
+}  
+
+public void validacionEspecialiad(Especialidad especialidad) throws Exception{
+    if(especialidad.getNombreEspecialidad().isEmpty() || especialidad.getNombreEspecialidad().isBlank()){
+                throw new ExcepcionesEspecialidad("Nombre de especialidad NO válido.");
+            }
+    if(especialidad.getDescripcion().isEmpty() || especialidad.getDescripcion().isBlank()){
+                throw new ExcepcionesEspecialidad("Descripción de especialidad NO válida.");
+            }    
+}
+
 public boolean registrarEspecialidad(Especialidad especialidad) throws Exception {
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
+    validacionEspecialiad(especialidad);
+    try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {  
+            
             var content = especialidad.toTxtFormat();
             bufferedWriter.write(content);
             bufferedWriter.newLine();
-        } catch (Exception exe) {
-            throw new Exception(exe.getMessage());
-        }
-        loginRepositorio = new LoginRepositorio();
-        loginRepositorio.registrarEspecialidad(especialidad);
 
+        } catch (Exception exe) {
+           throw new Exception(exe.getMessage());
+        }
         return true;
     };
 

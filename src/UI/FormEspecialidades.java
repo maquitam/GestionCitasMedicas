@@ -2,6 +2,7 @@ package UI;
 
 import javax.swing.*;
 
+import repositorio.EspecialidadRepositorio;
 import servicios.ServicioEspecialidad;
 import servicios.UtilidadesForm;
 
@@ -9,8 +10,10 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FormEspecialidades extends JPanel {      
+public class FormEspecialidades extends JPanel { 
+    private EspecialidadRepositorio especialidadRepositorio;     
     protected CampoTexto nombreEspecialidad, identificador,estado, descripcion;
+    private ComboBox<String> tipoEspecialidades;
 
     
     public FormEspecialidades(String titulo) {
@@ -74,13 +77,12 @@ public class FormEspecialidades extends JPanel {
         add(descripcion, gbc);
         gbc.insets = new Insets(10,20,1,20);
 
+
     }
 
     protected void cargarEspecialidad(Map<String, String> datos) {
         nombreEspecialidad.setText(datos.get("nombreEspecialidad"));
-        identificador.setText(datos.get("identificador"));
-        estado.setText(datos.get("estado"));
-        descripcion.setText(datos.get("descripción"));
+        descripcion.setText(datos.get("descripcion"));
 
     }
 
@@ -106,11 +108,13 @@ public class FormEspecialidades extends JPanel {
                     JOptionPane.showMessageDialog(null, "Especialidad Creada Exitosamente", "", JOptionPane.INFORMATION_MESSAGE);
                     UtilidadesForm.limpiarCampos(this);
                     return true;
-                } else {
+                }  else {
                     JOptionPane.showMessageDialog(null, "¡Ups! Parece que esta especialidad ya existe", "", JOptionPane.INFORMATION_MESSAGE);
                     UtilidadesForm.limpiarCampos(this);
+
                 }
             } catch (Exception e1) {
+                JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
                 e1.printStackTrace();
             }
         return false;

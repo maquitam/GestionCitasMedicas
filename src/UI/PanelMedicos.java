@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import repositorio.EspecialidadRepositorio;
 import servicios.ServicioEspecialidad;
 import servicios.ServicioMedico;
 import servicios.UtilidadesForm;
@@ -22,6 +23,8 @@ public class PanelMedicos extends JPanel {
     private DefaultTableModel modeloTabla;
     private ServicioMedico servicioMedico;
     private ControlMedico controlMedico;
+    private EspecialidadRepositorio especialidadRepositorio;
+    private ServicioEspecialidad servicioEspecialidad;
 
     private CampoTexto primerNombreField, segundoNombreField, primerApellidoField,
                         segundoApellidoField, documentoField, telefonoField,
@@ -34,7 +37,16 @@ public class PanelMedicos extends JPanel {
 
     private int filaSeleccionada = -1;
 
+
     public PanelMedicos(AdminView adminView) {
+
+    /*try {
+            especialidadRepositorio = new EspecialidadRepositorio();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        this.servicioEspecialidad = new ServicioEspecialidad();
+
         this.adminView = adminView;
         this.servicioMedico = new ServicioMedico();
         this.controlMedico = new ControlMedico();
@@ -184,10 +196,18 @@ public class PanelMedicos extends JPanel {
         medicoForm.add(especialidadLabel,gbc);
         gbc.gridy = 10;
         gbc.weightx = 1;
-        String[] listaEspecialidades = {"Pediatría", "Consulta General"};
+       //String[] listaEspecialidades = {"Pediatría", "Consulta General"};
+       try{String[] listaEspecialidades = servicioEspecialidad.getEspecialidadesList();
         tipoEspecialidades = new ComboBox<>(listaEspecialidades);
         gbc.anchor = GridBagConstraints.NORTH;
         medicoForm.add(tipoEspecialidades, gbc);
+
+    }catch(Exception e){
+        String[] listaEspecialidades = {"Error en Especialidades.txt"};
+        tipoEspecialidades = new ComboBox<>(listaEspecialidades);
+        gbc.anchor = GridBagConstraints.NORTH;
+        medicoForm.add(tipoEspecialidades, gbc);}
+    
 
         gbc.gridx = 1;
         // Campo de Contraseña
