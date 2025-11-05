@@ -2,6 +2,7 @@ package servicios;
 
 import java.io.IOException;
 import java.util.Map;
+
 import objetos.Especialidad;
 
 import java.util.HashMap;
@@ -16,21 +17,25 @@ public class ServicioEspecialidad {
     EspecialidadRepositorio especialidadRepositorio;
     LoginRepositorio loginRepositorio;
 
-    public ServicioEspecialidad() {
+    public ServicioEspecialidad() throws Exception, IOException {
    
         try {
             especialidadRepositorio = new EspecialidadRepositorio();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public List<Especialidad> getEspecialidades() {
+    public List<Especialidad> getEspecialidades() throws Exception, IOException{
         return especialidadRepositorio.getEspecialidades();
     }
 
+    public String[] getEspecialidadesList() throws Exception, IOException {
+        return especialidadRepositorio.getEspecialidadesList();
+    }
 
-    public int generarId() {
+
+    public int generarId() throws Exception, IOException {
         var especialidades = getEspecialidades();
         
         if (especialidades == null) {
@@ -45,18 +50,18 @@ public class ServicioEspecialidad {
             if (buscarPorNombre(datos.get("nombreEspecialidad")) != -1) {
                 return false;
             }
-
+        
             var especialidad = new Especialidad(datos.get("nombreEspecialidad"), generarId(),true, datos.get("descripcion"));
         
         return especialidadRepositorio.registrarEspecialidad(especialidad);
 
         } catch (Exception e) {
-            return false;
+            throw e;
         }
         
     }
 
-    public Map<String, String> cargarEspecialidad(String nombre) {
+    public Map<String, String> cargarEspecialidad(String nombre) throws Exception, IOException {
         Especialidad especialidad = obtenerEspecialidad(nombre);
 
         Map<String, String> datos = new HashMap<>();
@@ -69,19 +74,19 @@ public class ServicioEspecialidad {
         return datos;
     }
 
-    public Especialidad obtenerEspecialidad(String nombre) {
+    public Especialidad obtenerEspecialidad(String nombre) throws Exception, IOException {
         var especialidades = getEspecialidades();
         var indice = buscarPorNombre(nombre);
         return especialidades.get(indice);
     };
 
-    public int buscarPorNombre(String nombre) {
+    public int buscarPorNombre(String nombre) throws Exception, IOException {
         var especialidades = getEspecialidades();
 
-        if (especialidades == null) {return -1;}
+       if (especialidades == null) {return -1;}
 
         for (var temporal : especialidades) {
-            if(temporal.getNombreEspecialidad().equals(nombre)) {
+            if(temporal.getNombreEspecialidad().toUpperCase().equals(nombre.toUpperCase())) {
                 return especialidades.indexOf(temporal);
             }
         }
@@ -105,7 +110,22 @@ public class ServicioEspecialidad {
         return true;
     };
     
+    public boolean eliminarEspecialidad(Map<String, String> datos) throws Exception {
+        var especialidades = getEspecialidades();
+        var indice = buscarPorNombre(datos.get("nombreEspecialidad"));
+        especialidades.remove(indice);
+        int i = 0;
+        
+        for (var especialidad : especialidades){
+            if (i >= indice){
+                especialidad.setIdentificador(especialidad.getIdentificador()-1);
+                }
+            i++;
+            }
+        especialidadRepositorio.actualizarBasedeDatos(especialidades);
+        return true;
 
+    }
     
 }
 

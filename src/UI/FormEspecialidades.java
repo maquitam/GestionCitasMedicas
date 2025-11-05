@@ -6,10 +6,11 @@ import servicios.ServicioEspecialidad;
 import servicios.UtilidadesForm;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FormEspecialidades extends JPanel {      
+public class FormEspecialidades extends JPanel {    
     protected CampoTexto nombreEspecialidad, identificador,estado, descripcion;
 
     
@@ -74,13 +75,12 @@ public class FormEspecialidades extends JPanel {
         add(descripcion, gbc);
         gbc.insets = new Insets(10,20,1,20);
 
+
     }
 
     protected void cargarEspecialidad(Map<String, String> datos) {
         nombreEspecialidad.setText(datos.get("nombreEspecialidad"));
-        identificador.setText(datos.get("identificador"));
-        estado.setText(datos.get("estado"));
-        descripcion.setText(datos.get("descripción"));
+        descripcion.setText(datos.get("descripcion"));
 
     }
 
@@ -96,22 +96,24 @@ public class FormEspecialidades extends JPanel {
     };
 
 
-    protected boolean guardarEspecialidad() {
+    protected boolean guardarEspecialidad() throws Exception, IOException {
         ServicioEspecialidad servicioEspecialidad = new ServicioEspecialidad();
             var datos = cargarDatos();
             boolean valid;
             try {
                 valid = servicioEspecialidad.crearEspecialidad(datos);
                 if (valid) {
-                    JOptionPane.showMessageDialog(null, "Especialidad Creada Exitosamente", "", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Especialidad creada exitosamente", "", JOptionPane.INFORMATION_MESSAGE);
                     UtilidadesForm.limpiarCampos(this);
                     return true;
-                } else {
+                }  else {
                     JOptionPane.showMessageDialog(null, "¡Ups! Parece que esta especialidad ya existe", "", JOptionPane.INFORMATION_MESSAGE);
                     UtilidadesForm.limpiarCampos(this);
+
                 }
-            } catch (Exception e1) {
-                e1.printStackTrace();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+                ex.printStackTrace();
             }
         return false;
     };

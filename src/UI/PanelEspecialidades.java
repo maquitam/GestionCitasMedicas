@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import servicios.ServicioEspecialidad;
 import servicios.UtilidadesForm;
@@ -17,9 +18,9 @@ public class PanelEspecialidades extends JPanel {
     private DefaultTableModel modeloTabla;
     private ServicioEspecialidad servicioEspecialidad;
     private FormEspecialidades formEspecialidades;
-    private Boton botonCrear, botonActualizar, botonCancelar;
+    private Boton botonCrear, botonCancelar;
 
-    public PanelEspecialidades(AdminView adminView) {
+    public PanelEspecialidades(AdminView adminView) throws Exception, IOException {
         this.adminView = adminView;
         this.servicioEspecialidad = new ServicioEspecialidad();
 
@@ -66,39 +67,28 @@ public class PanelEspecialidades extends JPanel {
 
     public JPanel crearBotones() {
         JPanel botonesPanel = new JPanel();
-        botonesPanel.setBackground(Color.GRAY);
 
         botonCrear = new Boton("Crear Especialidad");
-        botonActualizar = new Boton("Actualizar");
         botonCancelar = new Boton("Cancelar");
-        
+
         botonesPanel.add(botonCrear);
-        botonesPanel.add(botonActualizar);
         botonesPanel.add(botonCancelar);
 
         // --- EVENTOS BOTONES ---
-        botonCrear.addActionListener(e->{
-            formEspecialidades.guardarEspecialidad();
-            actualizarTabla();
-        });
-
-        botonActualizar.addActionListener(e->{
-            var datos = formEspecialidades.cargarDatos();
+        botonCrear.addActionListener (e->{
             try {
-                servicioEspecialidad.actualizarEspecialidad(datos);
-                actualizarTabla();
-                modoCrear();
+                formEspecialidades.guardarEspecialidad();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-                UtilidadesForm.limpiarCampos(formEspecialidades);
+            actualizarTabla();
         });
 
         botonCancelar.addActionListener(e->{
             UtilidadesForm.limpiarCampos(formEspecialidades);
             modoCrear();
-        });
-            
+        });     
+          
         return botonesPanel;
     }
 
@@ -125,6 +115,11 @@ public class PanelEspecialidades extends JPanel {
         JScrollPane scrollTabla = new JScrollPane(tablaEspecialidades);
 
         JPopupMenu menu = new JPopupMenu();
+        JMenuItem itemActualizar = new JMenuItem("Actualizar");
+        JMenuItem itemEliminar = new JMenuItem("Eliminar");
+        menu.add(itemActualizar);
+        menu.add(itemEliminar);
+
 
         tablaEspecialidades.setComponentPopupMenu(menu);
         
@@ -133,48 +128,77 @@ public class PanelEspecialidades extends JPanel {
         // --- EVENTOS TABLA ---
         tablaEspecialidades.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
+                if (e.getClickCount() == 1) {
                     int fila = tablaEspecialidades.getSelectedRow();
                     if (fila != -1) {
                         modoEdicion();
                         var nombre = tablaEspecialidades.getValueAt(fila, 0).toString();
-                        var datos = servicioEspecialidad.cargarEspecialidad(nombre);
+                        try{
+                        var datos = servicioEspecialidad.cargarEspecialidad(nombre);            
                         formEspecialidades.cargarEspecialidad(datos);
-
+                        }catch(Exception ex){
+                            ex.printStackTrace();
+                            }
                         }
                     }
                 }
             
         });
+
+        itemActualizar.addActionListener(e->{
+            var datos = formEspecialidades.cargarDatos();
+            try {
+                servicioEspecialidad.actualizarEspecialidad(datos);
+                actualizarTabla();
+                modoCrear();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+                UtilidadesForm.limpiarCampos(formEspecialidades);
+        });
+        
+
+        itemEliminar.addActionListener(a->{
+            var datos = formEspecialidades.cargarDatos();
+            try {
+                servicioEspecialidad.eliminarEspecialidad(datos);
+                actualizarTabla();
+                modoCrear();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+                UtilidadesForm.limpiarCampos(formEspecialidades);
+
+        });
+
         return tablaPanel;
 
     };
 
     public void actualizarTabla() {
+       try{ 
         var especialidades = servicioEspecialidad.getEspecialidades();
-        
         if (especialidades == null) {
             return;
-        }
+            }
         modeloTabla.setRowCount(0);
-
         modeloTabla = (DefaultTableModel) tablaEspecialidades.getModel();
-
         for (var especialidad : especialidades) {
             modeloTabla.addRow(new Object[]{especialidad.getNombreEspecialidad(), especialidad.getIdentificadorFormated(), especialidad.getEstadoFormated(), especialidad.getDescripcion()});
-        }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            }
     };
 
     public void modoCrear() {
-        botonActualizar.setVisible(false);
-        botonCancelar.setVisible(false);
         botonCrear.setVisible(true);
+        botonCancelar.setVisible(false);
     }
     
     public void modoEdicion() {
-        botonActualizar.setVisible(true);
-        botonCancelar.setVisible(true);
         botonCrear.setVisible(false);
-    }
+        botonCancelar.setVisible(true);
+    }    
 
 }

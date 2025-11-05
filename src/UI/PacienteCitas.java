@@ -94,7 +94,7 @@ public class PacienteCitas extends JPanel {
         comboEspecialidad.removeAllItems();
 
         // ⚙️ Creamos una lista manual para simular especialidades
-        List<Especialidad> lista = new ArrayList<>();
+       /*  List<Especialidad> lista = new ArrayList<>();
         lista.add(new Especialidad("Medicina General", "E001", true));
         lista.add(new Especialidad("Pediatría", "E002", true));
         lista.add(new Especialidad("Cardiología", "E003", true));
@@ -117,7 +117,7 @@ public class PacienteCitas extends JPanel {
                 }
                 return this;
             }
-        });
+        });*/
 
         comboEspecialidad.setSelectedIndex(0);
         filtrarMedicosPorEspecialidad();
@@ -132,7 +132,7 @@ public class PacienteCitas extends JPanel {
 
         comboMedico.removeAllItems();
 
-        String nombreEsp = esp.consultarEspecialidad()
+        /*String nombreEsp = esp.consultarEspecialidad()
             .split("\n")[0]
             .replace("Nombre: ", "")
             .trim();
@@ -158,7 +158,7 @@ public class PacienteCitas extends JPanel {
             comboMedico.addItem(new Medico(
                     5, "Paula", "Piel", "CC", "654987", "3101112233", "ppiel@hospital.com",
                     "Cl 100 #15-30", "Bogotá", "Dermatología", true, "zxcv"));
-        }
+        }*/
 
         comboMedico.setRenderer(new DefaultListCellRenderer() {
             @Override

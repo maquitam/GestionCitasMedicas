@@ -1,13 +1,19 @@
 package app;
 
+import UI.LoginView;
 import UI.PacienteView;
+import objetos.Especialidad;
 import objetos.Paciente;
+import repositorio.EspecialidadRepositorio;
 import servicios.ServicioPaciente;
 
 public class Main {
 
     public static void main(String[] args) {
 
+        LoginView login = new LoginView();
+
+        
         // Crear o buscar el paciente actual
         ServicioPaciente servicioPaciente = new ServicioPaciente();
 

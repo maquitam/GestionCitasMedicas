@@ -1,5 +1,14 @@
-hola|0|true|bien
-holsa|1|true|mal
-cardiologia|2|true|cardiope
-General|3|true|122324
-game|4|true|play
+Cardiología|0|true|Estudia y trata las enfermedades del corazón y del sistema circulatorio
+Neurología|1|true|Atiende trastornos del sistema nervioso (cerebro, médula espinal y nervios)
+Pediatría|2|true|Cuida la salud y desarrollo de niños y adolescentes
+Dermatología|3|true|Se ocupa de las enfermedades de la piel, cabello y uñas
+Ginecología|4|true|Trata la salud del sistema reproductor femenino
+Obstetricia|5|true|Acompaña el embarazo, parto y posparto
+Oftalmología|6|true|Atiende enfermedades de los ojos y problemas de visión
+Otorrinolaringología|7|true|Trata afecciones del oído, nariz y garganta
+Psiquiatría|8|true|Diagnostica y trata trastornos mentales y emocionales
+Oncología|9|true|Se especializa en el diagnóstico y tratamiento del cáncer
+Endocrinología|10|true|Estudia las glándulas hormonales y sus trastornos
+Nefrología|11|true|Se ocupa de las enfermedades de los riñones
+Gastroenterología|12|true|Atiende problemas del sistema digestivo
+Neumología|13|true|Trata enfermedades del sistema respiratorio
