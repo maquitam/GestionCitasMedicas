@@ -38,7 +38,7 @@ public class PanelMedicos extends JPanel {
     private int filaSeleccionada = -1;
 
 
-    public PanelMedicos(AdminView adminView) {
+    public PanelMedicos(AdminView adminView) throws Exception {
 
     /*try {
             especialidadRepositorio = new EspecialidadRepositorio();
@@ -203,6 +203,7 @@ public class PanelMedicos extends JPanel {
         medicoForm.add(tipoEspecialidades, gbc);
 
     }catch(Exception e){
+        e.printStackTrace();
         String[] listaEspecialidades = {"Error en Especialidades.txt"};
         tipoEspecialidades = new ComboBox<>(listaEspecialidades);
         gbc.anchor = GridBagConstraints.NORTH;

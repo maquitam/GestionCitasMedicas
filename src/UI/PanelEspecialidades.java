@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import servicios.ServicioEspecialidad;
 import servicios.UtilidadesForm;
@@ -19,7 +20,7 @@ public class PanelEspecialidades extends JPanel {
     private FormEspecialidades formEspecialidades;
     private Boton botonCrear, botonCancelar;
 
-    public PanelEspecialidades(AdminView adminView) {
+    public PanelEspecialidades(AdminView adminView) throws Exception, IOException {
         this.adminView = adminView;
         this.servicioEspecialidad = new ServicioEspecialidad();
 
@@ -66,7 +67,6 @@ public class PanelEspecialidades extends JPanel {
 
     public JPanel crearBotones() {
         JPanel botonesPanel = new JPanel();
-        //botonesPanel.setBackground(Color.GRAY);
 
         botonCrear = new Boton("Crear Especialidad");
         botonCancelar = new Boton("Cancelar");
@@ -75,8 +75,12 @@ public class PanelEspecialidades extends JPanel {
         botonesPanel.add(botonCancelar);
 
         // --- EVENTOS BOTONES ---
-        botonCrear.addActionListener(e->{
-            formEspecialidades.guardarEspecialidad();
+        botonCrear.addActionListener (e->{
+            try {
+                formEspecialidades.guardarEspecialidad();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             actualizarTabla();
         });
 
@@ -129,8 +133,12 @@ public class PanelEspecialidades extends JPanel {
                     if (fila != -1) {
                         modoEdicion();
                         var nombre = tablaEspecialidades.getValueAt(fila, 0).toString();
-                        var datos = servicioEspecialidad.cargarEspecialidad(nombre);
+                        try{
+                        var datos = servicioEspecialidad.cargarEspecialidad(nombre);            
                         formEspecialidades.cargarEspecialidad(datos);
+                        }catch(Exception ex){
+                            ex.printStackTrace();
+                            }
                         }
                     }
                 }
@@ -168,18 +176,19 @@ public class PanelEspecialidades extends JPanel {
     };
 
     public void actualizarTabla() {
+       try{ 
         var especialidades = servicioEspecialidad.getEspecialidades();
-        
         if (especialidades == null) {
             return;
-        }
+            }
         modeloTabla.setRowCount(0);
-
         modeloTabla = (DefaultTableModel) tablaEspecialidades.getModel();
-
         for (var especialidad : especialidades) {
             modeloTabla.addRow(new Object[]{especialidad.getNombreEspecialidad(), especialidad.getIdentificadorFormated(), especialidad.getEstadoFormated(), especialidad.getDescripcion()});
-        }
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            }
     };
 
     public void modoCrear() {
