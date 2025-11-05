@@ -2,18 +2,16 @@ package UI;
 
 import javax.swing.*;
 
-import repositorio.EspecialidadRepositorio;
 import servicios.ServicioEspecialidad;
 import servicios.UtilidadesForm;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FormEspecialidades extends JPanel { 
-    private EspecialidadRepositorio especialidadRepositorio;     
+public class FormEspecialidades extends JPanel {    
     protected CampoTexto nombreEspecialidad, identificador,estado, descripcion;
-    private ComboBox<String> tipoEspecialidades;
 
     
     public FormEspecialidades(String titulo) {
@@ -98,14 +96,14 @@ public class FormEspecialidades extends JPanel {
     };
 
 
-    protected boolean guardarEspecialidad() {
+    protected boolean guardarEspecialidad() throws Exception, IOException {
         ServicioEspecialidad servicioEspecialidad = new ServicioEspecialidad();
             var datos = cargarDatos();
             boolean valid;
             try {
                 valid = servicioEspecialidad.crearEspecialidad(datos);
                 if (valid) {
-                    JOptionPane.showMessageDialog(null, "Especialidad Creada Exitosamente", "", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Especialidad creada exitosamente", "", JOptionPane.INFORMATION_MESSAGE);
                     UtilidadesForm.limpiarCampos(this);
                     return true;
                 }  else {
@@ -113,9 +111,9 @@ public class FormEspecialidades extends JPanel {
                     UtilidadesForm.limpiarCampos(this);
 
                 }
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(null, e1.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
-                e1.printStackTrace();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
+                ex.printStackTrace();
             }
         return false;
     };

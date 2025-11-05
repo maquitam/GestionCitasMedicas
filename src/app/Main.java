@@ -11,23 +11,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // Crear o buscar el paciente actual
         LoginView login = new LoginView();
-      try{ EspecialidadRepositorio especialidadRepositorio = new EspecialidadRepositorio();
-       var lista = especialidadRepositorio.getEspecialidadesList();
-            System.out.println("------------------------------------");
 
-       System.out.println(lista[0]);
-            System.out.println("------------------------------------");
-
-        }catch(Exception e){
-            System.out.println("------------------------------------");
-            System.out.println(e.getMessage());
-            System.out.println("------------------------------------");
-
-        }
-
-
+        
+        // Crear o buscar el paciente actual
         ServicioPaciente servicioPaciente = new ServicioPaciente();
 
         // Intentar buscar paciente existente por documento

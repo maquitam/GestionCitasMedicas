@@ -75,19 +75,21 @@ public class AdminView extends BaseView {
         panelDerecho = new JPanel(cardLayout);
         
         //Crear paneles    
+        try{
         PanelMedicos medicoPanel = new PanelMedicos(this);
         PanelPacientes panelPacientes = new PanelPacientes(this);
         JPanel bienvenidaPanel = mostrarBienvenida("Bienvenid@ Admin");
         PanelEspecialidades panelEspecialidades = new PanelEspecialidades(this);
-
-
 
         panelDerecho.add(bienvenidaPanel, BIENVENIDA_PANEL);
         panelDerecho.add(panelPacientes, MODULO_PACIENTES);
         panelDerecho.add(medicoPanel, MODULO_MEDICOS);
         panelDerecho.add(panelEspecialidades, MODULO_ESPECIALIDADES);
         cardLayout.show(panelDerecho, BIENVENIDA_PANEL);
-    }
+    }catch(Exception e){
+        e.printStackTrace();
+        }
+}
 
     public void mostrarPanelMedicos() {
         cardLayout.show(panelDerecho, MODULO_MEDICOS);

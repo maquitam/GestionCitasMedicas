@@ -13,40 +13,37 @@ public class EspecialidadRepositorio {
     private File file;
     public static final String PATH = "datos\\Especialidades.txt";
     
-    private LoginRepositorio loginRepositorio;
-
-    public EspecialidadRepositorio() throws IOException {
-        file = new File(PATH);
+    public EspecialidadRepositorio() throws IOException, Exception {
+       try {file = new File(PATH);
         if (!file.exists()) {
             file.getParentFile().mkdirs();
             file.createNewFile();
         }
+        }catch(IOException e){
+            throw new ExcepcionesEspecialidad("Error creando el archivo Especialidades.txt: " + e.getMessage());
+        }
     }
 
-    public List<Especialidad> getEspecialidades() {
+    public List<Especialidad> getEspecialidades() throws IOException, Exception {
         Scanner s = null;
         List<Especialidad> especialidades = new ArrayList<>();
         try {
             s = new Scanner(file);
-
             while (s.hasNextLine()) {
                 String especialidadLine = s.nextLine();
                 var especialidad = Especialidad.fromTxtFormat(especialidadLine);
-
                 especialidades.add(especialidad);
             }
-    
             return especialidades;
             
-    } catch (Exception exe) {
-        return null;
-    }        
+    } catch (IOException e) {
+            throw new ExcepcionesEspecialidad("A ocurrido un error leyendo el archivo Especialidades.txt: " + e.getMessage());
+    }  
 }
 
-    public String[] getEspecialidadesList() {
+    public String[] getEspecialidadesList() throws IOException, Exception {
         Scanner s = null;
-        String[] especialidades = new String[getEspecialidades().size()];
-        try {
+        try {String[] especialidades = new String[getEspecialidades().size()];
             s = new Scanner(file);
             int i = 0;
             while (s.hasNextLine()) {
@@ -54,16 +51,12 @@ public class EspecialidadRepositorio {
                 String especialidad = Especialidad.listaEspecialidades(especialidadLine);
                 especialidades[i] = especialidad;
                 i++;
-                /*for (int i = 0; i <= getEspecialidades().size() + 1 ; i++){
-                    especialidades[i] = especialidad;
-                }*/
             }
-    
             return especialidades;
             
-    } catch (Exception exe) {
-        return null;
-    }
+        } catch (IOException e) {
+            throw new ExcepcionesEspecialidad("A ocurrido un error leyendo el archivo Especialidades.txt: " + e.getMessage());
+            }
 }  
 
 public void validacionEspecialiad(Especialidad especialidad) throws Exception{
@@ -75,44 +68,40 @@ public void validacionEspecialiad(Especialidad especialidad) throws Exception{
             }    
 }
 
-public boolean registrarEspecialidad(Especialidad especialidad) throws Exception {
+public boolean registrarEspecialidad(Especialidad especialidad) throws IOException, Exception {
     validacionEspecialiad(especialidad);
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {  
-            
             var content = especialidad.toTxtFormat();
             bufferedWriter.write(content);
             bufferedWriter.newLine();
-
-        } catch (Exception exe) {
-           throw new Exception(exe.getMessage());
-        }
-        return true;
+            return true;
+        } catch (Exception e) {
+            throw new ExcepcionesEspecialidad("Error registrando especialidad: " + e.getMessage());
+            }   
     };
 
 
-    public boolean actualizarBasedeDatos(List<Especialidad> especialidades) throws Exception {
+    public boolean actualizarBasedeDatos(List<Especialidad> especialidades) throws Exception, IOException {
         try {
             if (file.exists()) {
                 file.delete();
-            }
+                }
 
             if (!file.exists()) {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
-            }
+                }
         
-
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, false))) {
+            try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, false))){
             for (var especialidadTmp : especialidades) {
                     String especialidadLine = especialidadTmp.toTxtFormat();
                     bufferedWriter.write(especialidadLine);
                     bufferedWriter.newLine();
-            }
-        }
-        return true;
-        
-    } catch (Exception exe) {
-            throw new Exception(exe.getMessage());
-    }
+                    }
+                }
+                return true;
+            }catch (IOException e) {
+                throw new ExcepcionesEspecialidad("Error actualizando base de datos: " + e.getMessage());
+                }
     }
 }
