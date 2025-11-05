@@ -326,7 +326,7 @@ public class FormPacientes extends JPanel {
                     UtilidadesForm.limpiarCampos(this);
                     return true;
                 }
-            JOptionPane.showMessageDialog(null, "¡Ups! Parece que este documento ya tiene una cuenta asociada", "", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Parece que este documento ya tiene una cuenta asociada", "", JOptionPane.INFORMATION_MESSAGE);
             UtilidadesForm.limpiarCampos(this);
             } catch (Exception e1) {
                 e1.printStackTrace();

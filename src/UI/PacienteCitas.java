@@ -119,7 +119,7 @@ public class PacienteCitas extends JPanel {
             }
         });*/
 
-        comboEspecialidad.setSelectedIndex(0);
+        // comboEspecialidad.setSelectedIndex(0);
         filtrarMedicosPorEspecialidad();
     }
     

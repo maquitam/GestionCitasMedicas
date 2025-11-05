@@ -28,7 +28,7 @@ public class AdminView extends BaseView {
         // Botones Laterales
         gbc.gridy = 0;
         gbc.gridx = 0;
-        Boton medicos = new Boton("MÃ©dicos");
+        Boton medicos = new Boton("Médicos");
         menuLateral.add(medicos, gbc);
         gbc.gridy = 1;
         Boton pacientes = new Boton("Pacientes");
