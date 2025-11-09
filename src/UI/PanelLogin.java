@@ -114,7 +114,12 @@ public class PanelLogin extends JPanel {
             usuario = textUsuario.getText();
             contrasenna = new String(campoContraseña.getPassword());
 
-            loginView.manejarInicioSesion(usuario, contrasenna);
+            try {
+                loginView.manejarInicioSesion(usuario, contrasenna);
+            } catch (Exception e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         });
 
     }

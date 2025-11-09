@@ -3,7 +3,9 @@ package UI;
 import javax.swing.*;
 
 import objetos.Usuario;
+import repositorio.PacienteRepositorio;
 import servicios.ServicioLogin;
+import servicios.ServicioPaciente;
 import servicios.UsuarioSesion;
 
 import java.awt.*;
@@ -98,18 +100,18 @@ public class LoginView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    public void manejarInicioSesion(String usuario, String contrasenna) {
+    public void manejarInicioSesion(String usuario, String contrasenna) throws Exception{
+        
+        /*Usuario usuarioOBJ = servicioLogin.iniciarSesion(usuario, contrasenna);
 
-        Usuario usuarioOBJ = servicioLogin.iniciarSesion(usuario, contrasenna);
-
-        if (usuarioOBJ != null) {
-            // Guardar en sesion
+        //if (usuarioOBJ != null) {
+            // Guardar en sesion.
             UsuarioSesion.setUsuarioActual(usuarioOBJ);
 
-            switch (usuarioOBJ.getPerfil().toLowerCase()) {
+            switch (usuarioOBJ) {
 
                 case "admin":
-                    new AdminView(usuarioOBJ.getNumeroDoc());
+                    new AdminView(usuario);
                     this.dispose();
                     break;
                 case "paciente":
@@ -118,8 +120,27 @@ public class LoginView extends JFrame {
                     break;
 
                 default:
-                    JOptionPane.showMessageDialog(null, "Rol no encontrado.");
+                    JOptionPane.showMessageDialog(null, "Rol no encontrado.");*/
+
+        var perfil = servicioLogin.iniciarSesion(usuario, contrasenna);
+        var pacienteRepositorio = new PacienteRepositorio();
+        var servicioPaciente = new ServicioPaciente();
+        switch (perfil) {
+            case "admin":
+                new AdminView(usuario);
+                this.dispose();
+                break;
+            case "Paciente":
+                new PacienteView(usuario);
+                var usuarios = pacienteRepositorio.getPacientes();
+                var indice = servicioPaciente.buscarPorDocumento(usuario);
+                var usuarioOBJ = usuarios.get(indice);
+                UsuarioSesion.setUsuarioActual(usuarioOBJ);
+                this.dispose();
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Hubo un error al iniciar sesión.", "Error", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
-}
+
