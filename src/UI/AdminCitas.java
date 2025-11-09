@@ -5,18 +5,17 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import objetos.*;
 import servicios.ControlCita;
 import servicios.ServicioMedico;
+import servicios.UsuarioSesion;
 
 public class AdminCitas extends JPanel {
 
     private JComboBox<Especialidad> comboEspecialidad;
     private JComboBox<Medico> comboMedico;
     private JTextField txtFecha;
-    private JTextField txtDocumentoPaciente;
     private JTextField txtHora;
     private JTextArea txtMotivo;
     private JTable tablaCitas;
@@ -25,39 +24,33 @@ public class AdminCitas extends JPanel {
 
     private final ControlCita controlCita;
     private final ServicioMedico servicioMedico;
-    private final String usuario; // nombre o correo del paciente autenticado
+    private final String usuario;
 
     public AdminCitas(AdminView parentView) {
-        this.usuario = parentView.USUARIO_AUTENTICADO; // usa lo que ya maneja BaseView
+        this.usuario = parentView.USUARIO_AUTENTICADO;
         this.controlCita = new ControlCita();
         this.servicioMedico = new ServicioMedico();
 
         initComponents();
         cargarEspecialidades();
-        cargarCitasPaciente();
+        cargarCitasPacienteSeleccionado();
     }
 
-    
-    // Inicialización visual
-    
+    // Interfaz visual
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
 
-        // Panel superior (formulario)
-        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 10, 10));
+        JPanel panelFormulario = new JPanel(new GridLayout(5, 2, 10, 10));
 
         comboEspecialidad = new JComboBox<>();
         comboMedico = new JComboBox<>();
-        txtDocumentoPaciente = new JTextField("");
-        txtFecha = new JTextField("");
-        txtHora = new JTextField("");
+        txtFecha = new JTextField(LocalDate.now().toString());
+        txtHora = new JTextField("09:00");
         txtMotivo = new JTextArea(3, 20);
 
         btnModificar = new JButton("Modificar");
         btnEliminar = new JButton("Eliminar");
 
-        panelFormulario.add(new JLabel("Documento del paciente:"));
-        panelFormulario.add(txtDocumentoPaciente);
         panelFormulario.add(new JLabel("Especialidad:"));
         panelFormulario.add(comboEspecialidad);
         panelFormulario.add(new JLabel("Médico:"));
@@ -69,11 +62,9 @@ public class AdminCitas extends JPanel {
         panelFormulario.add(new JLabel("Motivo:"));
         panelFormulario.add(new JScrollPane(txtMotivo));
 
-        // Tabla
-        modeloTabla = new DefaultTableModel(new Object[]{"ID", "Médico", "Fecha", "Hora", "Motivo"}, 0);
+        modeloTabla = new DefaultTableModel(new Object[] { "ID", "Médico", "Fecha", "Hora", "Motivo" }, 0);
         tablaCitas = new JTable(modeloTabla);
 
-        // Panel botones
         JPanel panelBotones = new JPanel();
         panelBotones.add(btnModificar);
         panelBotones.add(btnEliminar);
@@ -88,101 +79,83 @@ public class AdminCitas extends JPanel {
         btnEliminar.addActionListener(e -> eliminarCita());
     }
 
-    
-    // Cargar especialidades (sin tocar ServicioMedico)
-    
+    // Cargar especialidades (por ahora vacías)
     private void cargarEspecialidades() {
         comboEspecialidad.removeAllItems();
-
-        // Creamos una lista manual para simular especialidades
-       /*  List<Especialidad> lista = new ArrayList<>();
-        lista.add(new Especialidad("Medicina General", "E001", true));
-        lista.add(new Especialidad("Pediatría", "E002", true));
-        lista.add(new Especialidad("Cardiología", "E003", true));
-        lista.add(new Especialidad("Dermatología", "E004", true));
-
-        for (Especialidad esp : lista) {
-            comboEspecialidad.addItem(esp);
-        }
-
-        // mostrar nombres legibles en el combo
-        comboEspecialidad.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(
-                JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value instanceof Especialidad especialidad) {
-                    // usa consultarEspecialidad() para mostrar solo el nombre
-                    String nombre = especialidad.consultarEspecialidad().split("\n")[0].replace("Nombre: ", "");
-                    setText(nombre);
-                }
-                return this;
+        try {
+            repositorio.EspecialidadRepositorio repo = new repositorio.EspecialidadRepositorio();
+            for (Especialidad e : repo.getEspecialidades()) {
+                comboEspecialidad.addItem(e);
             }
-        });*/
 
-        // comboEspecialidad.setSelectedIndex(0);
-        filtrarMedicosPorEspecialidad();
+            comboEspecialidad.setRenderer(new DefaultListCellRenderer() {
+                @Override
+                public Component getListCellRendererComponent(
+                        JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                    super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                    if (value instanceof Especialidad esp) {
+                        setText(esp.getNombreEspecialidad());
+                    }
+                    return this;
+                }
+            });
+
+        } catch (Exception ex) {
+            System.err.println("Error cargando especialidades: " + ex.getMessage());
+        }
     }
-    
 
     // Filtrar médicos según especialidad seleccionada
     private void filtrarMedicosPorEspecialidad() {
-        Especialidad esp = (Especialidad) comboEspecialidad.getSelectedItem();
-        if (esp == null)
-            return;
-
         comboMedico.removeAllItems();
 
-        /*String nombreEsp = esp.consultarEspecialidad()
-            .split("\n")[0]
-            .replace("Nombre: ", "")
-            .trim();
+        Especialidad esp = (Especialidad) comboEspecialidad.getSelectedItem();
+        String nombreEsp = (esp != null) ? esp.getNombreEspecialidad() : null;
 
-        System.out.println("Especilidad seleccionada: "+ nombreEsp);
+        try {
+            repositorio.MedicoRepositorio repo = new repositorio.MedicoRepositorio();
+            for (Medico medico : repo.getMedicos()) {
 
-        if (nombreEsp.contains("Medicina General")) {
-            comboMedico.addItem(new Medico(
-                    1, "Juan", "Pérez", "CC", "123456", "3123456789", "juanperez@hospital.com",
-                    "Cra 1 #23-45", "Bogotá", "Medicina General", true, "1234"));
-            comboMedico.addItem(new Medico(
-                    2, "Ana", "Gómez", "CC", "654321", "3009876543", "anagomez@hospital.com",
-                    "Av 9 #45-10", "Bogotá", "Medicina General", true, "5678"));
-        } else if (nombreEsp.contains("Pediatría")) {
-            comboMedico.addItem(new Medico(
-                    3, "Carlos", "Niño", "CC", "789123", "3141592653", "cniño@hospital.com",
-                    "Calle 45 #67-89", "Bogotá", "Pediatría", true, "abcd"));
-        } else if (nombreEsp.contains("Cardiología")) {
-            comboMedico.addItem(new Medico(
-                    4, "Sofía", "Corazón", "CC", "321987", "3015556666", "scorazon@hospital.com",
-                    "Transv 20 #30-10", "Bogotá", "Cardiología", true, "qwer"));
-        } else if (nombreEsp.contains("Dermatología")) {
-            comboMedico.addItem(new Medico(
-                    5, "Paula", "Piel", "CC", "654987", "3101112233", "ppiel@hospital.com",
-                    "Cl 100 #15-30", "Bogotá", "Dermatología", true, "zxcv"));
-        }*/
-
-        comboMedico.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(
-                    JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                    super.getListCellRendererComponent((list), value, index, isSelected, cellHasFocus);
-                    if (value instanceof Medico medico) {
-                        setText(medico.getNombres()+""+medico.getApellidos());
-                    }
-                return this;
+                // Si no hay especialidad seleccionada, mostrar todos
+                if (nombreEsp == null || nombreEsp.isEmpty()) {
+                    comboMedico.addItem(medico);
+                } else if (medico.getEspeciliadad() != null &&
+                        medico.getEspeciliadad().equalsIgnoreCase(nombreEsp)) {
+                    comboMedico.addItem(medico);
+                }
             }
-        });
+
+            comboMedico.setRenderer(new DefaultListCellRenderer() {
+                @Override
+                public Component getListCellRendererComponent(
+                        JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                    super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                    if (value instanceof Medico medico) {
+                        setText(medico.getNombres() + " " + medico.getApellidos());
+                    }
+                    return this;
+                }
+            });
+
+        } catch (Exception e) {
+            System.err.println("Error cargando médicos: " + e.getMessage());
+        }
     }
 
-    // Cargar citas del paciente actual
-    private void cargarCitasPaciente() {
+    // CAMBIAR A CITAS DEL PACIENTE SELECCIONADO
+    private void cargarCitasPacienteSeleccionado() {
         modeloTabla.setRowCount(0);
-        System.out.println("Mostrando citas del paciente: " + usuario);
-        List<Cita> citas = controlCita.listarCitas();
+        Paciente pacienteActual = (Paciente) UsuarioSesion.getUsuarioActual();
+        if (pacienteActual == null) {
+            System.err.println("No hay paciente logueado.");
+            return;
+        }
+
+        List<Cita> citas = controlCita.buscarCitaPorPaciente(pacienteActual);
         for (Cita c : citas) {
-            modeloTabla.addRow(new Object[]{
+            modeloTabla.addRow(new Object[] {
                     c.getIdCita(),
-                    //c.getMedico().getNombres(),
+                    c.getMedico().getNombres() + " " + c.getMedico().getApellidos(),
                     c.getFecha(),
                     c.getHora(),
                     c.getMotivo()
@@ -190,22 +163,24 @@ public class AdminCitas extends JPanel {
         }
     }
 
-
     // Modificar cita seleccionada
     private void modificarCita() {
         int fila = tablaCitas.getSelectedRow();
-        if (fila < 0) return;
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione una cita primero.");
+            return;
+        }
 
         try {
             int id = (int) modeloTabla.getValueAt(fila, 0);
-            //Medico m = (Medico) comboMedico.getSelectedItem();
+            Medico m = (Medico) comboMedico.getSelectedItem();
             LocalDate fecha = LocalDate.parse(txtFecha.getText());
             LocalTime hora = LocalTime.parse(txtHora.getText());
             String motivo = txtMotivo.getText();
 
-            controlCita.modificarCita(id, fecha, hora, motivo);
+            controlCita.modificarCita(id, m, fecha, hora, motivo);
             JOptionPane.showMessageDialog(this, "Cita modificada correctamente.");
-            cargarCitasPaciente();
+            cargarCitasPacienteSeleccionado();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al modificar: " + ex.getMessage());
         }
@@ -214,11 +189,14 @@ public class AdminCitas extends JPanel {
     // Eliminar cita seleccionada
     private void eliminarCita() {
         int fila = tablaCitas.getSelectedRow();
-        if (fila < 0) return;
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(this, "Seleccione una cita primero.");
+            return;
+        }
 
         int id = (int) modeloTabla.getValueAt(fila, 0);
         controlCita.eliminarCita(id);
         JOptionPane.showMessageDialog(this, "Cita eliminada correctamente.");
-        cargarCitasPaciente();
+        cargarCitasPacienteSeleccionado();
     }
 }
