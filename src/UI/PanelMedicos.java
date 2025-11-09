@@ -2,6 +2,8 @@ package UI;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import repositorio.EspecialidadRepositorio;
@@ -11,10 +13,13 @@ import servicios.UtilidadesForm;
 import servicios.ControlMedico;
 
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PanelMedicos extends JPanel {
 
@@ -25,6 +30,7 @@ public class PanelMedicos extends JPanel {
     private ControlMedico controlMedico;
     private EspecialidadRepositorio especialidadRepositorio;
     private ServicioEspecialidad servicioEspecialidad;
+    private final List<Boolean> camposValidos = new ArrayList<>();
 
     private CampoTexto primerNombreField, segundoNombreField, primerApellidoField,
                         segundoApellidoField, documentoField, telefonoField,
@@ -39,26 +45,24 @@ public class PanelMedicos extends JPanel {
 
 
     public PanelMedicos(AdminView adminView) throws Exception {
-
-    /*try {
-            especialidadRepositorio = new EspecialidadRepositorio();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         this.servicioEspecialidad = new ServicioEspecialidad();
 
         this.adminView = adminView;
         this.servicioMedico = new ServicioMedico();
         this.controlMedico = new ControlMedico();
 
+        for (int i = 0; i < 8; i++) camposValidos.add(false);
+
         setPreferredSize(new Dimension(700,400));
         setLayout(new BorderLayout());
 
         JPanel medicoForm = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        var GAP_BETWEEN = new Insets(10, 20, 20, 20);
+        var GAP_BETWEEN = new Insets(10, 20, 5, 20);
         gbc.insets = GAP_BETWEEN;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+
+
 
         // Título - Módulo de Médicos
         JLabel moduleTitle = new JLabel("Módulo Médicos");
@@ -79,19 +83,20 @@ public class PanelMedicos extends JPanel {
         
         gbc.insets = new Insets(10,20,1,20);
 
-        // Primer Nombre
-        JLabel primerNombreLabel = new JLabel("Primer Nombre");
+        // JLabels - Nombres
+        JLabel primerNombreLabel = new JLabel("Primer Nombre *");
+
         gbc.gridx = 0;
         medicoForm.add(primerNombreLabel, gbc);
+        gbc.anchor = GridBagConstraints.WEST;
 
-        // Segundo Nombre
         JLabel segundoNombreLabel = new JLabel("Segundo Nombre");
         gbc.gridx = 1;
         medicoForm.add(segundoNombreLabel, gbc);
 
+        // Campos - Nombres
         gbc.gridy = 2;
         gbc.weightx = 1;
-        gbc.insets = GAP_BETWEEN;
 
         primerNombreField = new CampoTexto(20);
         gbc.gridx = 0;
@@ -101,22 +106,28 @@ public class PanelMedicos extends JPanel {
         gbc.gridx = 1;
         medicoForm.add(segundoNombreField, gbc);
 
-        gbc.insets = new Insets(10,20,1,20);
-
-        // Apellidos
-        JLabel primerApellidoLabel = new JLabel("Primer Apellido");
-        gbc.gridx = 0;
+        // Mensaje de error - Primer Nombre
         gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.insets = GAP_BETWEEN;
+        JLabel errorPrimerNombre = new JLabel(" ");
+        errorPrimerNombre.setForeground(Color.RED);
+        medicoForm.add(errorPrimerNombre, gbc);
+
+        // JLabels - Apellidos
+        gbc.insets = new Insets(10,20,1,20);
+        JLabel primerApellidoLabel = new JLabel("Primer Apellido *");
+        gbc.gridx = 0;
+        gbc.gridy = 4;
         medicoForm.add(primerApellidoLabel, gbc);
 
-        JLabel segundoApellidoLabel = new JLabel("Segundo Apellido");
+        JLabel segundoApellidoLabel = new JLabel("Segundo Apellido *");
         gbc.gridx = 1;
         medicoForm.add(segundoApellidoLabel, gbc);
-        
-        gbc.gridy = 4;
+
+        // Campos - Apellidos
+        gbc.gridy = 5;
         gbc.weightx = 0.5;
-        gbc.insets = GAP_BETWEEN;
-        
         primerApellidoField = new CampoTexto(20);
         gbc.gridx = 0;
         medicoForm.add(primerApellidoField, gbc);
@@ -125,16 +136,31 @@ public class PanelMedicos extends JPanel {
         gbc.gridx = 1;
         medicoForm.add(segundoApellidoField, gbc);
 
-        // Documento y Tipo de Documento
-        gbc.insets = new Insets(10,20,1,20);
-        // Numero de Documento
-        JLabel documentoLabel = new JLabel("Documento");
+        // Mensajes de Error - Apellidos
+        gbc.gridy = 6;
         gbc.gridx = 0;
-        gbc.gridy = 5;
-        medicoForm.add(documentoLabel, gbc);
-        
         gbc.insets = GAP_BETWEEN;
+        JLabel errorPrimerApellido = new JLabel(" ");
+        errorPrimerApellido.setForeground(Color.RED);
+        medicoForm.add(errorPrimerApellido, gbc);
 
+        gbc.gridx = 1;
+        JLabel errorSegundoApellido = new JLabel(" ");
+        errorSegundoApellido.setForeground(Color.RED);
+        medicoForm.add(errorSegundoApellido, gbc);
+
+        
+        // JLabel - Documento y Telefono
+        gbc.insets = new Insets(10,20,1,20);
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        JLabel documentoLabel = new JLabel("Documento *");
+        
+        medicoForm.add(documentoLabel, gbc);
+
+        JLabel telefonoLabel = new JLabel("Telefono *");
+        gbc.gridx = 1;
+        medicoForm.add(telefonoLabel,gbc);
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints innerGbc = new GridBagConstraints();
@@ -151,72 +177,92 @@ public class PanelMedicos extends JPanel {
         tiposDocumentos = new ComboBox<>(listaDocumentos);
         panel.add(tiposDocumentos, innerGbc);
 
-        gbc.gridy = 6;
+        gbc.gridy = 8;
+        gbc.gridx = 0;
         medicoForm.add(panel, gbc);
         
-        gbc.insets = new Insets(10,20,1,20);
-        // Telefono
-        JLabel telefonoLabel = new JLabel("Telefono");
-        gbc.gridx = 1;
-        gbc.gridy = 5;
-        medicoForm.add(telefonoLabel,gbc);
-
-        gbc.insets = GAP_BETWEEN;
         telefonoField = new CampoTexto(20);
-        gbc.gridy = 6;
+        gbc.gridx = 1;
         medicoForm.add(telefonoField, gbc);
         
-        gbc.insets = new Insets(10,20,1,20);
-        // Direccion
-        JLabel direccionLabel = new JLabel("Dirección");
-        gbc.gridx = 1;
-        gbc.gridy = 7;
-        medicoForm.add(direccionLabel,gbc);
-
-        gbc.insets = GAP_BETWEEN;
-        direccionField = new CampoTexto(20);
-        gbc.gridy = 8;
-        medicoForm.add(direccionField, gbc);
-
-        gbc.insets = new Insets(10,20,1,20);
-        // Correo Electronico
-        JLabel correoLabel = new JLabel("Correo Electrónico");
+        // Mensajes de Error - Documento y Telefono
+        gbc.gridy = 9;
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.insets = GAP_BETWEEN;
+        JLabel errorDocumento = new JLabel(" ");
+        errorDocumento.setForeground(Color.RED);
+        medicoForm.add(errorDocumento, gbc);
+
+        JLabel errorTelefono = new JLabel(" ");
+        errorTelefono.setForeground(Color.RED);
+        gbc.gridx = 1;
+        medicoForm.add(errorTelefono, gbc);
+
+
+        // JLabels - Dirección y Correo
+        gbc.insets = new Insets(10,20,1,20);
+        gbc.gridy = 10;
+        gbc.gridx = 0;
+        JLabel correoLabel = new JLabel("Correo Electrónico *");
         medicoForm.add(correoLabel,gbc);
 
-        gbc.insets = GAP_BETWEEN;
+        JLabel direccionLabel = new JLabel("Dirección *");
+        gbc.gridx = 1;
+        medicoForm.add(direccionLabel,gbc);
+
+        // Campos - Dirección y Correo
+        gbc.gridy = 11;
+        gbc.gridx = 0;
         correoField = new CampoTexto(20);
-        gbc.gridy = 8;
         medicoForm.add(correoField, gbc);
 
-        gbc.gridy = 9;
-        gbc.insets = new Insets(10,20,1,20);
-        JLabel especialidadLabel = new JLabel("Especialidad");
-        medicoForm.add(especialidadLabel,gbc);
-        gbc.gridy = 10;
-        gbc.weightx = 1;
-       //String[] listaEspecialidades = {"Pediatría", "Consulta General"};
-       try{String[] listaEspecialidades = servicioEspecialidad.getEspecialidadesList();
-        tipoEspecialidades = new ComboBox<>(listaEspecialidades);
-        gbc.anchor = GridBagConstraints.NORTH;
-        medicoForm.add(tipoEspecialidades, gbc);
-    }catch(Exception e){
-        e.printStackTrace();
-        String[] listaEspecialidades = {"Error en Especialidades.txt"};
-        tipoEspecialidades = new ComboBox<>(listaEspecialidades);
-        gbc.anchor = GridBagConstraints.NORTH;
-        medicoForm.add(tipoEspecialidades, gbc);}
-    
-        
-
+        direccionField = new CampoTexto(20);
         gbc.gridx = 1;
-        // Campo de Contraseña
-        JLabel labelContraseña = new JLabel("Contraseña");
-        gbc.gridy = 9;
-        gbc.anchor = GridBagConstraints.WEST;
-        medicoForm.add(labelContraseña, gbc);
+        medicoForm.add(direccionField, gbc);
         
+        // Mensajes de Error - Dirección y Correo
+        gbc.gridy = 12;
+        gbc.gridx = 0;
+        gbc.insets = GAP_BETWEEN;
+        JLabel errorCorreo = new JLabel(" ");
+        errorCorreo.setForeground(Color.RED);
+        medicoForm.add(errorCorreo, gbc);
+
+        JLabel errorDireccion = new JLabel(" ");
+        errorDireccion.setForeground(Color.RED);
+        gbc.gridx = 1;
+        medicoForm.add(errorDireccion, gbc);
+
+        // JLabels - Especialidad y Contraseña
+        gbc.gridy = 13;
+        gbc.gridx = 0;
+        JLabel especialidadLabel = new JLabel("Especialidad *");
+        medicoForm.add(especialidadLabel,gbc);
+
+        JLabel labelContraseña = new JLabel("Contraseña *");
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 1;
+        medicoForm.add(labelContraseña, gbc);
+
+
+        // Campos - Especialidad y Contraseña
+        gbc.gridy = 14;
+        gbc.weightx = 1;
+        gbc.gridx = 0;
+
+        try{
+            String[] listaEspecialidades = servicioEspecialidad.getEspecialidadesList();
+            tipoEspecialidades = new ComboBox<>(listaEspecialidades);
+            gbc.anchor = GridBagConstraints.NORTH;
+            medicoForm.add(tipoEspecialidades, gbc);
+        } catch(Exception e){
+            e.printStackTrace();
+            String[] listaEspecialidades = {"Error en Especialidades.txt"};
+            tipoEspecialidades = new ComboBox<>(listaEspecialidades);
+            gbc.anchor = GridBagConstraints.NORTH;
+            medicoForm.add(tipoEspecialidades, gbc);
+        }
+    
         JPanel panelContraseña = new JPanel(new GridBagLayout());
         GridBagConstraints gbcPanel = new GridBagConstraints();
 
@@ -230,32 +276,44 @@ public class PanelMedicos extends JPanel {
 
         JCheckBox mostrarContraseña = new JCheckBox("Mostrar Contraseña");
 
-        mostrarContraseña.addActionListener(e->{
-            boolean showing = campoContraseña.getEchoChar() != 0;
-            if (showing) {
-                campoContraseña.setEchoChar((char) 0); // Mostrar texto
-                mostrarContraseña.setText("Ocultar Constraseña");
-            } else {
-                campoContraseña.setEchoChar('•'); // Ocultar texto
-                mostrarContraseña.setText("Mostrar Constraseña");
-            }
-        });
-
         gbcPanel.gridy = 1;
         gbcPanel.gridx = 0;
         gbcPanel.insets = new Insets(8, 0, 8, 0);
         gbcPanel.fill = GridBagConstraints.HORIZONTAL;
         gbcPanel.anchor = GridBagConstraints.WEST;
         panelContraseña.add(mostrarContraseña, gbcPanel);
-        gbc.gridy = 10;
+        gbc.gridx = 1;
         gbc.insets = new Insets(8, 0, 0, 0);
         medicoForm.add(panelContraseña, gbc);
 
+        // Mensajes de Error - Contraseña
+        gbc.gridy = 15;
+        gbc.gridx = 1;
+        gbc.insets = new Insets(0,20,1,20);
+        JLabel errorContraseña = new JLabel("La contraseña debe tener 4 números.");
+        errorContraseña.setForeground(Color.RED);
+        medicoForm.add(errorContraseña, gbc);
+
+
+        // JLabel - Subtitulo
+        gbc.insets = new Insets(10,20,1,20);
+        gbc.gridy = 15;
+        gbc.gridx = 0;
+        JLabel subtitulo = new JLabel("Los campos marcados con * son obligatorios.");
+        subtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        subtitulo.setForeground(Color.RED);
+
+        medicoForm.add(subtitulo, gbc);
+
+        gbc.insets = new Insets(8, 0, 0, 0);
 
         // Boton Crear Medico
         btnCrearMedico = new Boton("Crear Médico");
+        
+        actualizarBotones();
+
         gbc.gridx = 0;
-        gbc.gridy = 11;
+        gbc.gridy = 15;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.5;
@@ -399,8 +457,177 @@ public class PanelMedicos extends JPanel {
             actualizarTabla();
         });
 
-        // - - - - - - - - - - - - - -
+        mostrarContraseña.addActionListener(e->{
+            boolean showing = campoContraseña.getEchoChar() != 0;
+            if (showing) {
+                campoContraseña.setEchoChar((char) 0); // Mostrar texto
+                mostrarContraseña.setText("Ocultar Constraseña");
+            } else {
+                campoContraseña.setEchoChar('•'); // Ocultar texto
+                mostrarContraseña.setText("Mostrar Constraseña");
+            }
+        });
+
+        primerNombreField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                try {
+                var valid = UtilidadesForm.validarCampoTexto(primerNombreField, errorPrimerNombre);
+                if (!valid) {
+                    camposValidos.set(0, false);
+                } else {
+                    camposValidos.set(0,true);
+                }
+                actualizarBotones();
+                } catch(Exception a) {
+                }
+            }
+        });
         
+        primerApellidoField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                try {
+                var valid = UtilidadesForm.validarCampoTexto(primerApellidoField, errorPrimerApellido);
+                if (!valid) {
+                    camposValidos.set(1, false);
+                } else {
+                    camposValidos.set(1,true);
+                }
+                actualizarBotones();
+                } catch(Exception a) {
+                }
+            }
+        });
+        
+        segundoApellidoField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                try {
+                var valid = UtilidadesForm.validarCampoTexto(segundoApellidoField, errorSegundoApellido);
+                if (!valid) {
+                    camposValidos.set(2, false);
+                } else {
+                    camposValidos.set(2,true);
+                }
+                actualizarBotones();
+                } catch(Exception a) {
+                }
+            }
+        });
+
+        documentoField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                try {
+                var valid = UtilidadesForm.validarDocumento(documentoField, errorDocumento);
+                if (!valid) {
+                    camposValidos.set(3, false);
+                } else {
+                    camposValidos.set(3,true);
+                }
+                actualizarBotones();
+                } catch(Exception a) {
+                }
+            }
+        });
+
+        telefonoField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                try {
+                var valid = UtilidadesForm.validarTelefono(telefonoField, errorTelefono);
+                if (!valid) {
+                    camposValidos.set(4, false);
+                } else {
+                    camposValidos.set(4,true);
+                }
+                actualizarBotones();
+                } catch(Exception a) {
+                }
+            }
+        });
+
+        correoField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                try {
+                var valid = UtilidadesForm.validarCorreo(correoField, errorCorreo);
+                if (!valid) {
+                    camposValidos.set(5, false);
+                } else {
+                    camposValidos.set(5,true);
+                }
+                actualizarBotones();
+                } catch(Exception a) {
+                }
+            }
+        });
+        
+        direccionField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                try {
+                var valid = UtilidadesForm.validarCampoTexto(direccionField, errorDireccion);
+                if (!valid) {
+                    camposValidos.set(6, false);
+                } else {
+                    camposValidos.set(6,true);
+                }
+                actualizarBotones();
+                } catch(Exception a) {
+                }
+            }
+        });
+
+        campoContraseña.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                try {
+                    var valid = UtilidadesForm.validarContrasenna(campoContraseña, errorContraseña);
+                    if (!valid) {
+                        camposValidos.set(7, false);
+                    } else {
+                        camposValidos.set(7,true);
+                    }
+                    actualizarBotones();
+                } catch(Exception a) {
+                }
+            }
+        });
+        // - - - - - - - - - - - - - -
     }
 
     private String toTxtFormat() {
@@ -484,5 +711,15 @@ public class PanelMedicos extends JPanel {
         btnActualizar.setVisible(false);
         btnCancelar.setVisible(false);
         btnCrearMedico.setVisible(true);
+    }
+
+    public void actualizarBotones() {
+        boolean todosValidos = camposValidos.stream().allMatch(v -> v);
+        btnCrearMedico.setEnabled(todosValidos);
+        if (todosValidos) {
+            btnCrearMedico.setBackground(new Color(35,94,40));
+        } else {
+            btnCrearMedico.setBackground(Color.GRAY);
+        }
     }
 }

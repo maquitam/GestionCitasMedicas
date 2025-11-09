@@ -1,1 +1,6 @@
 admin|admin
+||Paciente
+||Paciente
+||Paciente
+1234567890|1234|Paciente
+||Paciente

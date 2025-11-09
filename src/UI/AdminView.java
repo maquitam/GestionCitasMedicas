@@ -102,4 +102,8 @@ public class AdminView extends BaseView {
     public void mostrarPanelPacientes() {
         cardLayout.show(panelDerecho, MODULO_PACIENTES);
     }
+
+    public static void main(String[] args) {
+        new AdminView(BIENVENIDA_PANEL);
+    }
 }

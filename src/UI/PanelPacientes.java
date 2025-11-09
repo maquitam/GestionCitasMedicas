@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import servicios.ServicioPaciente;
 import servicios.UtilidadesForm;
 
-public class PanelPacientes extends JPanel {
+public class PanelPacientes extends JPanel implements UtilidadesForm.BotonActualizable {
     private AdminView adminView;
     private JTable tablaPacientes;
     private DefaultTableModel modeloTabla;
@@ -26,6 +26,8 @@ public class PanelPacientes extends JPanel {
 
         setPreferredSize(new Dimension(700,400));
         setLayout(new BorderLayout());
+
+        UtilidadesForm.setBotonActualizable(this);
 
         JPanel formPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -65,13 +67,31 @@ public class PanelPacientes extends JPanel {
         return formPanel;
     };
 
+    @Override
+    public void actualizarEstadoBoton(boolean habilitado) {
+        // Actualizar ambos botones (Crear y Actualizar)
+        botonCrear.setEnabled(habilitado);
+        botonActualizar.setEnabled(habilitado);
+        
+        Color colorHabilitado = new Color(35,94,40);
+        Color colorDeshabilitado = Color.GRAY;
+        
+        botonCrear.setBackground(habilitado ? colorHabilitado : colorDeshabilitado);
+        botonActualizar.setBackground(habilitado ? colorHabilitado : colorDeshabilitado);
+    }
+
     public JPanel crearBotones() {
         JPanel botonesPanel = new JPanel();
-        botonesPanel.setBackground(Color.GRAY);
+        botonesPanel.setBackground(getBackground());
 
         botonCrear = new Boton("Crear Paciente");
         botonActualizar = new Boton("Actualizar");
         botonCancelar = new Boton("Cancelar");
+        botonCrear.setEnabled(false);
+        botonCrear.setBackground(Color.GRAY);
+        botonActualizar.setEnabled(false);
+        botonActualizar.setBackground(Color.GRAY);
+        
         
         botonesPanel.add(botonCrear);
         botonesPanel.add(botonActualizar);
