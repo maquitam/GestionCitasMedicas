@@ -1,1 +1,2 @@
 0|María Camila|Parra Morales|CC|1090377346|16-11-2004|FEMENINO|A+|mcparram1611@gmail.com|3022480598|Sabaneta|Paciente|123
+1| | |CC|||FEMENINO|A+||||Paciente|
