@@ -3,31 +3,30 @@ package UI;
 import javax.swing.*;
 import java.awt.*;
 
-
 public class PanelLogin extends JPanel {
     private LoginView loginView;
     private String usuario, contrasenna;
 
     public PanelLogin(LoginView loginView) {
         this.loginView = loginView;
-        
+
         setBackground(Color.WHITE);
         setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10,20,10,20);
+        gbc.insets = new Insets(10, 20, 10, 20);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        
+
         // Título
         JLabel titulo = new JLabel("¡Bienvenid@!");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        titulo.setForeground(new Color(35,94,40));
+        titulo.setForeground(new Color(35, 94, 40));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        gbc.insets = new Insets(0,20,30,20);
+        gbc.insets = new Insets(0, 20, 30, 20);
         add(titulo, gbc);
-        
+
         // Subtítulo
         gbc.gridx = 0;
         JLabel subtitulo = new JLabel("Inicia sesión para continuar");
@@ -45,20 +44,20 @@ public class PanelLogin extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.WEST;
-        add(labelUsuario,gbc);
+        add(labelUsuario, gbc);
 
         CampoTexto textUsuario = new CampoTexto(20);
         gbc.gridy = 3;
         gbc.gridwidth = 2;
-        add(textUsuario,gbc);
+        add(textUsuario, gbc);
         gbc.gridwidth = 1;
-        
+
         // Campo de Contraseña
         JLabel labelContraseña = new JLabel("Contraseña");
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.WEST;
         add(labelContraseña, gbc);
-        
+
         CampoContraseña campoContraseña = new CampoContraseña(20);
         campoContraseña.setPreferredSize(textUsuario.getPreferredSize());
 
@@ -69,7 +68,7 @@ public class PanelLogin extends JPanel {
         ImageIcon openedEye = new ImageIcon(getClass().getResource("/img/opened_eye.png"));
         Image imgOpenedEye = openedEye.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         ImageIcon openedEyeEscalado = new ImageIcon(imgOpenedEye);
-        
+
         JButton boton = new JButton(closedEyeEscalado);
 
         boton.setBorderPainted(false);
@@ -78,8 +77,7 @@ public class PanelLogin extends JPanel {
         boton.setMargin(new Insets(0, 0, 0, 0));
         boton.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
-
-        boton.addActionListener (e -> {
+        boton.addActionListener(e -> {
             boolean showing = campoContraseña.getEchoChar() != 0;
             if (showing) {
                 campoContraseña.setEchoChar((char) 0); // Mostrar texto
@@ -101,6 +99,9 @@ public class PanelLogin extends JPanel {
         add(boton, gbc);
 
         // Boton Login
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+
         Boton loginBoton = new Boton("Iniciar Sesión");
         gbc.gridy = 6;
         gbc.insets = new Insets(30, 20, 8, 0);
@@ -108,7 +109,6 @@ public class PanelLogin extends JPanel {
         gbc.gridx = 0;
         add(loginBoton, gbc);
 
-        
         loginBoton.addActionListener(e -> {
 
             usuario = textUsuario.getText();

@@ -9,26 +9,26 @@ public class Cita {
     private int idCita;
     private LocalDate fecha;
     private LocalTime hora;
-    private String idMedico;
-    private String idPaciente;
+    private Medico medico;
+    private Paciente paciente;
     private String motivo;
 
     // Constructores
     public Cita() {
     }
 
-    public Cita(int idCita, LocalDate fecha, LocalTime hora, String idMedico, String idPaciente, String motivo) {
+    public Cita(int idCita, LocalDate fecha, LocalTime hora, Medico medico, Paciente paciente, String motivo) {
         this.idCita = idCita;
         this.fecha = fecha;
         this.hora = hora;
-        this.idMedico = idMedico;
-        this.idPaciente = idPaciente;
+        this.medico = medico;
+        this.paciente = paciente;
         this.motivo = motivo;
     }
 
-    public Cita(String idMedico, String idPaciente, LocalDate fecha, LocalTime hora, String motivo) {
-        this.idMedico = idMedico;
-        this.idPaciente = idPaciente;
+    public Cita(Paciente paciente, Medico medico, LocalDate fecha, LocalTime hora, String motivo) {
+        this.paciente = paciente;
+        this.medico = medico;
         this.fecha = fecha;
         this.hora = hora;
         this.motivo = motivo;
@@ -47,25 +47,25 @@ public class Cita {
     }
 
     public void eliminarCita() {
-        System.out.println("Cita eliminada: " + this);
+        System.out.println(" Cita eliminada: " + this);
     }
 
     public void consultarCita() {
-        System.out.println("ℹConsultando cita: " + this);
+        System.out.println("Consultando cita: " + this);
     }
 
     // Validar disponibilidad
     public boolean validarDisponibilidad(Cita otraCita) {
-        if (otraCita == null || this.idMedico == null || otraCita.idMedico == null) {
+        if (otraCita == null || this.medico == null || otraCita.medico == null) {
             return true; // no hay conflicto
         }
-        boolean mismoMedico = this.idMedico.equals(otraCita.idMedico);
+        boolean mismoMedico = this.medico.getId() == otraCita.medico.getId();
         boolean mismaFecha = this.fecha != null && this.fecha.equals(otraCita.fecha);
         boolean mismaHora = this.hora != null && this.hora.equals(otraCita.hora);
         return !(mismoMedico && mismaFecha && mismaHora);
     }
 
-    // 🔹 Getters y Setters
+    // Getters y Setters
     public int getIdCita() {
         return idCita;
     }
@@ -89,21 +89,21 @@ public class Cita {
     public void setHora(LocalTime hora) {
         this.hora = hora;
     }
-    
-    public String getIdMedico() {
-        return idMedico;
+
+    public Medico getMedico() {
+        return medico;
     }
 
-    public void setIdMedico(String idMedico) {
-        this.idMedico = idMedico;
+    public void setMedico(Medico medico) {
+        this.medico = medico;
     }
 
-    public String getIdPaciente() {
-        return idPaciente;
+    public Paciente getPaciente() {
+        return paciente;
     }
 
-    public void setIdPaciente(String idPaciente) {
-        this.idPaciente = idPaciente;
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
     }
 
     public String getMotivo() {
@@ -114,52 +114,76 @@ public class Cita {
         this.motivo = motivo;
     }
 
-    
     // Métodos de comparación
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
         if (!(o instanceof Cita))
             return false;
-        Cita cita = (Cita) o;
-        return idCita == cita.idCita;
+        Cita c = (Cita) o;
+        return this.idCita == c.idCita &&
+                Objects.equals(this.fecha, c.fecha) &&
+                Objects.equals(this.hora, c.hora) &&
+                Objects.equals(this.motivo, c.motivo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idCita);
+        return Objects.hash(idCita, fecha, hora, motivo);
     }
 
-    
     // Representación en texto
-    
-    //public String toString() {
-    //    String nombreMedico = (idMedico != null) ? idMedico : "Sin asignar";
-    //    String nombrePaciente = (idPaciente != null) ? idPaciente : "Desconocido";
-    //    return "Cita #" + idCita +
-    //            " [" + fecha + " " + hora + "] " +
-    //            "Médico: " + nombreMedico +
-    //            ", Paciente: " + nombrePaciente +
-    //            ", Motivo: " + motivo;
-    //}
 
-    public String toTxtFormat() {
-            return getIdCita() + "|" + getFecha() + "|" + getHora() + "|" + getIdMedico() + "|" + getIdPaciente() + "|" + getMotivo();
-        }
-    
-    public static Cita fromTxtFormat(String lineaCita) {
-            String[] parts = lineaCita.split("\\|");
-            if (parts.length != 6) throw new IllegalArgumentException("Fórmato de linea no valido.");
-            Cita cita = new Cita(Integer.parseInt(parts[0]), LocalDate.parse(parts[1]), LocalTime.parse(parts[2]), parts[3], parts[4], parts[5]);
-            return cita;
-        }
-    
-    public static String listaEspecialidades(String lineaEspecialidad) {
-     String[] parts = lineaEspecialidad.split("\\|");
-        if (parts.length != 4) throw new IllegalArgumentException("Fórmato de linea no valido.");
-        String especialidad = parts[0];
-            return especialidad;
+    @Override
+    public String toString() {
+        String nombreMedico = (medico != null) ? medico.getNombres() : "Sin asignar";
+        String nombrePaciente = (paciente != null) ? paciente.getNombres() : "Desconocido";
+        return "Cita #" + idCita +
+                " [" + fecha + " " + hora + "] " +
+                "Médico: " + nombreMedico +
+                ", Paciente: " + nombrePaciente +
+                ", Motivo: " + motivo;
+    }
+
+    // exportamos cita, convertimos la cita en formato de texto
+    public String exportarArchivoCitas() {
+
+        String idMedico = (medico != null) ? String.valueOf(medico.getId()) : "0"; // operador ternario
+        String idPaciente = (paciente != null) ? String.valueOf(paciente.getId()) : "0";
+        String fechaStr = (fecha != null) ? fecha.toString() : "";
+        String horaStr = (hora != null) ? hora.toString() : "";
+        String motivoStr = (motivo != null) ? motivo.replace("|", "/") : "";
+
+        String linea = idCita + "|" + idPaciente + "|" + idMedico + "|" + fechaStr + "|" + horaStr + "|" + motivoStr;
+        return linea.endsWith("\n") ? linea : linea + "\n";
+    }
+
+    // crear una cita a partir de una linea del archivo citas
+
+    public static Cita cargarDesdeArchivo(String linea) {
+
+        String[] partes = linea.split("\\|");
+
+        if (partes.length < 0)
+            return null;
+
+        Cita cita = new Cita();
+        cita.setIdCita(Integer.parseInt(partes[0]));
+
+        Paciente p = new Paciente();
+        p.setId(Integer.parseInt(partes[1]));
+        cita.setPaciente(p);
+
+        Medico m = new Medico();
+        m.setId(Integer.parseInt(partes[2]));
+        cita.setMedico(m);
+
+        cita.setFecha(LocalDate.parse(partes[3]));
+        cita.setHora(LocalTime.parse(partes[4]));
+        cita.setMotivo((partes[5]));
+
+        return cita;
     }
 }

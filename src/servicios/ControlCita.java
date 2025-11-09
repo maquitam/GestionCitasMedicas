@@ -1,6 +1,5 @@
 package servicios;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -8,131 +7,124 @@ import java.util.List;
 import objetos.Cita;
 import objetos.Medico;
 import objetos.Paciente;
-
-import repositorio.LoginRepositorio;
 import repositorio.CitasRepositorio;
-
 
 public class ControlCita {
 
-    CitasRepositorio citasRepositorio;
-    LoginRepositorio loginRepositorio;
     private final List<Cita> listaCitas;
+    private final CitasRepositorio citasRepositorio;
 
+    // Constructor: carga citas desde archivo
     public ControlCita() {
-
-        try {
-            citasRepositorio = new CitasRepositorio();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.listaCitas = new ArrayList<>();
-    }
-    //Agendar una nueva cita
-    
-    public List<Cita> getCitas() throws Exception, IOException{
-        return citasRepositorio.getCitas();
+        this.citasRepositorio = new CitasRepositorio();
+        this.listaCitas = citasRepositorio.listarCitas();
     }
 
+    // Agendar nueva cita
     public boolean agendarCita(Cita nuevaCita) {
-        if (!validarDisponibilidad(nuevaCita.getIdMedico(), nuevaCita.getFecha(), nuevaCita.getHora())) {
+        if (!validarDisponibilidad(nuevaCita.getMedico(), nuevaCita.getFecha(), nuevaCita.getHora())) {
             System.out.println("El médico ya tiene una cita en esa fecha y hora.");
             return false;
         }
 
         nuevaCita.setIdCita(generarIdCita());
         listaCitas.add(nuevaCita);
-        System.out.println("Cita agendada correctamente: " + nuevaCita);
-        return true;
+
+        boolean guardado = citasRepositorio.registrarCita(nuevaCita);
+        if (guardado) {
+            System.out.println("Cita agendada y guardada: " + nuevaCita);
+            return true;
+        } else {
+            System.err.println("Error guardando cita en archivo.");
+            return false;
+        }
     }
 
-    
-    //Validar disponibilidad del médico
-
-    public boolean validarDisponibilidad(String idMedico, LocalDate fecha, LocalTime hora) {
+    // Validar disponibilidad del médico
+    public boolean validarDisponibilidad(Medico medico, LocalDate fecha, LocalTime hora) {
         for (Cita c : listaCitas) {
-            if (c.getIdMedico() != null
-                    && c.getIdMedico().equals(idMedico)
+            if (c.getMedico() != null
+                    && c.getMedico().equals(medico)
                     && c.getFecha() != null && c.getFecha().equals(fecha)
                     && c.getHora() != null && c.getHora().equals(hora)) {
-                return false; // El médico ya tiene cita a esa hora
+                return false;
             }
         }
         return true;
     }
 
-    
-    //Modificar cita
-
-    public boolean modificarCita(int idCita, String nuevoIdMedico, LocalDate nuevaFecha, LocalTime nuevaHora, String nuevoMotivo) {
+    // Modificar cita existente
+    public boolean modificarCita(int idCita, Medico nuevoMedico, LocalDate nuevaFecha, LocalTime nuevaHora,
+            String nuevoMotivo) {
         for (Cita c : listaCitas) {
             if (c.getIdCita() == idCita) {
-                // Validar disponibilidad (excepto si es el mismo horario)
-                if (!(c.getIdMedico().equals(nuevoIdMedico)
+                if (!(c.getMedico().equals(nuevoMedico)
                         && c.getFecha().equals(nuevaFecha)
                         && c.getHora().equals(nuevaHora))) {
 
-                    if (!validarDisponibilidad(nuevoIdMedico, nuevaFecha, nuevaHora)) {
+                    if (!validarDisponibilidad(nuevoMedico, nuevaFecha, nuevaHora)) {
                         System.out.println("El médico ya tiene una cita en esa fecha y hora.");
                         return false;
                     }
                 }
 
-                c.setIdMedico(nuevoIdMedico);
+                c.setMedico(nuevoMedico);
                 c.setFecha(nuevaFecha);
                 c.setHora(nuevaHora);
                 c.setMotivo(nuevoMotivo);
-                System.out.println("Cita modificada correctamente: " + c);
+                citasRepositorio.actualizarBasedeDatos(listaCitas);
+                System.out.println("Cita modificada: " + c);
                 return true;
             }
         }
-        System.out.println("No se encontró una cita con el ID " + idCita);
+        System.out.println("No se encontró la cita con ID " + idCita);
         return false;
     }
 
-    
-    //Cancelar cita
-    
+    // Eliminar cita
     public boolean eliminarCita(int idEliminar) {
         boolean eliminada = listaCitas.removeIf(c -> c.getIdCita() == idEliminar);
         if (eliminada) {
-            System.out.println("Cita cancelada correctamente.");
+            citasRepositorio.actualizarBasedeDatos(listaCitas);
+            System.out.println("Cita eliminada.");
         } else {
-            System.out.println("No se encontró la cita con el ID " + idEliminar);
+            System.out.println("No se encontró la cita con ID " + idEliminar);
         }
         return eliminada;
     }
 
-    
-    //Buscar citas por paciente
-
-    public List<Cita> buscarCitaPorPaciente(String idPaciente) {
+    // Buscar citas por paciente
+    public List<Cita> buscarCitaPorPaciente(Paciente paciente) {
         List<Cita> resultado = new ArrayList<>();
+        if (paciente == null)
+            return resultado;
+
         for (Cita c : listaCitas) {
-            if (c.getIdPaciente() != null && c.getIdPaciente().equals(idPaciente)) {
+            if (c.getPaciente() != null &&
+                    c.getPaciente().getId() == paciente.getId()) {
                 resultado.add(c);
             }
         }
         return resultado;
     }
 
-    
-    //Listar todas las citas
-    
+    // Listar todas las citas
     public List<Cita> listarCitas() {
         return new ArrayList<>(listaCitas);
     }
 
-    
-    //Generar ID automático
-    
+    // Generar ID automático
     public int generarIdCita() {
-        return listaCitas.size() + 1;
+        int maxiId = 0;
+        for (Cita c : listaCitas) {
+            if (c.getIdCita() > maxiId) {
+                maxiId = c.getIdCita();
+            }
+        }
+        return maxiId + 1;
     }
 
-    
-    //Buscar cita por ID
-    
+    // Buscar cita por ID
     public Cita buscarPorId(int idCita) {
         for (Cita c : listaCitas) {
             if (c.getIdCita() == idCita) {

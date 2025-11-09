@@ -2,7 +2,9 @@ package UI;
 
 import javax.swing.*;
 
+import objetos.Usuario;
 import servicios.ServicioLogin;
+import servicios.UsuarioSesion;
 
 import java.awt.*;
 
@@ -18,14 +20,16 @@ public class LoginView extends JFrame {
     public static final Dimension DEFECTO = new Dimension(800, 500);
 
     private ServicioLogin servicioLogin;
-    
+
     public LoginView() {
         setTitle("Gestor de Citas Médicas");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+
         setResizable(false);
         setLayout(new BorderLayout());
-        
+
+        this.servicioLogin = new ServicioLogin();
+
         initComponents();
 
         setSize(DEFECTO);
@@ -33,7 +37,7 @@ public class LoginView extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    
+
     private void initComponents() {
 
         crearPanelIzquierdo();
@@ -95,22 +99,27 @@ public class LoginView extends JFrame {
     }
 
     public void manejarInicioSesion(String usuario, String contrasenna) {
-        
-        servicioLogin = new ServicioLogin();
 
-        var perfil = servicioLogin.iniciarSesion(usuario, contrasenna);
+        Usuario usuarioOBJ = servicioLogin.iniciarSesion(usuario, contrasenna);
 
-        switch (perfil) {
-            case "admin":
-                new AdminView(usuario);
-                this.dispose();
-                break;
-            case "Paciente":
-                new PacienteView(usuario);
-                this.dispose();
-                break;
-            default:
-                JOptionPane.showMessageDialog(null, "Hubo un error al iniciar sesión.", "Error", JOptionPane.INFORMATION_MESSAGE);;
+        if (usuarioOBJ != null) {
+            // Guardar en sesion
+            UsuarioSesion.setUsuarioActual(usuarioOBJ);
+
+            switch (usuarioOBJ.getPerfil().toLowerCase()) {
+
+                case "admin":
+                    new AdminView(usuarioOBJ.getNumeroDoc());
+                    this.dispose();
+                    break;
+                case "paciente":
+                    new PacienteView(usuarioOBJ.getNumeroDoc());
+                    this.dispose();
+                    break;
+
+                default:
+                    JOptionPane.showMessageDialog(null, "Rol no encontrado.");
+            }
         }
     }
 }
