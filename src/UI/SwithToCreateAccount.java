@@ -38,7 +38,7 @@ public class SwithToCreateAccount extends JPanel {
         Boton registerButton = new Boton("Crear Cuenta");
         registerButton.setBackground(new Color(44,119,50));
 
-        registerButton.addActionListener(_->{
+        registerButton.addActionListener(a ->{
             loginFrame.mostrarRegistroPanel();
             loginFrame.mostrarIniciarSesion();
         });

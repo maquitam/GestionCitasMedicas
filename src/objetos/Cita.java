@@ -9,26 +9,26 @@ public class Cita {
     private int idCita;
     private LocalDate fecha;
     private LocalTime hora;
-    private Medico medico;
-    private Paciente paciente;
+    private String idMedico;
+    private String idPaciente;
     private String motivo;
 
     // Constructores
     public Cita() {
     }
 
-    public Cita(int idCita, LocalDate fecha, LocalTime hora, Medico medico, Paciente paciente, String motivo) {
+    public Cita(int idCita, LocalDate fecha, LocalTime hora, String idMedico, String idPaciente, String motivo) {
         this.idCita = idCita;
         this.fecha = fecha;
         this.hora = hora;
-        this.medico = medico;
-        this.paciente = paciente;
+        this.idMedico = idMedico;
+        this.idPaciente = idPaciente;
         this.motivo = motivo;
     }
 
-    public Cita(Paciente paciente, Medico medico, LocalDate fecha, LocalTime hora, String motivo) {
-        this.paciente = paciente;
-        this.medico = medico;
+    public Cita(String idMedico, String idPaciente, LocalDate fecha, LocalTime hora, String motivo) {
+        this.idMedico = idMedico;
+        this.idPaciente = idPaciente;
         this.fecha = fecha;
         this.hora = hora;
         this.motivo = motivo;
@@ -36,30 +36,30 @@ public class Cita {
 
     // 🔹 Métodos CRUD simulados
     public void crearCita() {
-        System.out.println("✅ Cita creada: " + this);
+        System.out.println("Cita creada: " + this);
     }
 
     public void modificarCita(LocalDate nuevaFecha, LocalTime nuevaHora, String nuevoMotivo) {
         this.fecha = nuevaFecha;
         this.hora = nuevaHora;
         this.motivo = nuevoMotivo;
-        System.out.println("✏️ Cita modificada: " + this);
+        System.out.println("Cita modificada: " + this);
     }
 
     public void eliminarCita() {
-        System.out.println("🗑️ Cita eliminada: " + this);
+        System.out.println("Cita eliminada: " + this);
     }
 
     public void consultarCita() {
-        System.out.println("ℹ️ Consultando cita: " + this);
+        System.out.println("ℹConsultando cita: " + this);
     }
 
     // Validar disponibilidad
     public boolean validarDisponibilidad(Cita otraCita) {
-        if (otraCita == null || this.medico == null || otraCita.medico == null) {
+        if (otraCita == null || this.idMedico == null || otraCita.idMedico == null) {
             return true; // no hay conflicto
         }
-        boolean mismoMedico = this.medico.getId() == otraCita.medico.getId();
+        boolean mismoMedico = this.idMedico.equals(otraCita.idMedico);
         boolean mismaFecha = this.fecha != null && this.fecha.equals(otraCita.fecha);
         boolean mismaHora = this.hora != null && this.hora.equals(otraCita.hora);
         return !(mismoMedico && mismaFecha && mismaHora);
@@ -89,21 +89,21 @@ public class Cita {
     public void setHora(LocalTime hora) {
         this.hora = hora;
     }
-
-    public Medico getMedico() {
-        return medico;
+    
+    public String getIdMedico() {
+        return idMedico;
     }
 
-    public void setMedico(Medico medico) {
-        this.medico = medico;
+    public void setIdMedico(String idMedico) {
+        this.idMedico = idMedico;
     }
 
-    public Paciente getPaciente() {
-        return paciente;
+    public String getIdPaciente() {
+        return idPaciente;
     }
 
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
+    public void setIdPaciente(String idPaciente) {
+        this.idPaciente = idPaciente;
     }
 
     public String getMotivo() {
@@ -135,14 +135,31 @@ public class Cita {
     
     // Representación en texto
     
-    @Override
-    public String toString() {
-        String nombreMedico = (medico != null) ? medico.getNombres() : "Sin asignar";
-        String nombrePaciente = (paciente != null) ? paciente.getNombres() : "Desconocido";
-        return "Cita #" + idCita +
-                " [" + fecha + " " + hora + "] " +
-                "Médico: " + nombreMedico +
-                ", Paciente: " + nombrePaciente +
-                ", Motivo: " + motivo;
+    //public String toString() {
+    //    String nombreMedico = (idMedico != null) ? idMedico : "Sin asignar";
+    //    String nombrePaciente = (idPaciente != null) ? idPaciente : "Desconocido";
+    //    return "Cita #" + idCita +
+    //            " [" + fecha + " " + hora + "] " +
+    //            "Médico: " + nombreMedico +
+    //            ", Paciente: " + nombrePaciente +
+    //            ", Motivo: " + motivo;
+    //}
+
+    public String toTxtFormat() {
+            return getIdCita() + "|" + getFecha() + "|" + getHora() + "|" + getIdMedico() + "|" + getIdPaciente() + "|" + getMotivo();
+        }
+    
+    public static Cita fromTxtFormat(String lineaCita) {
+            String[] parts = lineaCita.split("\\|");
+            if (parts.length != 6) throw new IllegalArgumentException("Fórmato de linea no valido.");
+            Cita cita = new Cita(Integer.parseInt(parts[0]), LocalDate.parse(parts[1]), LocalTime.parse(parts[2]), parts[3], parts[4], parts[5]);
+            return cita;
+        }
+    
+    public static String listaEspecialidades(String lineaEspecialidad) {
+     String[] parts = lineaEspecialidad.split("\\|");
+        if (parts.length != 4) throw new IllegalArgumentException("Fórmato de linea no valido.");
+        String especialidad = parts[0];
+            return especialidad;
     }
 }

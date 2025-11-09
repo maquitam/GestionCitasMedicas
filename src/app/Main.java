@@ -1,10 +1,12 @@
 package app;
 
 import UI.LoginView;
+import UI.PacienteView;
 
 public class Main {
 
     public static void main(String[] args) {
-        new LoginView();
+        PacienteView pacienteView = new PacienteView("usuarioEjemplo");
+        pacienteView.setVisible(true);
     }
 }

@@ -11,22 +11,23 @@ import objetos.*;
 import servicios.ControlCita;
 import servicios.ServicioMedico;
 
-public class PacienteCitas extends JPanel {
+public class AdminCitas extends JPanel {
 
     private JComboBox<Especialidad> comboEspecialidad;
     private JComboBox<Medico> comboMedico;
     private JTextField txtFecha;
+    private JTextField txtDocumentoPaciente;
     private JTextField txtHora;
     private JTextArea txtMotivo;
     private JTable tablaCitas;
     private DefaultTableModel modeloTabla;
-    private JButton btnAgendar, btnModificar, btnEliminar;
+    private JButton btnModificar, btnEliminar;
 
     private final ControlCita controlCita;
     private final ServicioMedico servicioMedico;
     private final String usuario; // nombre o correo del paciente autenticado
 
-    public PacienteCitas(PacienteView parentView) {
+    public AdminCitas(AdminView parentView) {
         this.usuario = parentView.USUARIO_AUTENTICADO; // usa lo que ya maneja BaseView
         this.controlCita = new ControlCita();
         this.servicioMedico = new ServicioMedico();
@@ -43,18 +44,20 @@ public class PacienteCitas extends JPanel {
         setLayout(new BorderLayout(10, 10));
 
         // Panel superior (formulario)
-        JPanel panelFormulario = new JPanel(new GridLayout(5, 2, 10, 10));
+        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 10, 10));
 
         comboEspecialidad = new JComboBox<>();
         comboMedico = new JComboBox<>();
-        txtFecha = new JTextField("2025-10-27");
-        txtHora = new JTextField("09:00");
+        txtDocumentoPaciente = new JTextField("");
+        txtFecha = new JTextField("");
+        txtHora = new JTextField("");
         txtMotivo = new JTextArea(3, 20);
 
-        btnAgendar = new JButton("Agendar");
         btnModificar = new JButton("Modificar");
         btnEliminar = new JButton("Eliminar");
 
+        panelFormulario.add(new JLabel("Documento del paciente:"));
+        panelFormulario.add(txtDocumentoPaciente);
         panelFormulario.add(new JLabel("Especialidad:"));
         panelFormulario.add(comboEspecialidad);
         panelFormulario.add(new JLabel("Médico:"));
@@ -72,7 +75,6 @@ public class PacienteCitas extends JPanel {
 
         // Panel botones
         JPanel panelBotones = new JPanel();
-        panelBotones.add(btnAgendar);
         panelBotones.add(btnModificar);
         panelBotones.add(btnEliminar);
 
@@ -82,7 +84,6 @@ public class PacienteCitas extends JPanel {
 
         // Eventos
         comboEspecialidad.addActionListener(e -> filtrarMedicosPorEspecialidad());
-        btnAgendar.addActionListener(e -> agendarCita());
         btnModificar.addActionListener(e -> modificarCita());
         btnEliminar.addActionListener(e -> eliminarCita());
     }
@@ -181,7 +182,7 @@ public class PacienteCitas extends JPanel {
         for (Cita c : citas) {
             modeloTabla.addRow(new Object[]{
                     c.getIdCita(),
-                    c.getMedico().getNombres(),
+                    //c.getMedico().getNombres(),
                     c.getFecha(),
                     c.getHora(),
                     c.getMotivo()
@@ -189,32 +190,6 @@ public class PacienteCitas extends JPanel {
         }
     }
 
-    // Agendar una nueva cita
-    private void agendarCita() {
-        try {
-            Medico m = (Medico) comboMedico.getSelectedItem();
-            LocalDate fecha = LocalDate.parse(txtFecha.getText());
-            LocalTime hora = LocalTime.parse(txtHora.getText());
-            String motivo = txtMotivo.getText();
-
-            //Paciente p = new Paciente(
-                //1, usuario, "Apellido", "correo@correo.com",
-                //"123456789", "F", "O+", "Calle Falsa 123",
-                //"Ciudad", "Departamento", "EPS Ejemplo",
-                //"Contraseña", "Paciente"
-            //);
-
-            Cita nueva = new Cita(p, m, fecha, hora, motivo);
-            if (controlCita.agendarCita(nueva)) {
-                JOptionPane.showMessageDialog(this, "Cita agendada correctamente.");
-                cargarCitasPaciente();
-            } else {
-                JOptionPane.showMessageDialog(this, "El médico no está disponible.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al agendar cita: " + ex.getMessage());
-        }
-    }
 
     // Modificar cita seleccionada
     private void modificarCita() {
@@ -223,12 +198,12 @@ public class PacienteCitas extends JPanel {
 
         try {
             int id = (int) modeloTabla.getValueAt(fila, 0);
-            Medico m = (Medico) comboMedico.getSelectedItem();
+            //Medico m = (Medico) comboMedico.getSelectedItem();
             LocalDate fecha = LocalDate.parse(txtFecha.getText());
             LocalTime hora = LocalTime.parse(txtHora.getText());
             String motivo = txtMotivo.getText();
 
-            controlCita.modificarCita(id, m, fecha, hora, motivo);
+            controlCita.modificarCita(id, fecha, hora, motivo);
             JOptionPane.showMessageDialog(this, "Cita modificada correctamente.");
             cargarCitasPaciente();
         } catch (Exception ex) {
