@@ -34,26 +34,6 @@ public class Cita {
         this.motivo = motivo;
     }
 
-    // 🔹 Métodos CRUD simulados
-    public void crearCita() {
-        System.out.println("Cita creada: " + this);
-    }
-
-    public void modificarCita(LocalDate nuevaFecha, LocalTime nuevaHora, String nuevoMotivo) {
-        this.fecha = nuevaFecha;
-        this.hora = nuevaHora;
-        this.motivo = nuevoMotivo;
-        System.out.println("Cita modificada: " + this);
-    }
-
-    public void eliminarCita() {
-        System.out.println(" Cita eliminada: " + this);
-    }
-
-    public void consultarCita() {
-        System.out.println("Consultando cita: " + this);
-    }
-
     // Validar disponibilidad
     public boolean validarDisponibilidad(Cita otraCita) {
         if (otraCita == null || this.medico == null || otraCita.medico == null) {
