@@ -84,7 +84,7 @@ public class AdminCitas extends JPanel {
 
         // Eventos
         comboEspecialidad.addActionListener(e -> filtrarMedicosPorEspecialidad());
-        btnModificar.addActionListener(e -> modificarCita());
+       // btnModificar.addActionListener(e -> modificarCita());
         btnEliminar.addActionListener(e -> eliminarCita());
     }
 
@@ -192,7 +192,7 @@ public class AdminCitas extends JPanel {
 
 
     // Modificar cita seleccionada
-    private void modificarCita() {
+     /*private void modificarCita() {
         int fila = tablaCitas.getSelectedRow();
         if (fila < 0) return;
 
@@ -209,7 +209,7 @@ public class AdminCitas extends JPanel {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al modificar: " + ex.getMessage());
         }
-    }
+    }*/
 
     // Eliminar cita seleccionada
     private void eliminarCita() {

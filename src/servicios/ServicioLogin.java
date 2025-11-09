@@ -61,8 +61,15 @@ public class ServicioLogin {
     // valida las credenciales
     // si si devuelve un OBJETO usuario con los datos del usuario
     // si no, pos devuelve null
-    public Usuario iniciarSesion(String usuario, String contrasenna) {
+    //public Usuario ...
+    public String iniciarSesion(String usuario, String contrasenna) {
         var valid = validarUsuarioyContraseña(usuario, contrasenna);
+        if (valid) {
+            return obtenerPerfil(usuario);
+        }
+
+        return "";
+        /*var valid = validarUsuarioyContraseña(usuario, contrasenna);
         if (valid) {
             String perfil = obtenerPerfil(usuario);
 
@@ -80,7 +87,8 @@ public class ServicioLogin {
                 }
 
             }
+
         }
-        return null;
+        return null;*/
     }
 }
