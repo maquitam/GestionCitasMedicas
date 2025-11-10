@@ -131,7 +131,7 @@ public class Cita {
     public String exportarArchivoCitas() {
 
         String idMedico = (medico != null) ? String.valueOf(medico.getId()) : "0"; // operador ternario
-        String idPaciente = (paciente != null) ? String.valueOf(paciente.getId()) : "0";
+        String idPaciente = (paciente != null) ? String.valueOf(paciente.getNumeroDoc()) : "0";
         String fechaStr = (fecha != null) ? fecha.toString() : "";
         String horaStr = (hora != null) ? hora.toString() : "";
         String motivoStr = (motivo != null) ? motivo.replace("|", "/") : "";

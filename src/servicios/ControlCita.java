@@ -108,6 +108,14 @@ public class ControlCita {
         return resultado;
     }
 
+    public List<Cita> mostrarTodasLasCitas() {
+        List<Cita> resultado = new ArrayList<>();
+        for (Cita c : listaCitas) {
+            resultado.add(c);
+        }
+        return resultado;
+    }
+
     // Listar todas las citas
     public List<Cita> listarCitas() {
         return new ArrayList<>(listaCitas);

@@ -27,15 +27,15 @@ public class Medico extends Usuario {
         return estado;
     }
 
+    //solución temporal para evitar error de compilación
     public String getEstadoFormated() {
-        var estado = getEstado();
-        switch (estado) {
-            case true:
-                return "Activo";
-            default:
-                return "Inactivo";
+        boolean estado = getEstado();
+        if (estado) {
+            return "Activa";
+        } else {
+            return "Inactiva";
         }
-    };
+    }
 
     // Setters
     public void setEstado(boolean estado) {

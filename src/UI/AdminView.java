@@ -7,10 +7,13 @@ import java.awt.*;
 public class AdminView extends BaseView {
     public static final String MODULO_MEDICOS = "medicoPanel";
     public static final String MODULO_PACIENTES = "pacientePanel";
+    public static final String MODULO_CITAS = "citasPanel";
     public static final String BIENVENIDA_PANEL = "bienvenidaPanel";
     public static final String MODULO_ESPECIALIDADES = "especialidadesPanel";
 
     public String USUARIO_AUTENTICADO;
+
+    
 
     public AdminView(String usuario) {
         super(usuario, "Vista Administrador");
@@ -60,6 +63,10 @@ public class AdminView extends BaseView {
             mostrarPanelPacientes();
         });
 
+        citas.addActionListener(e->{
+            mostrarPanelCitas();
+        });
+
         especialidades.addActionListener(e->{
             mostrarPanelEspecialidades();
         });
@@ -76,6 +83,7 @@ public class AdminView extends BaseView {
         
         //Crear paneles    
         try{
+        AdminCitas citasPanel = new AdminCitas(this);
         PanelMedicos medicoPanel = new PanelMedicos(this);
         PanelPacientes panelPacientes = new PanelPacientes(this);
         JPanel bienvenidaPanel = mostrarBienvenida("Bienvenid@ Admin");
@@ -85,6 +93,8 @@ public class AdminView extends BaseView {
         panelDerecho.add(panelPacientes, MODULO_PACIENTES);
         panelDerecho.add(medicoPanel, MODULO_MEDICOS);
         panelDerecho.add(panelEspecialidades, MODULO_ESPECIALIDADES);
+        panelDerecho.add(citasPanel, MODULO_CITAS);
+        
         cardLayout.show(panelDerecho, BIENVENIDA_PANEL);
     }catch(Exception e){
         e.printStackTrace();
@@ -95,8 +105,12 @@ public class AdminView extends BaseView {
         cardLayout.show(panelDerecho, MODULO_MEDICOS);
     }
 
-        public void mostrarPanelEspecialidades() {
+    public void mostrarPanelEspecialidades() {
         cardLayout.show(panelDerecho, MODULO_ESPECIALIDADES);
+    }
+
+    public void mostrarPanelCitas() {
+        cardLayout.show(panelDerecho, MODULO_CITAS);
     }
 
     public void mostrarPanelPacientes() {

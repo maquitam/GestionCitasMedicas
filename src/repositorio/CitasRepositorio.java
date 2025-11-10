@@ -37,7 +37,7 @@ public class CitasRepositorio {
     public boolean registrarCita(Cita cita) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(archivo, true))) {
             bufferedWriter.write(cita.exportarArchivoCitas());
-            bufferedWriter.newLine();
+            //bufferedWriter.newLine();
 
             return true;
         } catch (IOException e) {

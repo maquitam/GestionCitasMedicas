@@ -17,6 +17,7 @@ public class AdminCitas extends JPanel {
     private JComboBox<Medico> comboMedico;
     private JTextField txtFecha;
     private JTextField txtHora;
+    private JTextField txtDocPaciente;
     private JTextArea txtMotivo;
     private JTable tablaCitas;
     private DefaultTableModel modeloTabla;
@@ -34,16 +35,18 @@ public class AdminCitas extends JPanel {
         initComponents();
         cargarEspecialidades();
         cargarCitasPacienteSeleccionado();
+        cargarTodasLasCitas();
     }
 
     // Interfaz visual
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
 
-        JPanel panelFormulario = new JPanel(new GridLayout(5, 2, 10, 10));
+        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 10, 10));
 
         comboEspecialidad = new JComboBox<>();
         comboMedico = new JComboBox<>();
+        txtDocPaciente = new JTextField();
         txtFecha = new JTextField(LocalDate.now().toString());
         txtHora = new JTextField("09:00");
         txtMotivo = new JTextArea(3, 20);
@@ -51,6 +54,8 @@ public class AdminCitas extends JPanel {
         btnModificar = new JButton("Modificar");
         btnEliminar = new JButton("Eliminar");
 
+        panelFormulario.add(new JLabel("Documento del Paciente:"));
+        panelFormulario.add(txtDocPaciente);
         panelFormulario.add(new JLabel("Especialidad:"));
         panelFormulario.add(comboEspecialidad);
         panelFormulario.add(new JLabel("Médico:"));
@@ -62,7 +67,7 @@ public class AdminCitas extends JPanel {
         panelFormulario.add(new JLabel("Motivo:"));
         panelFormulario.add(new JScrollPane(txtMotivo));
 
-        modeloTabla = new DefaultTableModel(new Object[] { "ID", "Médico", "Fecha", "Hora", "Motivo" }, 0);
+        modeloTabla = new DefaultTableModel(new Object[] { "ID","Documento del Paciente", "Médico", "Fecha", "Hora", "Motivo" }, 0);
         tablaCitas = new JTable(modeloTabla);
 
         JPanel panelBotones = new JPanel();
@@ -142,19 +147,35 @@ public class AdminCitas extends JPanel {
         }
     }
 
+    private void cargarTodasLasCitas() {
+        modeloTabla.setRowCount(0);
+        List<Cita> citas = controlCita.mostrarTodasLasCitas();
+        for (Cita c : citas) {
+            modeloTabla.addRow(new Object[] {
+                    c.getIdCita(),
+                    c.getPaciente().getNumeroDoc(),
+                    c.getMedico().getNombres() + " " + c.getMedico().getApellidos(),
+                    c.getFecha(),
+                    c.getHora(),
+                    c.getMotivo()
+            });
+        }
+    }
+
     // CAMBIAR A CITAS DEL PACIENTE SELECCIONADO
     private void cargarCitasPacienteSeleccionado() {
         modeloTabla.setRowCount(0);
-        Paciente pacienteActual = (Paciente) UsuarioSesion.getUsuarioActual();
-        if (pacienteActual == null) {
+        Paciente pacienteBuscar = (Paciente) UsuarioSesion.getUsuarioActual();
+        if (pacienteBuscar == null) {
             System.err.println("No hay paciente logueado.");
             return;
         }
 
-        List<Cita> citas = controlCita.buscarCitaPorPaciente(pacienteActual);
+        List<Cita> citas = controlCita.buscarCitaPorPaciente(pacienteBuscar);
         for (Cita c : citas) {
             modeloTabla.addRow(new Object[] {
                     c.getIdCita(),
+                    c.getPaciente().getNumeroDoc(),
                     c.getMedico().getNombres() + " " + c.getMedico().getApellidos(),
                     c.getFecha(),
                     c.getHora(),
@@ -197,6 +218,6 @@ public class AdminCitas extends JPanel {
         int id = (int) modeloTabla.getValueAt(fila, 0);
         controlCita.eliminarCita(id);
         JOptionPane.showMessageDialog(this, "Cita eliminada correctamente.");
-        cargarCitasPacienteSeleccionado();
+        cargarTodasLasCitas();
     }
 }

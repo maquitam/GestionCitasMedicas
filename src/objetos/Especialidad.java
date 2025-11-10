@@ -47,16 +47,15 @@ public class Especialidad {
         return descripcion;
     }
 
-    // boolean to formated string
+    //solución temporal para evitar error de compilación
     public String getEstadoFormated() {
-        var estado = getEstado();
-        switch (estado) {
-            case true:
-                return "Activa";
-            default:
-                return "Inactiva";
+        boolean estado = getEstado();
+        if (estado) {
+            return "Activa";
+        } else {
+            return "Inactiva";
         }
-    };
+    }
 
     // int to formated string
     public String getIdentificadorFormated() {
