@@ -1,6 +1,2 @@
 admin|admin
-||Paciente
-||Paciente
-||Paciente
-1234567890|1234|Paciente
-||Paciente
+1033066917|alejorg123|Paciente
