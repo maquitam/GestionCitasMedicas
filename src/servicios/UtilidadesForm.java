@@ -50,7 +50,7 @@ public abstract class UtilidadesForm {
             return true;
         }
 
-        nombreCampo.setText("Ingrese una documento válido.");
+        nombreCampo.setText("Ingrese un documento válido.");
         nombreCampo.setForeground(Color.RED);
         return false;
     }
@@ -63,7 +63,7 @@ public abstract class UtilidadesForm {
             return true;
         }
 
-        nombreCampo.setText("Ingrese una número válido.");
+        nombreCampo.setText("Ingrese un número de teléfono válido.");
         nombreCampo.setForeground(Color.RED);
         return false;
     }
@@ -71,12 +71,12 @@ public abstract class UtilidadesForm {
     public static boolean validarCorreo(JTextField campoTexto, JLabel nombreCampo) throws Exception {
         String valor = campoTexto.getText();
 
-        if (valor.matches("(?=.*\\d)(?=.*@)(?=.*\\.com).*")) {
+        if (valor.matches("(?=.*\\w)(?=.*@)(?=.*\\.com).*") || valor.matches("(?=.*\\w)(?=.*@)(?=.*\\.co).*")) {
             nombreCampo.setText(" ");
             return true;
         }
 
-        nombreCampo.setText("Ingrese una correo válido.");
+        nombreCampo.setText("Ingrese un correo válido.");
         nombreCampo.setForeground(Color.RED);
         return false;
     }
