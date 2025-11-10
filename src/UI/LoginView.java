@@ -90,7 +90,7 @@ public class LoginView extends JFrame {
 
     public void mostrarIniciarSesion() {
         cardLayout.show(panelIzquierdo, INICIAR_SESION);
-        setSize(900, 650);
+        setSize(900, 800);
         setLocationRelativeTo(null);
     }
 

@@ -6,19 +6,29 @@ import servicios.ServicioPaciente;
 import servicios.UtilidadesForm;
 
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
-public class PanelRegistro extends JPanel {
+public class PanelRegistro extends JPanel implements UtilidadesForm.BotonActualizable {
     private LoginView loginFrame;
     private FormPacientes formPacientes;
     private ServicioPaciente servicioPaciente;
     private CampoTexto primerNombre, segundoNombre, primerApellido, segundoApellido, documento, telefono, direccion, fechaNacimiento, correo;
     private ComboBox<String> tiposDocumentos, sexo, grupo, rh;
     private JPasswordField contrasenna;
+    public Boton enviarBoton;
+
+    
 
     public PanelRegistro(LoginView loginFrame) {
         this.loginFrame = loginFrame;
+        
+        UtilidadesForm.setBotonActualizable(this);
+
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
         
@@ -35,8 +45,11 @@ public class PanelRegistro extends JPanel {
         JPanel btnPanel = new JPanel(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 0, 15, 0);
         gbc.weightx = 0.5;
-        Boton enviarBoton = new Boton("Crear Cuenta");
+        enviarBoton = new Boton("Crear Cuenta");
+        enviarBoton.setEnabled(false);
+        enviarBoton.setBackground(Color.GRAY);
 
         btnPanel.add(enviarBoton, gbc);
 
@@ -64,6 +77,16 @@ public class PanelRegistro extends JPanel {
         return btnPanel;
     }
 
+    @Override
+    public void actualizarEstadoBoton(boolean habilitado) {
+        enviarBoton.setEnabled(habilitado);
+        if (habilitado) {
+            enviarBoton.setBackground(new Color(35,94,40));         
+        } else {
+            enviarBoton.setBackground(Color.GRAY);
+        }
+    }
+
     public Map<String, String> obtenerDatosCampos() {
             Map<String, String> datos = new HashMap<>();
 
@@ -85,4 +108,8 @@ public class PanelRegistro extends JPanel {
 
             return datos;
         }
-}
+
+    public void mostrarBtnEnviar(boolean e) {
+        enviarBoton.setEnabled(e);
+    }
+    }
