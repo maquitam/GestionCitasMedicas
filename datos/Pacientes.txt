@@ -1,2 +1,3 @@
 0|María Camila|Parra Morales|CC|1090377346|16-11-2004|FEMENINO|A+|mcparram1611@gmail.com|3022480598|Sabaneta|Paciente|123
-1|Alejandro |Ruiz Gonzalez|CC|1033066917|06-07-2004|MASCULINO|A+|alejandro.ruizg@udea.edu.co|3053622854|Bello|Paciente|alejorg123
+1|Sebastian|Lopez Martinez|CC|123456|20-05-2002|MASCULINO|O+|sebastian.lopez@gmail.com|3014587923|Medellin|Paciente|1234
+2|asd |asd |CC|123456789|01-01-2001|MASCULINO|B+|correo|8946|57894126|Paciente|987654321
