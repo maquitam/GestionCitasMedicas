@@ -11,63 +11,58 @@ import servicios.ControlCita;
 import servicios.ServicioMedico;
 import servicios.UsuarioSesion;
 
-public class PacienteCitas extends JPanel {
+public class AdminCitas extends JPanel {
 
     private JComboBox<Especialidad> comboEspecialidad;
     private JComboBox<Medico> comboMedico;
     private JTextField txtFecha;
     private JTextField txtHora;
+    private JTextField txtDocPaciente;
     private JTextArea txtMotivo;
     private JTable tablaCitas;
     private DefaultTableModel modeloTabla;
-    private JButton btnAgendar, btnModificar, btnEliminar;
+    private JButton btnModificar, btnEliminar, btnBuscarDocumentoPaciente;
 
     private final ControlCita controlCita;
     private final ServicioMedico servicioMedico;
     private final String usuario;
 
-    public PacienteCitas(PacienteView parentView) {
+    public AdminCitas(AdminView parentView) {
         this.usuario = parentView.USUARIO_AUTENTICADO;
         this.controlCita = new ControlCita();
         this.servicioMedico = new ServicioMedico();
 
         initComponents();
         cargarEspecialidades();
-        cargarCitasPaciente();
+        cargarCitasPacienteSeleccionado();
+        cargarTodasLasCitas();
     }
 
     // Interfaz visual
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
 
-        JPanel panelFormulario = new JPanel(new GridLayout(5, 2, 10, 10));
+        JPanel panelFormulario = new JPanel(new GridLayout(6, 2, 10, 10));
 
         comboEspecialidad = new JComboBox<>();
         comboMedico = new JComboBox<>();
+        txtDocPaciente = new JTextField();
         txtFecha = new JTextField(LocalDate.now().toString());
         txtHora = new JTextField("09:00");
         txtMotivo = new JTextArea(3, 20);
 
-        btnAgendar = new JButton("Agendar");
+        btnBuscarDocumentoPaciente = new JButton("Buscar Paciente Por Documento");
         btnModificar = new JButton("Modificar");
         btnEliminar = new JButton("Eliminar");
 
-        panelFormulario.add(new JLabel("Especialidad:"));
-        panelFormulario.add(comboEspecialidad);
-        panelFormulario.add(new JLabel("Médico:"));
-        panelFormulario.add(comboMedico);
-        panelFormulario.add(new JLabel("Fecha (AAAA-MM-DD):"));
-        panelFormulario.add(txtFecha);
-        panelFormulario.add(new JLabel("Hora (HH:MM):"));
-        panelFormulario.add(txtHora);
-        panelFormulario.add(new JLabel("Motivo:"));
-        panelFormulario.add(new JScrollPane(txtMotivo));
+        panelFormulario.add(new JLabel("Documento del Paciente:"));
+        panelFormulario.add(txtDocPaciente);
 
-        modeloTabla = new DefaultTableModel(new Object[] { "ID", "Médico", "Fecha", "Hora", "Motivo" }, 0);
+        modeloTabla = new DefaultTableModel(new Object[] { "ID","Documento del Paciente", "Médico", "Fecha", "Hora", "Motivo" }, 0);
         tablaCitas = new JTable(modeloTabla);
 
         JPanel panelBotones = new JPanel();
-        panelBotones.add(btnAgendar);
+        panelBotones.add(btnBuscarDocumentoPaciente);
         panelBotones.add(btnModificar);
         panelBotones.add(btnEliminar);
 
@@ -77,9 +72,9 @@ public class PacienteCitas extends JPanel {
 
         // Eventos
         comboEspecialidad.addActionListener(e -> filtrarMedicosPorEspecialidad());
-        btnAgendar.addActionListener(e -> agendarCita());
-        btnModificar.addActionListener(e -> modificarCita());
+       // btnModificar.addActionListener(e -> modificarCita());
         btnEliminar.addActionListener(e -> eliminarCita());
+        btnBuscarDocumentoPaciente.addActionListener(e -> cargarCitasPacienteSeleccionado());
     }
 
     // Cargar especialidades (por ahora vacías)
@@ -145,19 +140,13 @@ public class PacienteCitas extends JPanel {
         }
     }
 
-    // Cargar citas del paciente actual
-    private void cargarCitasPaciente() {
+    private void cargarTodasLasCitas() {
         modeloTabla.setRowCount(0);
-        Paciente pacienteActual = (Paciente) UsuarioSesion.getUsuarioActual();
-        if (pacienteActual == null) {
-            System.err.println("No hay paciente logueado.");
-            return;
-        }
-
-        List<Cita> citas = controlCita.buscarCitaPorPaciente(pacienteActual);
+        List<Cita> citas = controlCita.mostrarTodasLasCitas();
         for (Cita c : citas) {
             modeloTabla.addRow(new Object[] {
                     c.getIdCita(),
+                    c.getPaciente().getNumeroDoc(),
                     c.getMedico().getNombres() + " " + c.getMedico().getApellidos(),
                     c.getFecha(),
                     c.getHora(),
@@ -166,35 +155,59 @@ public class PacienteCitas extends JPanel {
         }
     }
 
-    // Agendar una nueva cita
-    private void agendarCita() {
-        try {
-            Medico m = (Medico) comboMedico.getSelectedItem();
-            LocalDate fecha = LocalDate.parse(txtFecha.getText());
-            LocalTime hora = LocalTime.parse(txtHora.getText());
-            String motivo = txtMotivo.getText();
+    // CAMBIAR A CITAS DEL PACIENTE SELECCIONADO
+    private void cargarCitasPacienteSeleccionado() {
+        modeloTabla.setRowCount(0); // limpiar tabla
 
-            Paciente p = (Paciente) UsuarioSesion.getUsuarioActual();
-            if (p == null) {
-                JOptionPane.showMessageDialog(this, "No hay paciente autenticado.", "Error", JOptionPane.ERROR_MESSAGE);
+        String doc = txtDocPaciente.getText().trim();
+
+        // Si no se ingresó documento, mostrar todas las citas
+        if (doc.isEmpty()) {
+            cargarTodasLasCitas();
+            return;
+        }
+
+        try {
+            // Buscar paciente por documento
+            repositorio.PacienteRepositorio repoPaciente = new repositorio.PacienteRepositorio();
+            servicios.ServicioPaciente servicioPaciente = new servicios.ServicioPaciente();
+            var pacientes = repoPaciente.getPacientes();
+            var index = servicioPaciente.buscarPorDocumento(doc);
+            var paciente = pacientes.get(index);
+
+            if (paciente == null) {
+                JOptionPane.showMessageDialog(this, "No se encontró un paciente con ese documento.");
                 return;
             }
 
-            Cita nueva = new Cita(p, m, fecha, hora, motivo);
-            if (controlCita.agendarCita(nueva)) {
-                JOptionPane.showMessageDialog(this, "Cita agendada correctamente.");
-                cargarCitasPaciente();
-            } else {
-                JOptionPane.showMessageDialog(this, "El médico no está disponible.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
+            // Buscar las citas del paciente
+            List<Cita> citas = controlCita.buscarCitaPorPaciente(paciente);
+
+            if (citas.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El paciente no tiene citas registradas.");
+                return;
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error al agendar cita: " + ex.getMessage());
+
+            // Agregar las citas a la tabla
+            for (Cita c : citas) {
+                modeloTabla.addRow(new Object[]{
+                        c.getIdCita(),
+                        c.getPaciente().getNumeroDoc(),
+                        c.getMedico().getNombres() + " " + c.getMedico().getApellidos(),
+                        c.getFecha(),
+                        c.getHora(),
+                        c.getMotivo()
+                });
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar citas: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     // Modificar cita seleccionada
-    private void modificarCita() {
+     /*private void modificarCita() {
         int fila = tablaCitas.getSelectedRow();
         if (fila < 0) {
             JOptionPane.showMessageDialog(this, "Seleccione una cita primero.");
@@ -210,11 +223,11 @@ public class PacienteCitas extends JPanel {
 
             controlCita.modificarCita(id, m, fecha, hora, motivo);
             JOptionPane.showMessageDialog(this, "Cita modificada correctamente.");
-            cargarCitasPaciente();
+            cargarCitasPacienteSeleccionado();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al modificar: " + ex.getMessage());
         }
-    }
+    }*/
 
     // Eliminar cita seleccionada
     private void eliminarCita() {
@@ -227,6 +240,6 @@ public class PacienteCitas extends JPanel {
         int id = (int) modeloTabla.getValueAt(fila, 0);
         controlCita.eliminarCita(id);
         JOptionPane.showMessageDialog(this, "Cita eliminada correctamente.");
-        cargarCitasPaciente();
+        cargarTodasLasCitas();
     }
 }

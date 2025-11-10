@@ -3,19 +3,18 @@ package UI;
 import javax.swing.*;
 import java.awt.*;
 
-public class SwithToCreateAccount extends JPanel {   
+public class SwithToCreateAccount extends JPanel {
     private LoginView loginFrame;
 
     public SwithToCreateAccount(LoginView loginFrame) {
         this.loginFrame = loginFrame;
-        setPreferredSize(new Dimension(300,getHeight()));
-        setBackground(new Color(35,94,40));
+        setPreferredSize(new Dimension(300, getHeight()));
+        setBackground(new Color(35, 94, 40));
         setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10,20,10,20);
+        gbc.insets = new Insets(10, 20, 10, 20);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
 
         // Titulo
         JLabel registerTitle = new JLabel("¿No tienes una cuenta?");
@@ -31,18 +30,18 @@ public class SwithToCreateAccount extends JPanel {
 
         gbc.gridy = 6;
         add(boton, gbc);
-    
+
     }
 
     public Boton BotonCrearCuenta() {
         Boton registerButton = new Boton("Crear Cuenta");
-        registerButton.setBackground(new Color(44,119,50));
+        registerButton.setBackground(new Color(44, 119, 50));
 
-        registerButton.addActionListener(_->{
+        registerButton.addActionListener(a -> {
             loginFrame.mostrarRegistroPanel();
             loginFrame.mostrarIniciarSesion();
         });
 
         return registerButton;
-    } 
+    }
 }

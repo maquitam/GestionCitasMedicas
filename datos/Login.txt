@@ -1,2 +1,6 @@
-admin|admin
-1033066917|alejorg123|Paciente
+admin|admin|admin
+1090245798|1234|Paciente
+1002345678|1234|Médico
+1009876543|1234|Médico
+1011237890|1234|Médico
+123456789|987654321|Paciente

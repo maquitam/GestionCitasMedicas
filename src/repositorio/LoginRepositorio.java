@@ -12,7 +12,7 @@ import objetos.Usuario;
 public class LoginRepositorio {
     private File file;
     public static final String PATH = "datos\\Login.txt";
-    
+
     public LoginRepositorio() throws IOException {
         file = new File(PATH);
         if (!file.exists()) {
@@ -20,13 +20,13 @@ public class LoginRepositorio {
             file.createNewFile();
 
             try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
-            var admin = "admin" + "|" + "admin";
-            bufferedWriter.write(admin);
-            bufferedWriter.newLine();
-        } catch (Exception exe) {
-            exe.getMessage();
-        }
-        
+                var admin = "admin" + "|" + "admin";
+                bufferedWriter.write(admin);
+                bufferedWriter.newLine();
+            } catch (Exception exe) {
+                exe.getMessage();
+            }
+
         }
     }
 
@@ -41,13 +41,13 @@ public class LoginRepositorio {
                 var login = new Login(loginLine.split("\\|")[0], loginLine.split("\\|")[1]);
                 logins.add(login);
             }
-    
+
             return logins;
-            
-    } catch (Exception exe) {
-        return null;
-    }        
-}
+
+        } catch (Exception exe) {
+            return null;
+        }
+    }
 
     public boolean registrarUsuario(Usuario usuario) throws Exception {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
@@ -62,18 +62,19 @@ public class LoginRepositorio {
     }
 
     public boolean eliminarUsuario(String documento) throws Exception {
-        Scanner s = null; 
+        Scanner s = null;
         List<String> logins = new ArrayList<>();
-         try{
+        try {
             s = new Scanner(file);
 
             while (s.hasNextLine()) {
                 String loginLine = s.nextLine();
                 if (!loginLine.contains(documento)) {
                     logins.add(loginLine);
-                };
+                }
+                ;
             }
-            
+
             if (file.exists()) {
                 file.delete();
             }
@@ -92,10 +93,10 @@ public class LoginRepositorio {
 
             return true;
 
-         } catch (Exception e)  {
+        } catch (Exception e) {
             return false;
-         }
         }
+    }
 
     public String obtenerPerfilUsuario(String documento) {
         Scanner s = null;
@@ -112,17 +113,19 @@ public class LoginRepositorio {
                     return partes[2];
                 }
             }
-    
+
             return "";
-            
-    } catch (Exception exe) {
-        return null;
+
+        } catch (Exception exe) {
+            return null;
+        }
     }
-    }
-// prueba alejo
-         public boolean registrarEspecialidad(Especialidad especialidad) throws Exception {
+
+    // prueba alejo
+    public boolean registrarEspecialidad(Especialidad especialidad) throws Exception {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATH, true))) {
-            var content = especialidad.getNombreEspecialidad() + "|" + especialidad.getIdentificador() + "|" + especialidad.getEstado() + "|" + especialidad.getDescripcion();
+            var content = especialidad.getNombreEspecialidad() + "|" + especialidad.getIdentificador() + "|"
+                    + especialidad.getEstado() + "|" + especialidad.getDescripcion();
             bufferedWriter.write(content);
             bufferedWriter.newLine();
         } catch (Exception exe) {
@@ -130,5 +133,36 @@ public class LoginRepositorio {
         }
 
         return true;
+    }
+
+    // buscamos en login.txt credenciales iniciadas
+    // si coinciden devuelve un objeto usuario
+    // si no, pos no devuelve null
+    public Usuario validarCredenciales(String usuario, String contrasena) {
+
+        try (Scanner s = new Scanner(file)) {
+            while (s.hasNextLine()) {
+                String[] partes = s.nextLine().split("\\|");
+
+                // Esperamos: usuario|contraseña|perfil
+                if (partes.length >= 3) {
+                    String nombreUsuario = partes[0];
+                    String password = partes[1];
+                    String perfil = partes[2];
+
+                    if (nombreUsuario.equals(usuario) && password.equals(contrasena)) {
+                        Usuario u = new Login();
+                        u.setNumeroDoc(nombreUsuario);
+                        u.setContrasenna(password);
+                        ;
+                        u.setPerfil(perfil);
+                        return u;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

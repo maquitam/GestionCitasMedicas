@@ -2,6 +2,7 @@ package servicios;
 
 import java.io.IOException;
 import repositorio.LoginRepositorio;
+import repositorio.PacienteRepositorio;
 import objetos.*;
 
 public class ServicioLogin {
@@ -19,7 +20,7 @@ public class ServicioLogin {
     public boolean validarUsuarioyContraseña(String usuario, String contraseña) {
         var logins = loginRepositorio.getLogins();
 
-        for (var login: logins)  {
+        for (var login : logins) {
             if (login.getUsuario().equals(usuario) && login.getContraseña().equals(contraseña))
                 return true;
         }
@@ -31,7 +32,7 @@ public class ServicioLogin {
         var logins = loginRepositorio.getLogins();
 
         for (var temporal : logins) {
-            if(temporal.getUsuario().equals(usuario.getNumeroDoc())) {
+            if (temporal.getUsuario().equals(usuario.getNumeroDoc())) {
                 return false;
             }
 
@@ -57,6 +58,10 @@ public class ServicioLogin {
         return loginRepositorio.obtenerPerfilUsuario(documento);
     }
 
+    // valida las credenciales
+    // si si devuelve un OBJETO usuario con los datos del usuario
+    // si no, devuelve null
+    //public Usuario ...
     public String iniciarSesion(String usuario, String contrasenna) {
         var valid = validarUsuarioyContraseña(usuario, contrasenna);
         if (valid) {
@@ -64,5 +69,26 @@ public class ServicioLogin {
         }
 
         return "";
+        /*var valid = validarUsuarioyContraseña(usuario, contrasenna);
+        if (valid) {
+            String perfil = obtenerPerfil(usuario);
+
+            if (perfil.equalsIgnoreCase("Paciente")) {
+                try {
+                    // buscamos paciente por documento
+                    PacienteRepositorio repo = new PacienteRepositorio();
+                    for (Paciente p : repo.getPacientes()) {
+                        if (p.getNumeroDoc().equals(usuario)) {
+                            return p;
+                        }
+                    }
+                } catch (IOException e) {
+                    System.err.println("Error leyendo Pacientes " + e);
+                }
+
+            }
+
+        }
+        return null;*/
     }
 }
